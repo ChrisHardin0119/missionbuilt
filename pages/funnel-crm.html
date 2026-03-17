@@ -1,0 +1,662 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mission Built | Funnel & CRM Automation</title>
+    <style>
+        :root {
+            --accent: #4f46e5;
+            --bg: #fafbfc;
+            --text: #1a1a2e;
+            --text-muted: #6b7280;
+            --border: #e5e7eb;
+            --surface: #ffffff;
+            --surface-2: #f3f4f6;
+            --radius: 16px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: var(--surface);
+            border-bottom: 1px solid var(--border);
+            padding: 1rem 2rem;
+            z-index: 100;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        }
+
+        nav a {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 500;
+            transition: opacity 0.2s;
+        }
+
+        nav a:hover {
+            opacity: 0.7;
+        }
+
+        /* Layout */
+        main {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 6rem 2rem 3rem;
+        }
+
+        /* Hero Section */
+        .hero {
+            text-align: center;
+            margin-bottom: 4rem;
+            padding: 3rem 0;
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            color: var(--text);
+            font-weight: 700;
+        }
+
+        .hero p {
+            font-size: 1.25rem;
+            color: var(--text-muted);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Section Styles */
+        section {
+            margin-bottom: 4rem;
+        }
+
+        section h2 {
+            font-size: 2rem;
+            margin-bottom: 2rem;
+            color: var(--text);
+            font-weight: 700;
+        }
+
+        /* Funnel Demo */
+        .funnel-container {
+            background: var(--surface);
+            border-radius: var(--radius);
+            padding: 2rem;
+            border: 1px solid var(--border);
+            margin-bottom: 3rem;
+        }
+
+        .funnel-visual {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            overflow-x: auto;
+            padding: 1rem 0;
+        }
+
+        .funnel-stage {
+            flex: 1;
+            min-width: 150px;
+            background: var(--surface-2);
+            border: 2px solid var(--border);
+            border-radius: calc(var(--radius) / 2);
+            padding: 1.5rem 1rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        .funnel-stage:hover {
+            border-color: var(--accent);
+            background: rgba(79, 70, 229, 0.05);
+            transform: translateY(-2px);
+        }
+
+        .funnel-stage.active {
+            background: var(--accent);
+            color: white;
+            border-color: var(--accent);
+        }
+
+        .funnel-stage h3 {
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .funnel-stage .number {
+            font-size: 2rem;
+            font-weight: 700;
+            opacity: 0.3;
+        }
+
+        .funnel-stage.active .number {
+            opacity: 1;
+        }
+
+        .stage-details {
+            display: none;
+            background: var(--surface-2);
+            border: 1px solid var(--border);
+            border-radius: calc(var(--radius) / 2);
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stage-details.active {
+            display: block;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .stage-details h3 {
+            color: var(--accent);
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+
+        .stage-details p {
+            color: var(--text-muted);
+            margin-bottom: 0.5rem;
+        }
+
+        /* Simulation */
+        .simulation-controls {
+            text-align: center;
+            margin: 2rem 0;
+        }
+
+        .btn {
+            background: var(--accent);
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: calc(var(--radius) / 2);
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: opacity 0.2s;
+        }
+
+        .btn:hover {
+            opacity: 0.9;
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .simulation-log {
+            background: var(--surface-2);
+            border-radius: calc(var(--radius) / 2);
+            padding: 1.5rem;
+            max-height: 300px;
+            overflow-y: auto;
+            margin-top: 1.5rem;
+        }
+
+        .log-entry {
+            padding: 0.75rem;
+            border-left: 3px solid var(--accent);
+            background: var(--surface);
+            margin-bottom: 0.75rem;
+            border-radius: 4px;
+            font-size: 0.95rem;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateX(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        /* Stats Panel */
+        .stats-panel {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .stat-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 1.5rem;
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--accent);
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        /* Case Study */
+        .case-study {
+            background: var(--surface);
+            border-radius: var(--radius);
+            padding: 2.5rem;
+            border: 1px solid var(--border);
+        }
+
+        .case-study-section {
+            margin-bottom: 2.5rem;
+        }
+
+        .case-study-section:last-child {
+            margin-bottom: 0;
+        }
+
+        .case-study h3 {
+            color: var(--accent);
+            margin-bottom: 1rem;
+            font-size: 1.3rem;
+            font-weight: 700;
+        }
+
+        .case-study p {
+            color: var(--text-muted);
+            margin-bottom: 0.75rem;
+            line-height: 1.8;
+        }
+
+        .tools-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .tool-item {
+            background: var(--surface-2);
+            padding: 0.75rem 1rem;
+            border-radius: calc(var(--radius) / 2);
+            color: var(--accent);
+            font-weight: 600;
+            text-align: center;
+            font-size: 0.9rem;
+        }
+
+        /* What Gets Automated Grid */
+        .automation-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .automation-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 2rem;
+            transition: all 0.3s;
+        }
+
+        .automation-card:hover {
+            border-color: var(--accent);
+            box-shadow: 0 4px 12px rgba(79, 70, 229, 0.1);
+            transform: translateY(-4px);
+        }
+
+        .automation-card h3 {
+            color: var(--accent);
+            margin-bottom: 1rem;
+            font-weight: 700;
+        }
+
+        .automation-card p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+
+        /* CTA Section */
+        .cta-section {
+            text-align: center;
+            padding: 3rem 2rem;
+            background: linear-gradient(135deg, var(--surface) 0%, var(--surface-2) 100%);
+            border-radius: var(--radius);
+            border: 1px solid var(--border);
+        }
+
+        .cta-section h2 {
+            margin-bottom: 1.5rem;
+        }
+
+        .cta-section p {
+            color: var(--text-muted);
+            margin-bottom: 2rem;
+            font-size: 1.1rem;
+        }
+
+        .cta-button {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 1rem 2.5rem;
+            border-radius: calc(var(--radius) / 2);
+            text-decoration: none;
+            font-weight: 600;
+            transition: opacity 0.2s;
+        }
+
+        .cta-button:hover {
+            opacity: 0.9;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .hero p {
+                font-size: 1rem;
+            }
+
+            section h2 {
+                font-size: 1.5rem;
+            }
+
+            nav {
+                padding: 1rem;
+            }
+
+            main {
+                padding: 5rem 1rem 2rem;
+            }
+
+            .case-study {
+                padding: 1.5rem;
+            }
+
+            .funnel-container {
+                padding: 1.5rem;
+            }
+
+            .stat-number {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <a href="../index.html">← Back to Portfolio</a>
+    </nav>
+
+    <main>
+        <!-- Hero -->
+        <section class="hero">
+            <h1>Funnel & CRM Automation</h1>
+            <p>Transform scattered leads into a predictable revenue engine with integrated sales funnels and automated follow-up systems.</p>
+        </section>
+
+        <!-- Interactive Funnel Demo -->
+        <section>
+            <h2>Interactive Sales Funnel</h2>
+            <div class="funnel-container">
+                <div class="funnel-visual">
+                    <div class="funnel-stage active" data-stage="0">
+                        <div class="number">1</div>
+                        <h3>Ad & Landing</h3>
+                    </div>
+                    <div class="funnel-stage" data-stage="1">
+                        <div class="number">2</div>
+                        <h3>Lead Capture</h3>
+                    </div>
+                    <div class="funnel-stage" data-stage="2">
+                        <div class="number">3</div>
+                        <h3>Nurture Sequence</h3>
+                    </div>
+                    <div class="funnel-stage" data-stage="3">
+                        <div class="number">4</div>
+                        <h3>Qualification</h3>
+                    </div>
+                    <div class="funnel-stage" data-stage="4">
+                        <div class="number">5</div>
+                        <h3>Conversion</h3>
+                    </div>
+                </div>
+
+                <div class="stage-details active" data-details="0">
+                    <h3>Ad & Landing Page</h3>
+                    <p>Facebook/Google ads drive traffic to a high-converting landing page built specifically for this audience.</p>
+                    <p><strong>What happens:</strong> Page loads with compelling headline, benefit-focused copy, and clear form.</p>
+                </div>
+
+                <div class="stage-details" data-details="1">
+                    <h3>Lead Capture</h3>
+                    <p>Simple form captures name, email, phone, and service interest. Immediately triggers welcome sequence.</p>
+                    <p><strong>What happens:</strong> Lead enters database, gets tagged by service interest, receives instant confirmation message.</p>
+                </div>
+
+                <div class="stage-details" data-details="2">
+                    <h3>Nurture Sequence</h3>
+                    <p>Automated 7-day email and SMS sequence delivers value before asking for the sale.</p>
+                    <p><strong>What happens:</strong> Day 1: Welcome email. Day 3: Case study. Day 5: Limited-time offer. Day 7: Final call-to-action.</p>
+                </div>
+
+                <div class="stage-details" data-details="3">
+                    <h3>Qualification</h3>
+                    <p>Leads that engage get prioritized. Non-responders enter a re-engagement campaign after 2 weeks.</p>
+                    <p><strong>What happens:</strong> Hot leads bubble to top of sales team's call list. AI suggests next best action.</p>
+                </div>
+
+                <div class="stage-details" data-details="4">
+                    <h3>Conversion</h3>
+                    <p>Qualified leads book appointments or make purchases through the integrated system.</p>
+                    <p><strong>What happens:</strong> Sale recorded, customer added to fulfillment workflow, success sequence begins.</p>
+                </div>
+
+                <div class="simulation-controls">
+                    <button class="btn" id="simulateBtn">Simulate a Lead Journey</button>
+                </div>
+
+                <div class="simulation-log" id="simulationLog"></div>
+
+                <div class="stats-panel">
+                    <div class="stat-card">
+                        <div class="stat-number">47</div>
+                        <div class="stat-label">Leads This Month</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">42%</div>
+                        <div class="stat-label">Email Open Rate</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">12%</div>
+                        <div class="stat-label">Conversion Rate</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Case Study -->
+        <section>
+            <h2>Real-World Case Study</h2>
+            <div class="case-study">
+                <div class="case-study-section">
+                    <h3>The Problem</h3>
+                    <p>A service-based business was running Facebook ads and getting leads—but no system existed to nurture them. Inquiries came in, got added to a spreadsheet, and sat there. By the time the sales team followed up, most leads had gone cold and moved on to competitors.</p>
+                    <p>Result: 3-5% conversion rate, inconsistent follow-up, and wasted ad spend.</p>
+                </div>
+
+                <div class="case-study-section">
+                    <h3>The Solution</h3>
+                    <p>We designed an automated funnel with integrated CRM management:</p>
+                    <ul style="margin-left: 1.5rem; color: var(--text-muted);">
+                        <li>Landing page automatically captures leads with minimal friction</li>
+                        <li>Instant welcome email + SMS confirm they're heard</li>
+                        <li>7-day personalized nurture sequence based on which service they clicked</li>
+                        <li>Engagement tracking flags hot leads and pushes them to the top of the call list</li>
+                        <li>Non-responders get a re-engagement campaign after 2 weeks (win-back offers, new case studies)</li>
+                        <li>All pipeline stages, notes, and history stored in one central CRM accessible to the team</li>
+                    </ul>
+                </div>
+
+                <div class="case-study-section">
+                    <h3>Tools Used</h3>
+                    <div class="tools-list">
+                        <div class="tool-item">GoHighLevel</div>
+                        <div class="tool-item">Email Automation</div>
+                        <div class="tool-item">SMS Workflows</div>
+                        <div class="tool-item">Pipeline Management</div>
+                        <div class="tool-item">Lead Scoring</div>
+                        <div class="tool-item">AI Response Suggestions</div>
+                    </div>
+                </div>
+
+                <div class="case-study-section">
+                    <h3>The Results</h3>
+                    <p><strong>Systems like this typically see a 40-60% increase in lead-to-appointment rates</strong> by eliminating the follow-up gap and automating the nurture process.</p>
+                    <p>Beyond conversion rates, businesses also experience:</p>
+                    <ul style="margin-left: 1.5rem; color: var(--text-muted);">
+                        <li>Faster sales cycles (days → hours)</li>
+                        <li>Better team visibility into pipeline</li>
+                        <li>Reduced manual data entry and follow-up friction</li>
+                        <li>Higher email engagement due to timely, relevant messaging</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- What Gets Automated -->
+        <section>
+            <h2>What Gets Automated</h2>
+            <div class="automation-grid">
+                <div class="automation-card">
+                    <h3>Lead Capture & Tagging</h3>
+                    <p>Forms automatically sort leads by service interest, source, and engagement level. No manual data entry.</p>
+                </div>
+                <div class="automation-card">
+                    <h3>Email & SMS Sequences</h3>
+                    <p>Personalized multi-channel campaigns trigger based on actions. Send to 1 person or 1,000 instantly.</p>
+                </div>
+                <div class="automation-card">
+                    <h3>Pipeline Management</h3>
+                    <p>Leads move through stages automatically based on engagement. Sales team sees hot leads first.</p>
+                </div>
+                <div class="automation-card">
+                    <h3>Appointment Booking</h3>
+                    <p>Integrated calendars let leads self-schedule. Automatic reminders reduce no-shows.</p>
+                </div>
+                <div class="automation-card">
+                    <h3>Re-Engagement Campaigns</h3>
+                    <p>Inactive leads get targeted win-back sequences. Turn cold prospects warm without manual outreach.</p>
+                </div>
+                <div class="automation-card">
+                    <h3>Analytics & Reporting</h3>
+                    <p>Real-time dashboards show conversion rates, email metrics, pipeline health, and ROI by campaign.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- CTA -->
+        <section class="cta-section">
+            <h2>Ready to Build Your Revenue Engine?</h2>
+            <p>Let's discuss how to set up a funnel and CRM system that works for your business model.</p>
+            <a href="mailto:hello@example.com" class="cta-button">Get in Touch</a>
+        </section>
+    </main>
+
+    <script>
+        // Funnel stage navigation
+        document.querySelectorAll('.funnel-stage').forEach(stage => {
+            stage.addEventListener('click', function() {
+                const stageNum = this.dataset.stage;
+
+                // Update active stage
+                document.querySelectorAll('.funnel-stage').forEach(s => s.classList.remove('active'));
+                this.classList.add('active');
+
+                // Update stage details
+                document.querySelectorAll('.stage-details').forEach(d => d.classList.remove('active'));
+                document.querySelector(`[data-details="${stageNum}"]`).classList.add('active');
+            });
+        });
+
+        // Simulation
+        const simulateBtn = document.getElementById('simulateBtn');
+        const simulationLog = document.getElementById('simulationLog');
+
+        simulateBtn.addEventListener('click', function() {
+            simulateBtn.disabled = true;
+            simulationLog.innerHTML = '';
+
+            const events = [
+                { message: '👤 Sarah clicked your Facebook ad about "email marketing for service businesses"', delay: 500 },
+                { message: '📄 Sarah lands on your high-converting landing page', delay: 1500 },
+                { message: '✉️ Sarah submitted her email and phone number', delay: 2500 },
+                { message: '🎯 Sarah tagged as: Lead Source: Facebook | Interest: Email Marketing', delay: 3500 },
+                { message: '📧 Day 1: Welcome email sent (opened in 3 min)', delay: 4500 },
+                { message: '📱 Day 1: SMS reminder sent to book a call', delay: 5500 },
+                { message: '📚 Day 3: Case study email sent (opened)', delay: 6500 },
+                { message: '🔥 Day 5: Limited-time offer email sent (clicked!)', delay: 7500 },
+                { message: '⭐ Sarah marked as HOT LEAD - moved to priority call list', delay: 8500 },
+                { message: '📞 Day 6: Sales team calls Sarah (appointment booked!)', delay: 9500 },
+                { message: '✅ CONVERSION: Sarah purchased your service', delay: 10500 },
+                { message: '🎉 Total funnel time: 6 days | ROI on ad spend: 450%', delay: 11500 }
+            ];
+
+            events.forEach(event => {
+                setTimeout(() => {
+                    const logEntry = document.createElement('div');
+                    logEntry.className = 'log-entry';
+                    logEntry.textContent = event.message;
+                    simulationLog.appendChild(logEntry);
+                    simulationLog.scrollTop = simulationLog.scrollHeight;
+                }, event.delay);
+            });
+
+            setTimeout(() => {
+                simulateBtn.disabled = false;
+            }, 12500);
+        });
+    </script>
+</body>
+</html>
