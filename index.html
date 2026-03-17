@@ -1060,12 +1060,7 @@
   <!-- WORKFLOW DEMO - UPGRADED -->
   <div class="demo-section" id="demo-workflow">
     <h3>Automation Pipeline Demo</h3>
-    <p class="demo-subtitle">Click "Run Pipeline" to see an animated simulation of a real automated content pipeline running in production.</p>
-
-    <div class="workflow-controls">
-      <button class="workflow-button" id="workflowRunBtn" onclick="runWorkflowSimulation()">Run Pipeline</button>
-      <button class="workflow-button" id="workflowResetBtn" onclick="resetWorkflow()" style="display:none; background: var(--text-muted);">Reset</button>
-    </div>
+    <p class="demo-subtitle">Click each step to see how a real automated content pipeline flows.</p>
 
     <div class="workflow-status" id="workflowStatus">Pipeline Status: Ready</div>
     <div class="workflow-progress-bar"><div class="workflow-progress-fill" id="workflowProgress"></div></div>
@@ -1106,7 +1101,7 @@
 
     <div id="workflowDetail" style="background: var(--surface-2); border-radius: 14px; padding: 20px; margin-top: 20px;">
       <p style="font-weight: 600; margin-bottom: 6px;">Pipeline Ready</p>
-      <p style="color: var(--text-muted); font-size: 0.92rem;">Click "Run Pipeline" above to start the automated workflow simulation, or click on any step to see its details manually.</p>
+      <p style="color: var(--text-muted); font-size: 0.92rem;">Click on any step above to see how it works.</p>
     </div>
   </div>
 
@@ -1202,12 +1197,7 @@
   <!-- FUNNEL DEMO - UPGRADED -->
   <div class="demo-section" id="demo-funnel">
     <h3>Sales Funnel Demo</h3>
-    <p class="demo-subtitle">Click "Start Simulation" to watch a lead named Sarah go through your entire sales funnel automatically.</p>
-
-    <div class="funnel-controls">
-      <button class="funnel-button" id="funnelStartBtn" onclick="startFunnelSimulation()">Start Simulation</button>
-      <button class="funnel-button" id="funnelResetBtn" onclick="resetFunnel()" style="display:none; background: var(--text-muted);">Reset</button>
-    </div>
+    <p class="demo-subtitle">Click through each stage to see how an automated funnel moves leads from first touch to conversion.</p>
 
     <div class="funnel-container" id="funnelContainer">
       <div class="funnel-stage" id="funnel-0" onclick="activateFunnel(0)">
@@ -1447,54 +1437,33 @@
     '[10:32:12] Pipeline complete. 1 blog post, 1 social post, 7 affiliate links embedded.'
   ];
 
-  async function runWorkflowSimulation() {
-    if (workflowAnimating) return;
-    workflowAnimating = true;
-    document.getElementById('workflowRunBtn').disabled = true;
-    document.getElementById('workflowResetBtn').style.display = 'inline-block';
+  function activateStep(idx) {
+    // Highlight this step and all previous steps as completed
+    document.querySelectorAll('.workflow-step').forEach((s,i) => s.classList.toggle('active', i<=idx));
 
-    const logEl = document.getElementById('workflowLog');
-    logEl.innerHTML = '';
+    // Update progress bar
+    const progress = ((idx + 1) / 5) * 100;
+    document.getElementById('workflowProgress').style.width = progress + '%';
 
-    for (let i = 0; i < 5; i++) {
-      document.getElementById(`step-${i}`).classList.add('animated');
-
-      const progress = ((i + 1) / 5) * 100;
-      document.getElementById('workflowProgress').style.width = progress + '%';
-      document.getElementById('workflowStatus').textContent = 'Pipeline Status: Running...';
-
-      // Show 1-2 logs per step
-      const logsForStep = i === 0 ? [0, 1] : i === 1 ? [2, 3] : i === 2 ? [4] : i === 3 ? [5] : [6];
-      for (const logIdx of logsForStep) {
-        await new Promise(r => setTimeout(r, 500));
-        const entry = document.createElement('div');
-        entry.className = 'workflow-log-entry';
-        entry.textContent = workflowLogs[logIdx];
-        logEl.appendChild(entry);
-        logEl.scrollTop = logEl.scrollHeight;
-      }
-
-      await new Promise(r => setTimeout(r, 300));
+    // Update status
+    if (idx === 4) {
+      document.getElementById('workflowStatus').textContent = 'Pipeline Status: Complete ✓';
+    } else {
+      document.getElementById('workflowStatus').textContent = `Pipeline Status: Step ${idx + 1} of 5`;
     }
 
-    document.getElementById('workflowStatus').textContent = 'Pipeline Status: Complete ✓';
-    document.getElementById('workflowProgress').style.width = '100%';
-    workflowAnimating = false;
-  }
+    // Show relevant logs for this step
+    const logEl = document.getElementById('workflowLog');
+    logEl.innerHTML = '';
+    const logsForStep = idx === 0 ? [0, 1] : idx === 1 ? [2, 3] : idx === 2 ? [4] : idx === 3 ? [5] : [6];
+    for (const logIdx of logsForStep) {
+      const entry = document.createElement('div');
+      entry.className = 'workflow-log-entry';
+      entry.textContent = workflowLogs[logIdx];
+      logEl.appendChild(entry);
+    }
 
-  function resetWorkflow() {
-    workflowAnimating = false;
-    document.querySelectorAll('.workflow-step').forEach(s => s.classList.remove('animated'));
-    document.getElementById('workflowProgress').style.width = '0%';
-    document.getElementById('workflowStatus').textContent = 'Pipeline Status: Ready';
-    document.getElementById('workflowLog').innerHTML = '';
-    document.getElementById('workflowRunBtn').disabled = false;
-    document.getElementById('workflowResetBtn').style.display = 'none';
-    document.getElementById('workflowDetail').innerHTML = `<p style="font-weight:600;margin-bottom:6px;">Pipeline Ready</p><p style="color:var(--text-muted);font-size:0.92rem;">Click "Run Pipeline" above to start the automated workflow simulation, or click on any step to see its details manually.</p>`;
-  }
-
-  function activateStep(idx) {
-    document.querySelectorAll('.workflow-step').forEach((s,i) => s.classList.toggle('active', i===idx));
+    // Update detail content
     const d = workflowDetails[idx];
     document.getElementById('workflowDetail').innerHTML = `<p style="font-weight:600;margin-bottom:6px;">${d.title}</p><p style="color:var(--text-muted);font-size:0.92rem;">${d.desc}</p>`;
   }
@@ -1502,6 +1471,13 @@
   // === QUIZ DEMO - UPGRADED ===
   let quizAnswers = [null, null, null];
   let quizAnswered = [false, false, false];
+
+  // Correct answer indices and explanations
+  const quizCorrectAnswers = [
+    { index: 2, explanation: 'The correct answer is C. A stall occurs when the wing exceeds its critical angle of attack, disrupting airflow and losing lift — regardless of speed. Common misconception that it\'s about engine failure or flying slowly.' },
+    { index: 1, explanation: 'The correct answer is B. API stands for Application Programming Interface — it\'s how different software systems communicate with each other, like how this chatbot talks to the Claude AI backend.' },
+    { index: 2, explanation: 'The correct answer is C. A CRM (Customer Relationship Management) system centralizes all your customer data, interactions, and pipeline in one place — making follow-ups and relationship building systematic instead of chaotic.' }
+  ];
 
   function selectQuizOption(questionIdx, optionIdx, correct) {
     if (quizAnswered[questionIdx]) return;
@@ -1517,6 +1493,8 @@
     buttons[optionIdx].style.opacity = '1';
 
     const result = document.getElementById(resultId);
+    const correctAnswerData = quizCorrectAnswers[questionIdx];
+
     if (correct) {
       buttons[optionIdx].style.borderColor = 'var(--success)';
       buttons[optionIdx].style.background = 'rgba(16,185,129,0.1)';
@@ -1527,8 +1505,13 @@
     } else {
       buttons[optionIdx].style.borderColor = 'var(--accent)';
       buttons[optionIdx].style.background = 'rgba(79,70,229,0.1)';
-      const correctBtn = Array.from(buttons).findIndex((b, i) => i !== optionIdx);
-      result.innerHTML = '<p style="color:var(--accent);font-weight:600;">Not quite!</p><p style="color:var(--text-muted);font-size:0.92rem;margin-top:6px;">My quiz systems provide instant feedback, show the correct answer, and help users learn from mistakes.</p>';
+
+      // Highlight the correct answer in green
+      buttons[correctAnswerData.index].style.borderColor = 'var(--success)';
+      buttons[correctAnswerData.index].style.background = 'rgba(16,185,129,0.1)';
+      buttons[correctAnswerData.index].style.opacity = '1';
+
+      result.innerHTML = '<p style="color:var(--accent);font-weight:600;">Not quite!</p><p style="color:var(--text-muted);font-size:0.92rem;margin-top:6px;">' + correctAnswerData.explanation + '</p>';
       result.style.background = 'var(--accent-glow)';
       result.style.border = '1px solid var(--accent)';
       result.classList.add('active');
@@ -1665,42 +1648,18 @@
   }
 
   // === FUNNEL DEMO - UPGRADED ===
-  let funnelAnimating = false;
-
-  async function startFunnelSimulation() {
-    if (funnelAnimating) return;
-    funnelAnimating = true;
-    document.getElementById('funnelStartBtn').disabled = true;
-    document.getElementById('funnelResetBtn').style.display = 'inline-block';
-
-    const stages = [
-      { title: 'Ad Click / Landing Page', content: '<p style="font-weight:600;">Sarah clicks your ad in Facebook...</p><p style="margin-top:8px; font-size:0.9rem;">She lands on a beautiful page describing your service. Loads in 1.2 seconds. Mobile optimized. Clear value prop. She scrolls.</p>' },
-      { title: 'Lead Capture Form', content: '<p style="font-weight:600;">Sarah enters her name and email...</p><p style="margin-top:8px; font-size:0.9rem;">Smart form. No unnecessary fields. Auto-detection of city/state. She hits submit. Immediately gets a confirmation: "Check your email for next steps."</p>' },
-      { title: 'AI Follow-Up Sequence', content: '<p style="font-weight:600;">Day 1: Welcome email + resource</p><p style="margin-top:6px; font-size:0.9rem;"><strong>Day 3:</strong> Case study from someone like her</p><p style="font-size:0.9rem;"><strong>Day 7:</strong> "Still interested?" check-in with social proof</p><p style="margin-top:8px; font-size:0.85rem; color: var(--text-muted);">Each email gets higher open rates. The sequence builds trust automatically.</p>' },
-      { title: 'Booking / Conversion', content: '<p style="font-weight:600;">Sarah books a call ✓</p><p style="margin-top:8px; font-size:0.9rem;">She got value from the emails. She trusts you. She\'s ready. Calendly opens. She picks a time. Calendar invite sent to her. You get notified. Follow-up reminders automated.</p>' },
-    ];
-
-    for (let i = 0; i < 4; i++) {
-      document.getElementById(`funnel-${i}`).classList.add('active');
-      const details = document.getElementById('funnelDetails');
-      details.classList.add('active');
-      document.getElementById('funnelDetailContent').innerHTML = stages[i].content;
-      await new Promise(r => setTimeout(r, 2000));
-    }
-
-    funnelAnimating = false;
-  }
-
-  function resetFunnel() {
-    document.querySelectorAll('.funnel-stage').forEach(s => s.classList.remove('active'));
-    document.getElementById('funnelDetails').classList.remove('active');
-    document.getElementById('funnelStartBtn').disabled = false;
-    document.getElementById('funnelResetBtn').style.display = 'none';
-    funnelAnimating = false;
-  }
+  const funnelStages = [
+    { title: 'Ad Click / Landing Page', content: '<p style="font-weight:600;">Sarah clicks your ad in Facebook...</p><p style="margin-top:8px; font-size:0.9rem;">She lands on a beautiful page describing your service. Loads in 1.2 seconds. Mobile optimized. Clear value prop. She scrolls.</p>' },
+    { title: 'Lead Capture Form', content: '<p style="font-weight:600;">Sarah enters her name and email...</p><p style="margin-top:8px; font-size:0.9rem;">Smart form. No unnecessary fields. Auto-detection of city/state. She hits submit. Immediately gets a confirmation: "Check your email for next steps."</p>' },
+    { title: 'AI Follow-Up Sequence', content: '<p style="font-weight:600;">Day 1: Welcome email + resource</p><p style="margin-top:6px; font-size:0.9rem;"><strong>Day 3:</strong> Case study from someone like her</p><p style="font-size:0.9rem;"><strong>Day 7:</strong> "Still interested?" check-in with social proof</p><p style="margin-top:8px; font-size:0.85rem; color: var(--text-muted);">Each email gets higher open rates. The sequence builds trust automatically.</p>' },
+    { title: 'Booking / Conversion', content: '<p style="font-weight:600;">Sarah books a call ✓</p><p style="margin-top:8px; font-size:0.9rem;">She got value from the emails. She trusts you. She\'s ready. Calendly opens. She picks a time. Calendar invite sent to her. You get notified. Follow-up reminders automated.</p>' },
+  ];
 
   function activateFunnel(idx) {
     document.querySelectorAll('.funnel-stage').forEach((s,i) => s.classList.toggle('active', i <= idx));
+    const details = document.getElementById('funnelDetails');
+    details.classList.add('active');
+    document.getElementById('funnelDetailContent').innerHTML = funnelStages[idx].content;
   }
 
   // === FEEDBACK DEMO - UPGRADED WITH AI ANALYSIS ===
