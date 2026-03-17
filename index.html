@@ -1797,7 +1797,7 @@
   }
 
   // === CONTACT FORM ===
-  function submitContactForm(event) {
+  async function submitContactForm(event) {
     event.preventDefault();
 
     const name = document.getElementById('name').value;
@@ -1806,17 +1806,33 @@
     const budget = document.getElementById('budget').value;
     const message = document.getElementById('message').value;
 
-    const subject = encodeURIComponent(`New Project Inquiry: ${service}`);
-    const body = encodeURIComponent(
-      `Name: ${name}\nEmail: ${email}\n\nLooking for: ${service}\nBudget: ${budget}\n\nMessage:\n${message}`
-    );
+    const submitBtn = event.target.querySelector('button[type="submit"]');
+    const originalText = submitBtn.textContent;
+    submitBtn.textContent = 'Sending...';
+    submitBtn.disabled = true;
 
-    const mailtoLink = `mailto:chrishardin.als@gmail.com?subject=${subject}&body=${body}`;
+    try {
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name, email, service, budget, message })
+      });
 
-    window.location.href = mailtoLink;
+      const data = await response.json();
 
-    document.getElementById('contactForm').style.display = 'none';
-    document.getElementById('contactSuccess').style.display = 'block';
+      if (response.ok) {
+        document.getElementById('contactForm').style.display = 'none';
+        document.getElementById('contactSuccess').style.display = 'block';
+      } else {
+        alert(data.error || 'Something went wrong. Please try again.');
+        submitBtn.textContent = originalText;
+        submitBtn.disabled = false;
+      }
+    } catch (err) {
+      alert('Network error. Please check your connection and try again.');
+      submitBtn.textContent = originalText;
+      submitBtn.disabled = false;
+    }
   }
 
   // Scroll to demo from service cards
