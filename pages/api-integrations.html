@@ -605,8 +605,8 @@
                 </div>
 
                 <div class="demo-controls">
-                    <button id="resetBtn" class="secondary">Reset Diagram</button>
-                    <button id="pipelineBtn">Run Full Pipeline</button>
+                    <button id="resetBtn" class="secondary">Reset</button>
+                    <button id="nextStepBtn">Next Step →</button>
                 </div>
             </div>
         </section>
@@ -765,10 +765,10 @@
         const ctx = canvas.getContext('2d');
         const requestPanel = document.getElementById('requestPanel');
         const resetBtn = document.getElementById('resetBtn');
-        const pipelineBtn = document.getElementById('pipelineBtn');
+        const nextStepBtn = document.getElementById('nextStepBtn');
 
         let animatingConnection = null;
-        let pipelineRunning = false;
+        let currentPipelineStep = -1;
 
         // Resize canvas for high DPI
         function resizeCanvas() {
@@ -1072,38 +1072,41 @@ Content-Type: application/rss+xml
             });
         });
 
-        // Pipeline animation
-        async function runPipeline() {
-            if (pipelineRunning) return;
-            pipelineRunning = true;
-            pipelineBtn.disabled = true;
-
-            const sequence = [0, 1, 2, 3, 4, 5]; // All APIs in order
-
-            for (const apiIndex of sequence) {
-                animatingConnection = apiIndex;
-                showRequest(apiIndex);
-                drawNetwork();
-                await new Promise(resolve => setTimeout(resolve, 800));
+        // Step-through pipeline
+        function nextPipelineStep() {
+            currentPipelineStep++;
+            if (currentPipelineStep >= apis.length) {
+                currentPipelineStep = apis.length - 1;
+                nextStepBtn.textContent = 'Complete ✓';
+                nextStepBtn.disabled = true;
+                return;
             }
-
-            animatingConnection = null;
+            animatingConnection = currentPipelineStep;
+            showRequest(currentPipelineStep);
             drawNetwork();
-            pipelineRunning = false;
-            pipelineBtn.disabled = false;
+
+            if (currentPipelineStep >= apis.length - 1) {
+                nextStepBtn.textContent = 'Complete ✓';
+                nextStepBtn.disabled = true;
+            } else {
+                nextStepBtn.textContent = `Next Step → (${currentPipelineStep + 2}/${apis.length})`;
+            }
         }
 
         // Reset button
         resetBtn.addEventListener('click', () => {
             animatingConnection = null;
+            currentPipelineStep = -1;
             requestPanel.innerHTML = 'Click a connection to view API request/response details';
             requestPanel.classList.add('empty');
             requestPanel.classList.remove('active');
+            nextStepBtn.textContent = 'Next Step →';
+            nextStepBtn.disabled = false;
             drawNetwork();
         });
 
-        // Pipeline button
-        pipelineBtn.addEventListener('click', runPipeline);
+        // Next step button
+        nextStepBtn.addEventListener('click', nextPipelineStep);
 
         // Initial draw
         drawNetwork();
