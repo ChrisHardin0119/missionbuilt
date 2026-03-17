@@ -1,0 +1,1080 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mission Built | Custom AI Solutions</title>
+    <style>
+        :root {
+            --accent: #4f46e5;
+            --bg: #fafbfc;
+            --text: #1a1a2e;
+            --text-muted: #6b7280;
+            --border: #e5e7eb;
+            --surface: #ffffff;
+            --surface-2: #f3f4f6;
+            --radius: 16px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: var(--surface);
+            border-bottom: 1px solid var(--border);
+            padding: 1rem 2rem;
+            z-index: 100;
+            backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.95);
+        }
+
+        nav a {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        nav a:hover {
+            gap: 0.75rem;
+        }
+
+        nav a::before {
+            content: "←";
+            font-size: 1.2rem;
+        }
+
+        main {
+            margin-top: 70px;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, var(--accent) 0%, #5b51d8 100%);
+            color: white;
+            padding: 4rem 2rem;
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .hero h1 {
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            margin-bottom: 1rem;
+            font-weight: 700;
+        }
+
+        .hero p {
+            font-size: 1.25rem;
+            max-width: 600px;
+            margin: 0 auto;
+            opacity: 0.95;
+        }
+
+        /* Section Title */
+        .section-title {
+            font-size: clamp(1.75rem, 4vw, 2.5rem);
+            margin-bottom: 2rem;
+            margin-top: 3rem;
+            font-weight: 700;
+            color: var(--text);
+        }
+
+        /* AI Solution Finder */
+        .solution-finder {
+            background: var(--surface);
+            border-radius: var(--radius);
+            padding: 3rem;
+            margin-bottom: 4rem;
+            border: 1px solid var(--border);
+        }
+
+        .step-indicator {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 2rem;
+            position: relative;
+        }
+
+        .step-indicator::before {
+            content: '';
+            position: absolute;
+            top: 20px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: var(--border);
+            z-index: -1;
+        }
+
+        .step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+            position: relative;
+            flex: 1;
+        }
+
+        .step-number {
+            width: 40px;
+            height: 40px;
+            background: var(--surface-2);
+            border: 2px solid var(--border);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            color: var(--text-muted);
+            transition: all 0.3s ease;
+        }
+
+        .step.active .step-number {
+            background: var(--accent);
+            color: white;
+            border-color: var(--accent);
+        }
+
+        .step-label {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            max-width: 120px;
+            text-align: center;
+        }
+
+        .step.active .step-label {
+            color: var(--text);
+            font-weight: 600;
+        }
+
+        .finder-content {
+            margin-top: 2rem;
+        }
+
+        .finder-step {
+            display: none;
+        }
+
+        .finder-step.active {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .finder-step h3 {
+            margin-bottom: 1.5rem;
+            font-size: 1.3rem;
+        }
+
+        .challenge-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .challenge-card {
+            background: var(--surface-2);
+            border: 2px solid var(--border);
+            border-radius: var(--radius);
+            padding: 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .challenge-card:hover {
+            border-color: var(--accent);
+            background: var(--surface);
+            transform: translateY(-4px);
+            box-shadow: 0 10px 25px rgba(79, 70, 229, 0.1);
+        }
+
+        .challenge-card.selected {
+            background: var(--accent);
+            color: white;
+            border-color: var(--accent);
+        }
+
+        .challenge-card h4 {
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .challenge-card p {
+            font-size: 0.95rem;
+            opacity: 0.8;
+        }
+
+        .follow-up-options {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .option-btn {
+            background: var(--surface-2);
+            border: 2px solid var(--border);
+            border-radius: var(--radius);
+            padding: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.95rem;
+            text-align: center;
+            font-weight: 500;
+        }
+
+        .option-btn:hover {
+            border-color: var(--accent);
+            background: var(--surface);
+        }
+
+        .option-btn.selected {
+            background: var(--accent);
+            color: white;
+            border-color: var(--accent);
+        }
+
+        .recommendation-card {
+            background: linear-gradient(135deg, var(--surface) 0%, var(--surface-2) 100%);
+            border: 2px solid var(--accent);
+            border-radius: var(--radius);
+            padding: 2rem;
+            margin-top: 2rem;
+        }
+
+        .recommendation-card h4 {
+            color: var(--accent);
+            margin-bottom: 1rem;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .recommendation-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .recommendation-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .recommendation-detail {
+            border-left: 3px solid var(--accent);
+            padding-left: 1rem;
+        }
+
+        .recommendation-detail strong {
+            display: block;
+            color: var(--accent);
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .finder-button {
+            background: var(--accent);
+            color: white;
+            border: none;
+            border-radius: var(--radius);
+            padding: 1rem 2rem;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 1rem;
+        }
+
+        .finder-button:hover {
+            background: #4338ca;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(79, 70, 229, 0.2);
+        }
+
+        .finder-button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+            justify-content: center;
+        }
+
+        .btn-secondary {
+            background: var(--surface-2);
+            color: var(--text);
+            border: 2px solid var(--border);
+            border-radius: var(--radius);
+            padding: 1rem 2rem;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--accent);
+            background: var(--surface);
+        }
+
+        /* Case Study / Portfolio */
+        .project-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-bottom: 4rem;
+        }
+
+        .project-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 2rem;
+            transition: all 0.3s ease;
+        }
+
+        .project-card:hover {
+            border-color: var(--accent);
+            box-shadow: 0 10px 30px rgba(79, 70, 229, 0.1);
+            transform: translateY(-4px);
+        }
+
+        .project-card h3 {
+            margin-bottom: 0.5rem;
+            font-size: 1.3rem;
+        }
+
+        .project-card p {
+            color: var(--text-muted);
+            margin-bottom: 1rem;
+            font-size: 0.95rem;
+        }
+
+        .tech-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .tag {
+            display: inline-block;
+            background: var(--surface-2);
+            color: var(--accent);
+            padding: 0.4rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            border: 1px solid var(--accent);
+            opacity: 0.8;
+        }
+
+        .project-description {
+            font-size: 0.95rem;
+            margin-bottom: 1rem;
+        }
+
+        .demonstrates {
+            font-size: 0.9rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--border);
+            color: var(--text-muted);
+        }
+
+        /* AI Toolkit */
+        .toolkit {
+            background: var(--surface);
+            border-radius: var(--radius);
+            padding: 2rem;
+            margin-bottom: 4rem;
+            border: 1px solid var(--border);
+        }
+
+        .toolkit-category {
+            margin-bottom: 2.5rem;
+        }
+
+        .toolkit-category:last-child {
+            margin-bottom: 0;
+        }
+
+        .toolkit-category h4 {
+            color: var(--accent);
+            margin-bottom: 1rem;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .toolkit-items {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+        }
+
+        .toolkit-item {
+            background: var(--surface-2);
+            color: var(--text);
+            padding: 0.75rem 1.25rem;
+            border-radius: 25px;
+            border: 1px solid var(--border);
+            font-weight: 500;
+            font-size: 0.95rem;
+        }
+
+        /* Process Section */
+        .process {
+            margin-bottom: 4rem;
+        }
+
+        .process-steps {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+        }
+
+        .process-step {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 2rem;
+            text-align: center;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .process-step:hover {
+            border-color: var(--accent);
+            box-shadow: 0 10px 25px rgba(79, 70, 229, 0.1);
+        }
+
+        .process-number {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, var(--accent) 0%, #5b51d8 100%);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin: 0 auto 1rem;
+        }
+
+        .process-step h3 {
+            margin-bottom: 0.5rem;
+        }
+
+        .process-step p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+
+        /* CTA Section */
+        .cta-section {
+            background: linear-gradient(135deg, var(--accent) 0%, #5b51d8 100%);
+            color: white;
+            border-radius: var(--radius);
+            padding: 3rem 2rem;
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .cta-section h2 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .cta-section p {
+            font-size: 1.1rem;
+            margin-bottom: 2rem;
+            opacity: 0.95;
+        }
+
+        .cta-button {
+            background: white;
+            color: var(--accent);
+            border: none;
+            border-radius: var(--radius);
+            padding: 1.25rem 2.5rem;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-block;
+            text-decoration: none;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Footer spacing */
+        section {
+            padding: 0 2rem;
+            margin-bottom: 4rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            nav {
+                padding: 1rem;
+            }
+
+            main {
+                margin-top: 60px;
+            }
+
+            .container, section {
+                padding: 0 1rem;
+            }
+
+            .solution-finder {
+                padding: 1.5rem;
+            }
+
+            .hero {
+                padding: 2.5rem 1rem;
+            }
+
+            .hero h1 {
+                font-size: 1.8rem;
+            }
+
+            .challenge-cards {
+                grid-template-columns: 1fr;
+            }
+
+            .project-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .process-steps {
+                grid-template-columns: 1fr;
+            }
+
+            .recommendation-details {
+                grid-template-columns: 1fr;
+            }
+
+            .cta-section {
+                padding: 2rem 1rem;
+            }
+
+            .cta-section h2 {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav>
+        <a href="../index.html">Back to Portfolio</a>
+    </nav>
+
+    <main>
+        <!-- Hero Section -->
+        <section class="hero">
+            <h1>Custom AI Solutions</h1>
+            <p>If you have a unique problem, I can build you a unique solution. No templates, no compromises—just what actually works for your business.</p>
+        </section>
+
+        <!-- AI Solution Finder -->
+        <section class="container">
+            <h2 class="section-title">Find Your Solution</h2>
+            <div class="solution-finder">
+                <!-- Step Indicator -->
+                <div class="step-indicator">
+                    <div class="step active" data-step="1">
+                        <div class="step-number">1</div>
+                        <div class="step-label">Challenge</div>
+                    </div>
+                    <div class="step" data-step="2">
+                        <div class="step-number">2</div>
+                        <div class="step-label">Refine</div>
+                    </div>
+                    <div class="step" data-step="3">
+                        <div class="step-number">3</div>
+                        <div class="step-label">Solution</div>
+                    </div>
+                </div>
+
+                <!-- Finder Content -->
+                <div class="finder-content">
+                    <!-- Step 1: Challenge -->
+                    <div class="finder-step active" data-step="1">
+                        <h3>What's your biggest challenge?</h3>
+                        <div class="challenge-cards">
+                            <div class="challenge-card" data-challenge="manual">
+                                <h4>Too Much Manual Work</h4>
+                                <p>Repetitive tasks are draining your time and resources</p>
+                            </div>
+                            <div class="challenge-card" data-challenge="leads">
+                                <h4>Not Enough Leads</h4>
+                                <p>Struggling to generate quality business opportunities</p>
+                            </div>
+                            <div class="challenge-card" data-challenge="content">
+                                <h4>Content is a Bottleneck</h4>
+                                <p>Can't keep up with content creation demands</p>
+                            </div>
+                            <div class="challenge-card" data-challenge="idea">
+                                <h4>Have an Idea, No Clue</h4>
+                                <p>You know what you want, but not how to build it</p>
+                            </div>
+                        </div>
+                        <button class="finder-button" id="step1-next" disabled>Continue to Next Step</button>
+                    </div>
+
+                    <!-- Step 2: Refine -->
+                    <div class="finder-step" data-step="2">
+                        <h3 id="step2-title">Let's narrow it down...</h3>
+                        <div class="follow-up-options" id="follow-up-container"></div>
+                        <div class="button-group">
+                            <button class="btn-secondary" id="step2-back">← Back</button>
+                            <button class="finder-button" id="step2-next" disabled>See Your Solution</button>
+                        </div>
+                    </div>
+
+                    <!-- Step 3: Solution -->
+                    <div class="finder-step" data-step="3">
+                        <div id="recommendation-container"></div>
+                        <div class="button-group">
+                            <button class="btn-secondary" id="step3-back">← Back to Finder</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Case Study / Portfolio -->
+        <section class="container">
+            <h2 class="section-title">My Portfolio of Solutions</h2>
+            <p style="color: var(--text-muted); margin-bottom: 2rem; font-size: 1.05rem;">
+                These projects showcase the kinds of custom solutions I've built—each one tailored to a specific problem.
+            </p>
+            <div class="project-grid">
+                <!-- Project 1: Automated Content Pipeline -->
+                <div class="project-card">
+                    <h3>Automated Content Pipeline</h3>
+                    <p>FB-AMZ-Marketing</p>
+                    <div class="tech-tags">
+                        <span class="tag">Python</span>
+                        <span class="tag">Claude API</span>
+                        <span class="tag">Automation</span>
+                    </div>
+                    <div class="project-description">
+                        Intelligent system that transforms raw content into platform-optimized posts for Facebook and Amazon with minimal human intervention.
+                    </div>
+                    <div class="demonstrates">
+                        <strong>Demonstrates:</strong> API integration, workflow automation, multi-platform optimization
+                    </div>
+                </div>
+
+                <!-- Project 2: Career Quiz Platform -->
+                <div class="project-card">
+                    <h3>Career Quiz Platform</h3>
+                    <p>CouldI</p>
+                    <div class="tech-tags">
+                        <span class="tag">Next.js</span>
+                        <span class="tag">TypeScript</span>
+                        <span class="tag">Scoring Engine</span>
+                    </div>
+                    <div class="project-description">
+                        Interactive quiz platform with multi-dimensional scoring and challenge system to help users explore career fit.
+                    </div>
+                    <div class="demonstrates">
+                        <strong>Demonstrates:</strong> Complex frontend logic, interactive UX, data processing
+                    </div>
+                </div>
+
+                <!-- Project 3: Impulse Spending Tracker -->
+                <div class="project-card">
+                    <h3>Impulse Spending Tracker</h3>
+                    <p>Snack Tax</p>
+                    <div class="tech-tags">
+                        <span class="tag">React</span>
+                        <span class="tag">Vite</span>
+                        <span class="tag">Dashboard</span>
+                    </div>
+                    <div class="project-description">
+                        Quick-log dashboard with intelligent insights that helps users understand their spending habits in real-time.
+                    </div>
+                    <div class="demonstrates">
+                        <strong>Demonstrates:</strong> Responsive design, real-time data visualization, user experience optimization
+                    </div>
+                </div>
+
+                <!-- Project 4: AI Portfolio Site -->
+                <div class="project-card">
+                    <h3>AI Portfolio Website</h3>
+                    <p>This Site</p>
+                    <div class="tech-tags">
+                        <span class="tag">HTML/CSS/JS</span>
+                        <span class="tag">Claude API</span>
+                        <span class="tag">Interactive</span>
+                    </div>
+                    <div class="project-description">
+                        Multi-page portfolio showcasing AI capabilities with interactive demos, detailed project cards, and Claude-powered features.
+                    </div>
+                    <div class="demonstrates">
+                        <strong>Demonstrates:</strong> Full-stack thinking, design implementation, API integration, user engagement
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- AI Toolkit -->
+        <section class="container">
+            <h2 class="section-title">My AI Toolkit</h2>
+            <div class="toolkit">
+                <div class="toolkit-category">
+                    <h4>AI Models & APIs</h4>
+                    <div class="toolkit-items">
+                        <span class="toolkit-item">Claude (Anthropic)</span>
+                        <span class="toolkit-item">ChatGPT (OpenAI)</span>
+                        <span class="toolkit-item">Copilot (Microsoft)</span>
+                        <span class="toolkit-item">Gemini (Google)</span>
+                    </div>
+                </div>
+
+                <div class="toolkit-category">
+                    <h4>Frontend Technologies</h4>
+                    <div class="toolkit-items">
+                        <span class="toolkit-item">React</span>
+                        <span class="toolkit-item">Next.js</span>
+                        <span class="toolkit-item">TypeScript</span>
+                        <span class="toolkit-item">HTML/CSS/JavaScript</span>
+                        <span class="toolkit-item">Vite</span>
+                    </div>
+                </div>
+
+                <div class="toolkit-category">
+                    <h4>Backend Technologies</h4>
+                    <div class="toolkit-items">
+                        <span class="toolkit-item">Python</span>
+                        <span class="toolkit-item">Node.js</span>
+                        <span class="toolkit-item">Express</span>
+                    </div>
+                </div>
+
+                <div class="toolkit-category">
+                    <h4>APIs & Integration</h4>
+                    <div class="toolkit-items">
+                        <span class="toolkit-item">REST APIs</span>
+                        <span class="toolkit-item">OAuth2</span>
+                        <span class="toolkit-item">Webhooks</span>
+                    </div>
+                </div>
+
+                <div class="toolkit-category">
+                    <h4>Tools & Infrastructure</h4>
+                    <div class="toolkit-items">
+                        <span class="toolkit-item">Git</span>
+                        <span class="toolkit-item">Supabase</span>
+                        <span class="toolkit-item">Railway</span>
+                        <span class="toolkit-item">Vercel</span>
+                    </div>
+                </div>
+
+                <div class="toolkit-category">
+                    <h4>Automation & Orchestration</h4>
+                    <div class="toolkit-items">
+                        <span class="toolkit-item">APScheduler</span>
+                        <span class="toolkit-item">Cron Jobs</span>
+                        <span class="toolkit-item">Pipeline Orchestration</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Process Section -->
+        <section class="container process">
+            <h2 class="section-title">How I Work</h2>
+            <div class="process-steps">
+                <div class="process-step">
+                    <div class="process-number">1</div>
+                    <h3>Discovery Call</h3>
+                    <p>We talk through your challenge, constraints, and goals. No assumptions—just understanding.</p>
+                </div>
+
+                <div class="process-step">
+                    <div class="process-number">2</div>
+                    <h3>Solution Design</h3>
+                    <p>I architect a custom approach tailored to your specific needs and constraints.</p>
+                </div>
+
+                <div class="process-step">
+                    <div class="process-number">3</div>
+                    <h3>Build & Iterate</h3>
+                    <p>Rapid development with feedback loops to ensure we're on the right track.</p>
+                </div>
+
+                <div class="process-step">
+                    <div class="process-number">4</div>
+                    <h3>Deploy & Support</h3>
+                    <p>Get your solution live and ensure it works perfectly in your environment.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- CTA Section -->
+        <section class="cta-section container">
+            <h2>Have Something in Mind?</h2>
+            <p>Let's figure out the best way to build it.</p>
+            <a href="../index.html#contact" class="cta-button">Start a Conversation</a>
+        </section>
+    </main>
+
+    <script>
+        // Solution Finder Logic
+        const challengeData = {
+            manual: {
+                title: "What type of work takes up most of your time?",
+                options: [
+                    {
+                        label: "Data entry & processing",
+                        solution: "Automated Data Processing",
+                        desc: "Python scripts that automate data collection, validation, and reporting. Save hours every week.",
+                        timeline: "2-3 weeks",
+                        tech: "Python, APIs, Database"
+                    },
+                    {
+                        label: "Content creation & distribution",
+                        solution: "AI Content Pipeline",
+                        desc: "Create once, optimize for every platform. AI handles the distribution and adaptation.",
+                        timeline: "3-4 weeks",
+                        tech: "Claude API, Python, Scheduling"
+                    },
+                    {
+                        label: "Customer support & responses",
+                        solution: "Intelligent Support Bot",
+                        desc: "Handle common inquiries automatically while routing complex issues to you.",
+                        timeline: "2 weeks",
+                        tech: "Claude API, Knowledge Base, Web Integration"
+                    }
+                ]
+            },
+            leads: {
+                title: "What's your primary sales channel?",
+                options: [
+                    {
+                        label: "Social media & digital",
+                        solution: "Social Lead Generation System",
+                        desc: "Automated lead capture, qualification, and nurturing across your digital channels.",
+                        timeline: "3-4 weeks",
+                        tech: "Node.js, APIs, Database, Webhooks"
+                    },
+                    {
+                        label: "Email & outreach",
+                        solution: "AI-Powered Outreach Engine",
+                        desc: "Personalized email sequences that convert. AI learns what works and optimizes in real-time.",
+                        timeline: "2-3 weeks",
+                        tech: "Python, Claude API, Email APIs"
+                    },
+                    {
+                        label: "Website & organic",
+                        solution: "Conversion Optimization Suite",
+                        desc: "Interactive tools and widgets that qualify leads and drive conversions on your site.",
+                        timeline: "3-5 weeks",
+                        tech: "React, Next.js, Analytics APIs"
+                    }
+                ]
+            },
+            content: {
+                title: "What's your biggest content pain point?",
+                options: [
+                    {
+                        label: "Creating the content",
+                        solution: "AI Content Generator",
+                        desc: "Brainstorm, draft, and refine content ideas faster than ever. You keep creative control.",
+                        timeline: "2 weeks",
+                        tech: "Claude API, React, Integrations"
+                    },
+                    {
+                        label: "Repurposing & adapting",
+                        solution: "Automated Content Transformer",
+                        desc: "One piece of content becomes many. Blog post → social clips → email → newsletter.",
+                        timeline: "3 weeks",
+                        tech: "Claude API, Python, Automation"
+                    },
+                    {
+                        label: "Planning & strategy",
+                        solution: "Content Strategy Assistant",
+                        desc: "AI-powered content calendar that suggests topics, timing, and optimization strategies.",
+                        timeline: "2-3 weeks",
+                        tech: "Claude API, Database, Dashboard"
+                    }
+                ]
+            },
+            idea: {
+                title: "What area are you building in?",
+                options: [
+                    {
+                        label: "a web or mobile app",
+                        solution: "Custom App Development",
+                        desc: "Full-stack development of your idea. From concept to production, end-to-end.",
+                        timeline: "4-8 weeks",
+                        tech: "React/Next.js, Node.js, Database, Deployment"
+                    },
+                    {
+                        label: "an AI integration or feature",
+                        solution: "AI Feature Implementation",
+                        desc: "Bring AI capabilities into your existing product or create an AI-first experience.",
+                        timeline: "2-4 weeks",
+                        tech: "Claude API, Integration, Frontend/Backend"
+                    },
+                    {
+                        label: "an automation or system",
+                        solution: "Automation System Build",
+                        desc: "Complex workflows, data pipelines, and automations that run without you.",
+                        timeline: "3-6 weeks",
+                        tech: "Python, APIs, Scheduling, Cloud"
+                    }
+                ]
+            }
+        };
+
+        let currentStep = 1;
+        let selectedChallenge = null;
+        let selectedFollowUp = null;
+
+        // DOM Elements
+        const challengeCards = document.querySelectorAll('.challenge-card');
+        const step1Next = document.getElementById('step1-next');
+        const step2Back = document.getElementById('step2-back');
+        const step2Next = document.getElementById('step2-next');
+        const step3Back = document.getElementById('step3-back');
+        const followUpContainer = document.getElementById('follow-up-container');
+        const recommendationContainer = document.getElementById('recommendation-container');
+        const stepIndicators = document.querySelectorAll('.step');
+        const finderSteps = document.querySelectorAll('.finder-step');
+
+        // Challenge Card Selection
+        challengeCards.forEach(card => {
+            card.addEventListener('click', () => {
+                challengeCards.forEach(c => c.classList.remove('selected'));
+                card.classList.add('selected');
+                selectedChallenge = card.dataset.challenge;
+                step1Next.disabled = false;
+            });
+        });
+
+        // Navigation Functions
+        function showStep(step) {
+            currentStep = step;
+
+            // Update indicators
+            stepIndicators.forEach(s => s.classList.remove('active'));
+            document.querySelector(`.step[data-step="${step}"]`).classList.add('active');
+
+            // Update content
+            finderSteps.forEach(s => s.classList.remove('active'));
+            document.querySelector(`.finder-step[data-step="${step}"]`).classList.add('active');
+
+            if (step === 2) {
+                populateFollowUp();
+            }
+
+            window.scrollTo({ top: document.querySelector('.solution-finder').offsetTop - 100, behavior: 'smooth' });
+        }
+
+        function populateFollowUp() {
+            const challengeInfo = challengeData[selectedChallenge];
+            document.getElementById('step2-title').textContent = challengeInfo.title;
+
+            followUpContainer.innerHTML = '';
+            selectedFollowUp = null;
+            step2Next.disabled = true;
+
+            challengeInfo.options.forEach((option, index) => {
+                const btn = document.createElement('button');
+                btn.className = 'option-btn';
+                btn.textContent = option.label;
+                btn.addEventListener('click', () => {
+                    document.querySelectorAll('.option-btn').forEach(b => b.classList.remove('selected'));
+                    btn.classList.add('selected');
+                    selectedFollowUp = index;
+                    step2Next.disabled = false;
+                });
+                followUpContainer.appendChild(btn);
+            });
+        }
+
+        function showRecommendation() {
+            const challengeInfo = challengeData[selectedChallenge];
+            const solution = challengeInfo.options[selectedFollowUp];
+
+            const html = `
+                <div class="recommendation-card">
+                    <h4>Your Personalized Solution</h4>
+                    <h3>${solution.solution}</h3>
+                    <p style="margin-bottom: 2rem; color: var(--text-muted); font-size: 1.05rem;">
+                        ${solution.desc}
+                    </p>
+                    <div class="recommendation-details">
+                        <div class="recommendation-detail">
+                            <strong>Timeline</strong>
+                            ${solution.timeline}
+                        </div>
+                        <div class="recommendation-detail">
+                            <strong>Tech Stack</strong>
+                            ${solution.tech}
+                        </div>
+                    </div>
+                    <button class="finder-button" onclick="document.location.hash='contact'">Let's Talk About This</button>
+                </div>
+            `;
+
+            recommendationContainer.innerHTML = html;
+        }
+
+        // Event Listeners
+        step1Next.addEventListener('click', () => showStep(2));
+        step2Back.addEventListener('click', () => showStep(1));
+        step2Next.addEventListener('click', () => {
+            showRecommendation();
+            showStep(3);
+        });
+        step3Back.addEventListener('click', () => showStep(1));
+    </script>
+</body>
+</html>
