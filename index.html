@@ -131,7 +131,7 @@
     border-radius: var(--radius);
     padding: 32px;
     transition: transform 0.25s, box-shadow 0.25s, border-color 0.25s;
-    cursor: default;
+    cursor: pointer;
     position: relative;
     overflow: hidden;
   }
@@ -611,6 +611,16 @@
     min-height: 120px;
     position: relative;
   }
+  .content-output strong {
+    display: inline-block;
+    background: var(--accent-glow);
+    color: var(--accent);
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 0.82rem;
+    letter-spacing: 0.02em;
+    margin-bottom: 4px;
+  }
 
   .content-actions {
     display: flex;
@@ -898,7 +908,7 @@
 
   <div class="services-grid">
 
-    <div class="service-card">
+    <div class="service-card" onclick="scrollToDemo('demo-chatbot', event)">
       <div class="service-icon" style="background: rgba(79,70,229,0.1);">&#129302;</div>
       <h3>AI Chatbots & Conversational Agents</h3>
       <p>Custom chatbots that handle leads, answer FAQs, qualify prospects, and book appointments. Trained on your business, speaking in your voice.</p>
@@ -909,12 +919,11 @@
         <span class="service-tag">24/7 Support</span>
       </div>
       <div style="display: flex; flex-direction: column; gap: 10px;">
-        <a href="pages/chatbots.html" class="service-link">Learn more &#8594;</a>
-        <a href="#demo-chatbot" class="service-link" style="color: var(--text-muted); font-weight: 500;">Try the demo ↓</a>
+        <a href="pages/chatbots.html" class="service-link" onclick="event.stopPropagation()">Learn more &#8594;</a>
       </div>
     </div>
 
-    <div class="service-card">
+    <div class="service-card" onclick="scrollToDemo('demo-workflow', event)">
       <div class="service-icon" style="background: rgba(16,185,129,0.1);">&#9889;</div>
       <h3>Automation Workflows & Pipelines</h3>
       <p>End-to-end automated systems that collect data, process it through AI, and publish or act on the results. Runs on schedule with zero babysitting.</p>
@@ -925,12 +934,11 @@
         <span class="service-tag">Multi-Platform</span>
       </div>
       <div style="display: flex; flex-direction: column; gap: 10px;">
-        <a href="pages/automation.html" class="service-link">Learn more &#8594;</a>
-        <a href="#demo-workflow" class="service-link" style="color: var(--text-muted); font-weight: 500;">Try the demo ↓</a>
+        <a href="pages/automation.html" class="service-link" onclick="event.stopPropagation()">Learn more &#8594;</a>
       </div>
     </div>
 
-    <div class="service-card">
+    <div class="service-card" onclick="scrollToDemo('demo-webapp', event)">
       <div class="service-icon" style="background: rgba(245,158,11,0.1);">&#128187;</div>
       <h3>Web Apps & Interactive Dashboards</h3>
       <p>Full-stack web applications with beautiful UIs, real-time data, user authentication, and AI features baked in. From concept to deployed.</p>
@@ -941,12 +949,11 @@
         <span class="service-tag">Responsive Design</span>
       </div>
       <div style="display: flex; flex-direction: column; gap: 10px;">
-        <a href="pages/webapps.html" class="service-link">Learn more &#8594;</a>
-        <a href="#demo-webapp" class="service-link" style="color: var(--text-muted); font-weight: 500;">Try the demo ↓</a>
+        <a href="pages/webapps.html" class="service-link" onclick="event.stopPropagation()">Learn more &#8594;</a>
       </div>
     </div>
 
-    <div class="service-card">
+    <div class="service-card" onclick="scrollToDemo('demo-content', event)">
       <div class="service-icon" style="background: rgba(236,72,153,0.1);">&#9997;&#65039;</div>
       <h3>AI Content Generation</h3>
       <p>Automated content systems that write blog posts, social media, email sequences, and marketing copy in your brand's voice. Consistent, on-schedule, on-brand.</p>
@@ -957,12 +964,11 @@
         <span class="service-tag">SEO Content</span>
       </div>
       <div style="display: flex; flex-direction: column; gap: 10px;">
-        <a href="pages/content.html" class="service-link">Learn more &#8594;</a>
-        <a href="#demo-content" class="service-link" style="color: var(--text-muted); font-weight: 500;">Try the demo ↓</a>
+        <a href="pages/content.html" class="service-link" onclick="event.stopPropagation()">Learn more &#8594;</a>
       </div>
     </div>
 
-    <div class="service-card">
+    <div class="service-card" onclick="scrollToDemo('demo-workflow', event)">
       <div class="service-icon" style="background: rgba(99,102,241,0.1);">&#128279;</div>
       <h3>API Integrations & Data Systems</h3>
       <p>Connect your tools. I build the bridges between your CRM, email platform, social media, payment system, and AI models so data flows automatically.</p>
@@ -973,12 +979,11 @@
         <span class="service-tag">Data Pipelines</span>
       </div>
       <div style="display: flex; flex-direction: column; gap: 10px;">
-        <a href="pages/api-integrations.html" class="service-link">Learn more &#8594;</a>
-        <a href="#demo-workflow" class="service-link" style="color: var(--text-muted); font-weight: 500;">Try the demo ↓</a>
+        <a href="pages/api-integrations.html" class="service-link" onclick="event.stopPropagation()">Learn more &#8594;</a>
       </div>
     </div>
 
-    <div class="service-card">
+    <div class="service-card" onclick="scrollToDemo('demo-funnel', event)">
       <div class="service-icon" style="background: rgba(234,88,12,0.1);">&#127919;</div>
       <h3>Funnel & CRM Automation</h3>
       <p>Automated sales funnels, lead nurture sequences, and CRM workflows that move prospects from first click to paying customer without manual follow-up.</p>
@@ -989,12 +994,11 @@
         <span class="service-tag">GoHighLevel</span>
       </div>
       <div style="display: flex; flex-direction: column; gap: 10px;">
-        <a href="pages/funnel-crm.html" class="service-link">Learn more &#8594;</a>
-        <a href="#demo-funnel" class="service-link" style="color: var(--text-muted); font-weight: 500;">Try the demo ↓</a>
+        <a href="pages/funnel-crm.html" class="service-link" onclick="event.stopPropagation()">Learn more &#8594;</a>
       </div>
     </div>
 
-    <div class="service-card">
+    <div class="service-card" onclick="scrollToDemo('demo-feedback', event)">
       <div class="service-icon" style="background: rgba(6,182,212,0.1);">&#128172;</div>
       <h3>Feedback & Support Systems</h3>
       <p>Smart feedback collection, user challenge systems, and automated support triage. Users submit issues, AI categorizes and routes them, you see structured data.</p>
@@ -1005,12 +1009,11 @@
         <span class="service-tag">Auto-Routing</span>
       </div>
       <div style="display: flex; flex-direction: column; gap: 10px;">
-        <a href="pages/feedback.html" class="service-link">Learn more &#8594;</a>
-        <a href="#demo-feedback" class="service-link" style="color: var(--text-muted); font-weight: 500;">Try the demo ↓</a>
+        <a href="pages/feedback.html" class="service-link" onclick="event.stopPropagation()">Learn more &#8594;</a>
       </div>
     </div>
 
-    <div class="service-card">
+    <div class="service-card" onclick="document.querySelector('#contact')?.scrollIntoView({behavior:'smooth',block:'start'})">
       <div class="service-icon" style="background: rgba(168,85,247,0.1);">&#129520;</div>
       <h3>Custom AI Solutions</h3>
       <p>Have something specific in mind? I build custom AI tools tailored to your exact business problem. If AI can solve it, I can build it.</p>
@@ -1020,7 +1023,7 @@
         <span class="service-tag">Unique Workflows</span>
         <span class="service-tag">Consulting</span>
       </div>
-      <a href="#contact" class="service-link">Let's talk &#8594;</a>
+      <a href="#contact" class="service-link" onclick="event.stopPropagation()">Let's talk &#8594;</a>
     </div>
 
   </div>
@@ -1259,38 +1262,45 @@
   <!-- FEEDBACK DEMO - UPGRADED -->
   <div class="demo-section" id="demo-feedback">
     <h3>Feedback & Support System Demo</h3>
-    <p class="demo-subtitle">Rate your experience and leave feedback. Watch in real-time as AI categorizes and routes your input.</p>
-    <div class="feedback-form" id="feedbackForm">
-      <p style="font-weight: 600; margin-bottom: 12px;">How was your experience?</p>
-      <div class="feedback-stars" id="feedbackStars">
-        <span class="feedback-star" onclick="setRating(1)">&#11088;</span>
-        <span class="feedback-star" onclick="setRating(2)">&#11088;</span>
-        <span class="feedback-star" onclick="setRating(3)">&#11088;</span>
-        <span class="feedback-star" onclick="setRating(4)">&#11088;</span>
-        <span class="feedback-star" onclick="setRating(5)">&#11088;</span>
-      </div>
-      <textarea class="feedback-textarea" id="feedbackText" placeholder="Tell us more about your experience..." oninput="analyzeFeedback()"></textarea>
-
-      <div class="feedback-analysis" id="feedbackAnalysis">
-        <div class="analysis-row">
-          <div class="analysis-label">Sentiment:</div>
-          <div class="analysis-value"><span id="sentimentValue" class="sentiment-positive">Positive</span></div>
-        </div>
-        <div class="analysis-row">
-          <div class="analysis-label">Category:</div>
-          <div class="analysis-value" id="categoryValue">Not detected</div>
-        </div>
-        <div class="analysis-row">
-          <div class="analysis-label">Priority:</div>
-          <div class="analysis-value" id="priorityValue">Low</div>
-        </div>
-        <div class="analysis-row">
-          <div class="analysis-label">Route To:</div>
-          <div class="analysis-value" id="routeValue">Feedback Dashboard</div>
+    <p class="demo-subtitle">Try submitting feedback below. The panel on the right shows what <strong>you (the business owner)</strong> would see in your admin dashboard — AI-powered sentiment analysis, auto-categorization, and smart routing happening in real time.</p>
+    <div style="display: flex; gap: 24px; flex-wrap: wrap;">
+      <div style="flex: 1; min-width: 280px;">
+        <div class="feedback-form" id="feedbackForm">
+          <p style="font-weight: 600; margin-bottom: 4px;">Customer View</p>
+          <p style="font-size: 0.82rem; color: var(--text-muted); margin-bottom: 12px;">This is what your customer sees — a simple feedback form.</p>
+          <div class="feedback-stars" id="feedbackStars">
+            <span class="feedback-star" onclick="setRating(1)">&#11088;</span>
+            <span class="feedback-star" onclick="setRating(2)">&#11088;</span>
+            <span class="feedback-star" onclick="setRating(3)">&#11088;</span>
+            <span class="feedback-star" onclick="setRating(4)">&#11088;</span>
+            <span class="feedback-star" onclick="setRating(5)">&#11088;</span>
+          </div>
+          <textarea class="feedback-textarea" id="feedbackText" placeholder="Tell us more about your experience..." oninput="analyzeFeedback()"></textarea>
+          <button class="feedback-submit" onclick="submitFeedback()">Submit Feedback</button>
         </div>
       </div>
-
-      <button class="feedback-submit" onclick="submitFeedback()">Submit Feedback</button>
+      <div style="flex: 1; min-width: 280px;">
+        <div class="feedback-analysis" id="feedbackAnalysis" style="display: block; background: var(--surface-2); border-radius: 12px; padding: 16px; border: 1px solid var(--border);">
+          <p style="font-weight: 700; margin-bottom: 4px; font-size: 0.95rem;">Owner Dashboard (Your View)</p>
+          <p style="font-size: 0.82rem; color: var(--text-muted); margin-bottom: 12px;">This is what you see behind the scenes — your customer never sees this.</p>
+          <div class="analysis-row">
+            <div class="analysis-label">Sentiment:</div>
+            <div class="analysis-value"><span id="sentimentValue" class="sentiment-neutral">Waiting for input...</span></div>
+          </div>
+          <div class="analysis-row">
+            <div class="analysis-label">Category:</div>
+            <div class="analysis-value" id="categoryValue">Waiting for input...</div>
+          </div>
+          <div class="analysis-row">
+            <div class="analysis-label">Priority:</div>
+            <div class="analysis-value" id="priorityValue">Waiting for input...</div>
+          </div>
+          <div class="analysis-row">
+            <div class="analysis-label">Route To:</div>
+            <div class="analysis-value" id="routeValue">Waiting for input...</div>
+          </div>
+        </div>
+      </div>
     </div>
     <div class="feedback-success" id="feedbackSuccess">
       <strong>Thanks for your feedback!</strong><br>
@@ -1644,7 +1654,10 @@
   function cycleContentExample() {
     const data = contentData[currentBusinessType][currentContentTab];
     currentContentIndex = (currentContentIndex + 1) % data.length;
-    document.getElementById('contentOutput').innerHTML = data[currentContentIndex];
+    const outputEl = document.getElementById('contentOutput');
+    const scrollY = window.scrollY;
+    outputEl.innerHTML = data[currentContentIndex];
+    window.scrollTo(0, scrollY);
   }
 
   // === FUNNEL DEMO - UPGRADED ===
@@ -1676,7 +1689,10 @@
     const analysis = document.getElementById('feedbackAnalysis');
 
     if (!text && !currentRating) {
-      analysis.classList.remove('active');
+      document.getElementById('sentimentValue').innerHTML = '<span class="sentiment-neutral">Waiting for input...</span>';
+      document.getElementById('categoryValue').textContent = 'Waiting for input...';
+      document.getElementById('priorityValue').textContent = 'Waiting for input...';
+      document.getElementById('routeValue').textContent = 'Waiting for input...';
       return;
     }
 
@@ -1716,8 +1732,6 @@
     document.getElementById('categoryValue').textContent = category;
     document.getElementById('priorityValue').textContent = priority;
     document.getElementById('routeValue').textContent = route;
-
-    analysis.classList.add('active');
   }
 
   function submitFeedback() {
@@ -1767,6 +1781,12 @@
 
     document.getElementById('contactForm').style.display = 'none';
     document.getElementById('contactSuccess').style.display = 'block';
+  }
+
+  // Scroll to demo from service cards
+  function scrollToDemo(demoId, event) {
+    if (event.target.closest('.service-link')) return;
+    document.getElementById(demoId)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
 
   // Smooth scroll for anchor links
