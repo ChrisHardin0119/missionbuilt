@@ -927,9 +927,6 @@
             // Add to submissions array
             submissions.unshift(submission);
 
-            // Save to localStorage
-            localStorage.setItem('feedbackSubmissions', JSON.stringify(submissions));
-
             // Show success message
             const successMsg = document.getElementById('successMessage');
             successMsg.classList.add('show');
@@ -991,12 +988,8 @@
             }
         }
 
-        // Load submissions from localStorage on page load
+        // Initialize dashboard on page load (session-only, no persistence)
         window.addEventListener('load', () => {
-            const stored = localStorage.getItem('feedbackSubmissions');
-            if (stored) {
-                submissions = JSON.parse(stored);
-            }
             updateDashboard();
         });
 
