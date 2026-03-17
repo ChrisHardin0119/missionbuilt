@@ -421,7 +421,11 @@
         .api-card:hover {
             border-color: var(--accent);
             box-shadow: 0 4px 12px rgba(79, 70, 229, 0.1);
-            transform: translateY(-4px);
+        }
+
+        .api-card.expanded {
+            border-color: var(--accent);
+            background: rgba(79, 70, 229, 0.03);
         }
 
         .api-icon {
@@ -432,6 +436,18 @@
         .api-name {
             font-weight: 600;
             color: var(--text);
+        }
+
+        .api-desc {
+            display: none;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-top: 0.75rem;
+            line-height: 1.5;
+        }
+
+        .api-card.expanded .api-desc {
+            display: block;
         }
 
         /* CTA Section */
@@ -662,46 +678,57 @@
         <!-- APIs Grid -->
         <section class="container">
             <h2>APIs I've Worked With</h2>
+            <p style="color: var(--text-muted); margin-bottom: 1.5rem;">Click any card to learn more about how I use it.</p>
             <div class="apis-grid">
-                <div class="api-card">
+                <div class="api-card" onclick="this.classList.toggle('expanded')">
                     <div class="api-icon">🤖</div>
                     <div class="api-name">Anthropic Claude</div>
+                    <div class="api-desc">Powers chatbots, content generation, and AI processing. Used for the live chatbot demo on this site and automated content pipelines.</div>
                 </div>
-                <div class="api-card">
+                <div class="api-card" onclick="this.classList.toggle('expanded')">
                     <div class="api-icon">🔍</div>
                     <div class="api-name">Google APIs</div>
+                    <div class="api-desc">Blogger API for auto-publishing, Google Sheets for data, OAuth2 for authentication, and Calendar for booking integrations.</div>
                 </div>
-                <div class="api-card">
+                <div class="api-card" onclick="this.classList.toggle('expanded')">
                     <div class="api-icon">📘</div>
                     <div class="api-name">Facebook Graph</div>
+                    <div class="api-desc">Automated social media posting, page management, and engagement tracking as part of content distribution pipelines.</div>
                 </div>
-                <div class="api-card">
+                <div class="api-card" onclick="this.classList.toggle('expanded')">
                     <div class="api-icon">📦</div>
                     <div class="api-name">Amazon Associates</div>
+                    <div class="api-desc">Product data retrieval and affiliate link generation for automated deal-finding and monetized content systems.</div>
                 </div>
-                <div class="api-card">
+                <div class="api-card" onclick="this.classList.toggle('expanded')">
                     <div class="api-icon">💳</div>
                     <div class="api-name">Stripe</div>
+                    <div class="api-desc">Payment processing, subscription management, and checkout flows for web apps and SaaS products.</div>
                 </div>
-                <div class="api-card">
+                <div class="api-card" onclick="this.classList.toggle('expanded')">
                     <div class="api-icon">📡</div>
                     <div class="api-name">RSS/Atom Feeds</div>
+                    <div class="api-desc">Real-time data collection from news sources, deal aggregators, and content feeds for automated pipelines.</div>
                 </div>
-                <div class="api-card">
+                <div class="api-card" onclick="this.classList.toggle('expanded')">
                     <div class="api-icon">💼</div>
                     <div class="api-name">CRM Systems</div>
+                    <div class="api-desc">HubSpot, Salesforce, and GoHighLevel integrations for lead capture, pipeline management, and automated follow-up.</div>
                 </div>
-                <div class="api-card">
+                <div class="api-card" onclick="this.classList.toggle('expanded')">
                     <div class="api-icon">📧</div>
                     <div class="api-name">Email Services</div>
+                    <div class="api-desc">SendGrid, Mailchimp, and SMTP integrations for transactional emails, drip campaigns, and automated sequences.</div>
                 </div>
-                <div class="api-card">
+                <div class="api-card" onclick="this.classList.toggle('expanded')">
                     <div class="api-icon">🗄️</div>
                     <div class="api-name">Databases</div>
+                    <div class="api-desc">PostgreSQL, MongoDB, Firebase, and Supabase for data storage, real-time sync, and user authentication.</div>
                 </div>
-                <div class="api-card">
+                <div class="api-card" onclick="this.classList.toggle('expanded')">
                     <div class="api-icon">✨</div>
                     <div class="api-name">Your API Here</div>
+                    <div class="api-desc">If your tool has an API, I can connect it. Custom integrations built to fit your exact workflow and business needs.</div>
                 </div>
             </div>
         </section>
