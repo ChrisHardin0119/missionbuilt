@@ -1,0 +1,901 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mission Built | Feedback & Support Systems</title>
+    <style>
+        :root {
+            --accent: #4f46e5;
+            --bg: #fafbfc;
+            --text: #1a1a2e;
+            --text-muted: #6b7280;
+            --border: #e5e7eb;
+            --surface: #ffffff;
+            --surface-2: #f3f4f6;
+            --radius: 16px;
+            --spacing: 1rem;
+            --transition: 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: var(--surface);
+            border-bottom: 1px solid var(--border);
+            padding: var(--spacing) 2rem;
+            z-index: 1000;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        }
+
+        nav a {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color var(--transition);
+        }
+
+        nav a:hover {
+            color: #3730a3;
+        }
+
+        /* Main layout */
+        main {
+            margin-top: 70px;
+            padding: 3rem 2rem;
+            max-width: 1200px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* Hero section */
+        .hero {
+            margin-bottom: 4rem;
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            color: var(--text);
+            font-weight: 700;
+        }
+
+        .hero p {
+            font-size: 1.25rem;
+            color: var(--text-muted);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Section styling */
+        section {
+            margin-bottom: 4rem;
+        }
+
+        h2 {
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+            color: var(--text);
+            font-weight: 700;
+        }
+
+        h3 {
+            font-size: 1.25rem;
+            margin: 1.5rem 0 1rem;
+            color: var(--text);
+            font-weight: 600;
+        }
+
+        p {
+            color: var(--text-muted);
+            margin-bottom: 1rem;
+        }
+
+        /* Demo section */
+        .demo-container {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .demo-tabs {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .demo-tab-btn {
+            background: none;
+            border: none;
+            padding: 1rem 1.5rem;
+            font-size: 1rem;
+            color: var(--text-muted);
+            cursor: pointer;
+            transition: all var(--transition);
+            border-bottom: 2px solid transparent;
+            margin-bottom: -1px;
+            font-weight: 500;
+        }
+
+        .demo-tab-btn.active {
+            color: var(--accent);
+            border-bottom-color: var(--accent);
+        }
+
+        .demo-tab-btn:hover {
+            color: var(--text);
+        }
+
+        .demo-tab {
+            display: none;
+        }
+
+        .demo-tab.active {
+            display: block;
+        }
+
+        /* Form styling */
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: var(--text);
+            font-size: 0.95rem;
+        }
+
+        .rating-stars {
+            display: flex;
+            gap: 0.5rem;
+            margin: 1rem 0;
+        }
+
+        .star {
+            font-size: 2rem;
+            cursor: pointer;
+            transition: color var(--transition), transform var(--transition);
+            color: var(--border);
+        }
+
+        .star:hover,
+        .star.active {
+            color: #fbbf24;
+            transform: scale(1.1);
+        }
+
+        select, textarea, input[type="email"], input[type="text"] {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-family: inherit;
+            font-size: 1rem;
+            color: var(--text);
+            transition: border-color var(--transition);
+        }
+
+        select:focus, textarea:focus, input:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin: 1rem 0;
+        }
+
+        input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+            accent-color: var(--accent);
+        }
+
+        .checkbox-group label {
+            margin: 0;
+            cursor: pointer;
+        }
+
+        .btn {
+            padding: 0.75rem 2rem;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all var(--transition);
+            font-family: inherit;
+        }
+
+        .btn-primary {
+            background: var(--accent);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #3730a3;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(79, 70, 229, 0.2);
+        }
+
+        .btn-primary:active {
+            transform: translateY(0);
+        }
+
+        /* Dashboard styling */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: var(--surface-2);
+            padding: 1.5rem;
+            border-radius: var(--radius);
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--accent);
+            margin: 0.5rem 0;
+        }
+
+        .stat-label {
+            font-size: 0.95rem;
+            color: var(--text-muted);
+        }
+
+        .submissions-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .submission-item {
+            background: var(--surface-2);
+            padding: 1.5rem;
+            border-radius: 12px;
+            border-left: 4px solid var(--border);
+            transition: all var(--transition);
+        }
+
+        .submission-item:hover {
+            transform: translateX(4px);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .submission-item.high {
+            border-left-color: #10b981;
+        }
+
+        .submission-item.medium {
+            border-left-color: #f59e0b;
+        }
+
+        .submission-item.low {
+            border-left-color: #ef4444;
+        }
+
+        .submission-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 0.75rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .submission-title {
+            font-weight: 600;
+            color: var(--text);
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            background: var(--surface);
+            color: var(--text);
+        }
+
+        .badge.category {
+            background: rgba(79, 70, 229, 0.1);
+            color: var(--accent);
+        }
+
+        .badge.routing {
+            background: rgba(100, 116, 139, 0.1);
+            color: #64748b;
+        }
+
+        .badge.priority-high {
+            background: rgba(16, 185, 129, 0.1);
+            color: #10b981;
+        }
+
+        .badge.priority-medium {
+            background: rgba(245, 158, 11, 0.1);
+            color: #f59e0b;
+        }
+
+        .badge.priority-low {
+            background: rgba(239, 68, 68, 0.1);
+            color: #ef4444;
+        }
+
+        .submission-meta {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+            flex-wrap: wrap;
+            font-size: 0.9rem;
+        }
+
+        .submission-text {
+            color: var(--text-muted);
+            margin: 0.75rem 0;
+            font-style: italic;
+        }
+
+        /* Case study section */
+        .case-study {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .case-study h3 {
+            color: var(--accent);
+            margin-top: 1.5rem;
+        }
+
+        .case-study h3:first-child {
+            margin-top: 0;
+        }
+
+        .tech-list {
+            list-style: none;
+            margin: 1rem 0;
+        }
+
+        .tech-list li {
+            padding: 0.5rem 0;
+            color: var(--text-muted);
+            position: relative;
+            padding-left: 1.5rem;
+        }
+
+        .tech-list li::before {
+            content: "→";
+            position: absolute;
+            left: 0;
+            color: var(--accent);
+            font-weight: bold;
+        }
+
+        /* Systems grid */
+        .systems-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+
+        .system-item {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            padding: 1.5rem;
+            border-radius: 12px;
+            text-align: center;
+            transition: all var(--transition);
+        }
+
+        .system-item:hover {
+            border-color: var(--accent);
+            box-shadow: 0 4px 12px rgba(79, 70, 229, 0.1);
+        }
+
+        .system-item-name {
+            font-weight: 600;
+            color: var(--text);
+        }
+
+        /* CTA Section */
+        .cta-section {
+            text-align: center;
+            padding: 3rem;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+        }
+
+        .cta-section h2 {
+            margin-bottom: 1rem;
+        }
+
+        .cta-section p {
+            margin-bottom: 1.5rem;
+            font-size: 1.1rem;
+        }
+
+        .cta-section a {
+            display: inline-block;
+            padding: 0.75rem 2rem;
+            background: var(--accent);
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all var(--transition);
+        }
+
+        .cta-section a:hover {
+            background: #3730a3;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(79, 70, 229, 0.2);
+        }
+
+        /* Success message */
+        .success-message {
+            display: none;
+            background: rgba(16, 185, 129, 0.1);
+            color: #10b981;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            border: 1px solid rgba(16, 185, 129, 0.3);
+        }
+
+        .success-message.show {
+            display: block;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            main {
+                padding: 2rem 1rem;
+                margin-top: 60px;
+            }
+
+            nav {
+                padding: 1rem;
+            }
+
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            h2 {
+                font-size: 1.5rem;
+            }
+
+            .demo-tabs {
+                flex-wrap: wrap;
+            }
+
+            .demo-tab-btn {
+                padding: 0.75rem 1rem;
+                font-size: 0.9rem;
+            }
+
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .submission-header {
+                flex-direction: column;
+            }
+
+            .systems-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero h1 {
+                font-size: 1.5rem;
+            }
+
+            h2 {
+                font-size: 1.25rem;
+            }
+
+            .demo-container {
+                padding: 1rem;
+            }
+
+            .systems-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .rating-stars {
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <a href="../index.html">← Back to Portfolio</a>
+    </nav>
+
+    <main>
+        <!-- Hero Section -->
+        <section class="hero">
+            <h1>Feedback & Support Systems</h1>
+            <p>Building structured feedback channels that turn user input into actionable insights</p>
+        </section>
+
+        <!-- Live Demo Section -->
+        <section>
+            <h2>Expanded Live Demo</h2>
+
+            <div class="demo-container">
+                <div class="demo-tabs">
+                    <button class="demo-tab-btn active" onclick="switchTab('submit')">Submit Feedback</button>
+                    <button class="demo-tab-btn" onclick="switchTab('dashboard')">Admin Dashboard</button>
+                </div>
+
+                <!-- Submit Tab -->
+                <div id="submit" class="demo-tab active">
+                    <div class="success-message" id="successMessage">
+                        ✓ Feedback submitted successfully! Check the Admin Dashboard to see it appear in real-time.
+                    </div>
+
+                    <form onsubmit="submitFeedback(event)">
+                        <div class="form-group">
+                            <label>Rate Your Experience</label>
+                            <div class="rating-stars" id="ratingStars">
+                                <span class="star" onclick="setRating(1)">★</span>
+                                <span class="star" onclick="setRating(2)">★</span>
+                                <span class="star" onclick="setRating(3)">★</span>
+                                <span class="star" onclick="setRating(4)">★</span>
+                                <span class="star" onclick="setRating(5)">★</span>
+                            </div>
+                            <input type="hidden" id="rating" value="0" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="category">Category</label>
+                            <select id="category" required>
+                                <option value="">Select a category...</option>
+                                <option value="Bug Report">Bug Report</option>
+                                <option value="Feature Request">Feature Request</option>
+                                <option value="General Feedback">General Feedback</option>
+                                <option value="Complaint">Complaint</option>
+                                <option value="Praise">Praise</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="feedback">Your Feedback</label>
+                            <textarea id="feedback" placeholder="Tell us what you think..." required></textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="email">Email (Optional)</label>
+                            <input type="email" id="email" placeholder="your@email.com">
+                        </div>
+
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="challenge" />
+                            <label for="challenge">Challenge This Answer (Structured Dispute)</label>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary">Submit Feedback</button>
+                    </form>
+                </div>
+
+                <!-- Dashboard Tab -->
+                <div id="dashboard" class="demo-tab">
+                    <h3>System Overview</h3>
+                    <div class="dashboard-grid">
+                        <div class="stat-card">
+                            <div class="stat-label">Total Submissions</div>
+                            <div class="stat-value" id="totalSubmissions">0</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-label">Average Rating</div>
+                            <div class="stat-value" id="avgRating">—</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-label">Open Issues</div>
+                            <div class="stat-value" id="openIssues">0</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-label">Response Rate</div>
+                            <div class="stat-value" id="responseRate">0%</div>
+                        </div>
+                    </div>
+
+                    <h3>Recent Submissions</h3>
+                    <div class="submissions-list" id="submissionsList">
+                        <p style="color: var(--text-muted); text-align: center; padding: 2rem;">
+                            No submissions yet. Submit feedback in the "Submit Feedback" tab to see it appear here.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Case Study Section -->
+        <section>
+            <h2>Case Study: Challenge This Answer System</h2>
+
+            <div class="case-study">
+                <h3>The Problem</h3>
+                <p>
+                    I built a career quiz application that helped users discover their ideal career path. The challenge: users would sometimes disagree with quiz results or feel the answers didn't capture their situation accurately. A generic "report" button wasn't good enough—it created vague complaints with no context, making it impossible to improve the quiz or understand what went wrong.
+                </p>
+
+                <h3>The Solution</h3>
+                <p>
+                    I created a "Challenge This Answer" system that transforms user disagreement into structured, actionable feedback. Instead of just flagging an issue, users can:
+                </p>
+                <ul class="tech-list">
+                    <li>Flag specific quiz answers they disagree with</li>
+                    <li>Provide their reasoning and context</li>
+                    <li>Indicate what answer they expected</li>
+                    <li>Have their challenge stored with full quiz context</li>
+                </ul>
+
+                <h3>The Technical Implementation</h3>
+                <ul class="tech-list">
+                    <li>React components with TypeScript interfaces (ChallengeFlag type)</li>
+                    <li>localStorage persistence for saveChallenge/loadChallenges functions</li>
+                    <li>Auto-categorization engine that classifies disputes by type</li>
+                    <li>Context preservation storing question ID, user's answer, expected answer, and timestamp</li>
+                    <li>Routing system that directs challenges to the right team (Product, Content, etc.)</li>
+                </ul>
+
+                <h3>The Result</h3>
+                <p>
+                    Every piece of user disagreement became usable data for improving quiz content. Instead of dismissing complaints, I could see patterns: "Question 12 has 47 challenges—we need to reword it." This structured feedback approach increased quiz quality and user satisfaction simultaneously. The system proved that feedback systems are most valuable when they preserve context and automate the grunt work of categorization and routing.
+                </p>
+            </div>
+        </section>
+
+        <!-- System Types Section -->
+        <section>
+            <h2>System Types I Build</h2>
+            <div class="systems-grid">
+                <div class="system-item">
+                    <div class="system-item-name">Rating Systems</div>
+                </div>
+                <div class="system-item">
+                    <div class="system-item-name">NPS Surveys</div>
+                </div>
+                <div class="system-item">
+                    <div class="system-item-name">Bug Reporters</div>
+                </div>
+                <div class="system-item">
+                    <div class="system-item-name">Feature Request Boards</div>
+                </div>
+                <div class="system-item">
+                    <div class="system-item-name">Challenge/Dispute Systems</div>
+                </div>
+                <div class="system-item">
+                    <div class="system-item-name">Auto-Triage & Routing</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CTA Section -->
+        <section class="cta-section">
+            <h2>Ready to Improve Your Feedback?</h2>
+            <p>Let's build a feedback system that actually drives product decisions.</p>
+            <a href="../index.html#contact">Get in Touch</a>
+        </section>
+    </main>
+
+    <script>
+        let currentRating = 0;
+        let submissions = [];
+
+        function setRating(rating) {
+            currentRating = rating;
+            document.getElementById('rating').value = rating;
+
+            const stars = document.querySelectorAll('#ratingStars .star');
+            stars.forEach((star, index) => {
+                if (index < rating) {
+                    star.classList.add('active');
+                } else {
+                    star.classList.remove('active');
+                }
+            });
+        }
+
+        function switchTab(tabName) {
+            // Hide all tabs
+            document.querySelectorAll('.demo-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            document.querySelectorAll('.demo-tab-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+
+            // Show selected tab
+            document.getElementById(tabName).classList.add('active');
+            event.target.classList.add('active');
+        }
+
+        function submitFeedback(e) {
+            e.preventDefault();
+
+            const rating = parseInt(document.getElementById('rating').value);
+            const category = document.getElementById('category').value;
+            const feedback = document.getElementById('feedback').value;
+            const email = document.getElementById('email').value;
+            const isChallenge = document.getElementById('challenge').checked;
+
+            // Validation
+            if (rating === 0) {
+                alert('Please select a rating');
+                return;
+            }
+
+            // Determine priority based on rating
+            let priority = 'high';
+            if (rating >= 4) {
+                priority = 'high';
+            } else if (rating === 3) {
+                priority = 'medium';
+            } else {
+                priority = 'low';
+            }
+
+            // Auto-route based on category
+            let routing = 'Support Team';
+            if (category === 'Feature Request') {
+                routing = 'Product Team';
+            } else if (category === 'Praise') {
+                routing = 'Marketing';
+            } else if (category === 'Bug Report') {
+                routing = 'Engineering';
+            }
+
+            // Create submission object
+            const submission = {
+                id: Date.now(),
+                rating: rating,
+                category: category,
+                feedback: feedback,
+                email: email || 'anonymous@user.local',
+                isChallenge: isChallenge,
+                priority: priority,
+                routing: routing,
+                timestamp: new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })
+            };
+
+            // Add to submissions array
+            submissions.unshift(submission);
+
+            // Save to localStorage
+            localStorage.setItem('feedbackSubmissions', JSON.stringify(submissions));
+
+            // Show success message
+            const successMsg = document.getElementById('successMessage');
+            successMsg.classList.add('show');
+            setTimeout(() => {
+                successMsg.classList.remove('show');
+            }, 4000);
+
+            // Reset form
+            document.querySelector('form').reset();
+            setRating(0);
+            currentRating = 0;
+
+            // Update dashboard
+            updateDashboard();
+        }
+
+        function updateDashboard() {
+            const totalSubmissions = submissions.length;
+            const avgRating = submissions.length > 0
+                ? (submissions.reduce((sum, s) => sum + s.rating, 0) / submissions.length).toFixed(1)
+                : '—';
+            const openIssues = submissions.filter(s => s.category === 'Bug Report' || s.category === 'Complaint').length;
+            const responseRate = '85%';
+
+            document.getElementById('totalSubmissions').textContent = totalSubmissions;
+            document.getElementById('avgRating').textContent = avgRating;
+            document.getElementById('openIssues').textContent = openIssues;
+            document.getElementById('responseRate').textContent = responseRate;
+
+            // Render submissions list
+            const submissionsList = document.getElementById('submissionsList');
+            if (submissions.length === 0) {
+                submissionsList.innerHTML = `
+                    <p style="color: var(--text-muted); text-align: center; padding: 2rem;">
+                        No submissions yet. Submit feedback in the "Submit Feedback" tab to see it appear here.
+                    </p>
+                `;
+            } else {
+                submissionsList.innerHTML = submissions.map(sub => `
+                    <div class="submission-item ${sub.priority}">
+                        <div class="submission-header">
+                            <div class="submission-title">
+                                ${'★'.repeat(sub.rating)}${'☆'.repeat(5 - sub.rating)}
+                            </div>
+                            <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                                <span class="badge category">${sub.category}</span>
+                                <span class="badge routing">${sub.routing}</span>
+                                <span class="badge priority-${sub.priority}">Priority: ${sub.priority}</span>
+                                ${sub.isChallenge ? '<span class="badge" style="background: rgba(168, 85, 247, 0.1); color: #a855f7;">⚠ Challenge</span>' : ''}
+                            </div>
+                        </div>
+                        <div class="submission-text">"${sub.feedback.substring(0, 120)}${sub.feedback.length > 120 ? '...' : ''}"</div>
+                        <div class="submission-meta">
+                            <span>From: ${sub.email}</span>
+                            <span>${sub.timestamp}</span>
+                        </div>
+                    </div>
+                `).join('');
+            }
+        }
+
+        // Load submissions from localStorage on page load
+        window.addEventListener('load', () => {
+            const stored = localStorage.getItem('feedbackSubmissions');
+            if (stored) {
+                submissions = JSON.parse(stored);
+            }
+            updateDashboard();
+        });
+    </script>
+</body>
+</html>
