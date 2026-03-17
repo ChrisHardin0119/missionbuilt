@@ -1,0 +1,1135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mission Built | Web Apps & Interactive Dashboards</title>
+    <style>
+        :root {
+            --accent: #4f46e5;
+            --bg: #fafbfc;
+            --text: #1a1a2e;
+            --text-muted: #6b7280;
+            --border: #e5e7eb;
+            --surface: #ffffff;
+            --surface-2: #f3f4f6;
+            --radius: 16px;
+            --duration: 0.3s;
+            --easing: cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            height: 100%;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            color: var(--text);
+            background-color: var(--bg);
+            line-height: 1.6;
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: var(--surface);
+            border-bottom: 1px solid var(--border);
+            padding: 1rem 2rem;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+
+        nav a {
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 500;
+            transition: opacity var(--duration) var(--easing);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        nav a:hover {
+            opacity: 0.7;
+        }
+
+        nav a::before {
+            content: '←';
+            font-size: 1.2em;
+        }
+
+        main {
+            margin-top: 4rem;
+            padding: 3rem 2rem;
+            max-width: 1200px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* Hero Section */
+        .hero {
+            text-align: center;
+            margin-bottom: 4rem;
+            animation: fadeInDown 0.6s var(--easing);
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, var(--accent), #6366f1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero p {
+            font-size: 1.1rem;
+            color: var(--text-muted);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Tabs */
+        .tabs-container {
+            margin-bottom: 4rem;
+        }
+
+        .tabs-nav {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            border-bottom: 1px solid var(--border);
+            flex-wrap: wrap;
+        }
+
+        .tabs-nav button {
+            background: none;
+            border: none;
+            padding: 1rem 1.5rem;
+            font-size: 1rem;
+            font-weight: 500;
+            color: var(--text-muted);
+            cursor: pointer;
+            position: relative;
+            transition: color var(--duration) var(--easing);
+            border-bottom: 2px solid transparent;
+            margin-bottom: -1px;
+        }
+
+        .tabs-nav button:hover {
+            color: var(--text);
+        }
+
+        .tabs-nav button.active {
+            color: var(--accent);
+            border-bottom-color: var(--accent);
+        }
+
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.4s var(--easing);
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Demo Container */
+        .demo-container {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        /* Career Quiz Demo */
+        .quiz-step {
+            display: none;
+        }
+
+        .quiz-step.active {
+            display: block;
+            animation: fadeIn 0.3s var(--easing);
+        }
+
+        .quiz-question {
+            margin-bottom: 2rem;
+        }
+
+        .quiz-question h3 {
+            margin-bottom: 1.5rem;
+            font-size: 1.3rem;
+        }
+
+        .quiz-options {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .quiz-option {
+            padding: 1rem 1.5rem;
+            border: 2px solid var(--border);
+            border-radius: var(--radius);
+            cursor: pointer;
+            transition: all var(--duration) var(--easing);
+            background: var(--surface-2);
+            font-size: 1rem;
+            text-align: left;
+        }
+
+        .quiz-option:hover {
+            border-color: var(--accent);
+            background: var(--surface);
+        }
+
+        .quiz-option input[type="radio"] {
+            margin-right: 0.75rem;
+            cursor: pointer;
+        }
+
+        .quiz-progress {
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 6px;
+            background: var(--surface-2);
+            border-radius: 3px;
+            overflow: hidden;
+            margin-bottom: 0.5rem;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent), #6366f1);
+            transition: width var(--duration) var(--easing);
+        }
+
+        .progress-text {
+            font-size: 0.875rem;
+            color: var(--text-muted);
+        }
+
+        .quiz-results {
+            display: none;
+            text-align: center;
+        }
+
+        .quiz-results.show {
+            display: block;
+            animation: fadeIn 0.4s var(--easing);
+        }
+
+        .results-heading {
+            font-size: 1.8rem;
+            margin-bottom: 2rem;
+            color: var(--accent);
+        }
+
+        .dimension-bar {
+            margin-bottom: 1.5rem;
+            text-align: left;
+        }
+
+        .dimension-label {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+
+        .dimension-track {
+            width: 100%;
+            height: 10px;
+            background: var(--surface-2);
+            border-radius: 5px;
+            overflow: hidden;
+        }
+
+        .dimension-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent), #6366f1);
+            transition: width 0.6s var(--easing);
+            border-radius: 5px;
+        }
+
+        /* Spending Tracker Demo */
+        .tracker-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: var(--surface-2);
+            padding: 1.5rem;
+            border-radius: var(--radius);
+            text-align: center;
+            animation: slideUp 0.5s var(--easing);
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--accent);
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        .pie-chart {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            margin: 0 auto 2rem;
+            background: conic-gradient(
+                from 0deg,
+                #4f46e5 0deg 90deg,
+                #6366f1 90deg 180deg,
+                #818cf8 180deg 270deg,
+                #c7d2fe 270deg 360deg
+            );
+            box-shadow: 0 4px 12px rgba(79, 70, 229, 0.1);
+        }
+
+        .pie-legend {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .legend-color {
+            width: 16px;
+            height: 16px;
+            border-radius: 3px;
+        }
+
+        .legend-color.cat1 { background: #4f46e5; }
+        .legend-color.cat2 { background: #6366f1; }
+        .legend-color.cat3 { background: #818cf8; }
+        .legend-color.cat4 { background: #c7d2fe; }
+
+        .transactions-list {
+            max-width: 500px;
+            margin: 2rem auto 0;
+        }
+
+        .transaction-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem;
+            border-bottom: 1px solid var(--border);
+            animation: slideIn 0.3s var(--easing);
+        }
+
+        .transaction-item:last-child {
+            border-bottom: none;
+        }
+
+        .transaction-name {
+            font-weight: 500;
+        }
+
+        .transaction-amount {
+            color: var(--accent);
+            font-weight: 600;
+        }
+
+        /* Dashboard Demo */
+        .dashboard-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .metric-card {
+            background: var(--surface-2);
+            padding: 2rem;
+            border-radius: var(--radius);
+            border-left: 4px solid var(--accent);
+            animation: slideUp 0.5s var(--easing);
+        }
+
+        .metric-card h3 {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 0.75rem;
+        }
+
+        .metric-value {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: var(--text);
+            margin-bottom: 0.5rem;
+        }
+
+        .metric-change {
+            font-size: 0.85rem;
+            color: #10b981;
+        }
+
+        .chart-container {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 2rem;
+        }
+
+        .chart-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+        }
+
+        svg {
+            max-width: 100%;
+            height: auto;
+        }
+
+        /* Case Study */
+        .case-study {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 3rem;
+            margin-bottom: 3rem;
+            animation: fadeInUp 0.6s var(--easing);
+        }
+
+        .case-study h2 {
+            font-size: 2rem;
+            margin-bottom: 2rem;
+            color: var(--accent);
+        }
+
+        .case-study-section {
+            margin-bottom: 2rem;
+        }
+
+        .case-study-section h3 {
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+            color: var(--text);
+        }
+
+        .case-study-section p {
+            color: var(--text-muted);
+            margin-bottom: 1rem;
+            line-height: 1.8;
+        }
+
+        .tech-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+
+        .tech-tag {
+            background: var(--surface-2);
+            color: var(--accent);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        /* What You Get */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .feature-item {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            padding: 2rem;
+            border-radius: var(--radius);
+            text-align: center;
+            animation: slideUp 0.5s var(--easing);
+        }
+
+        .feature-item h3 {
+            font-size: 1.1rem;
+            margin-bottom: 1rem;
+            color: var(--accent);
+        }
+
+        .feature-item p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+
+        /* CTA */
+        .cta-section {
+            text-align: center;
+            padding: 3rem;
+            background: linear-gradient(135deg, var(--accent), #6366f1);
+            border-radius: var(--radius);
+            color: white;
+            margin-bottom: 2rem;
+        }
+
+        .cta-section h2 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .cta-section p {
+            font-size: 1.1rem;
+            margin-bottom: 2rem;
+            opacity: 0.95;
+        }
+
+        .cta-button {
+            display: inline-block;
+            background: white;
+            color: var(--accent);
+            padding: 1rem 2rem;
+            border-radius: var(--radius);
+            text-decoration: none;
+            font-weight: 600;
+            transition: transform var(--duration) var(--easing), box-shadow var(--duration) var(--easing);
+        }
+
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        /* Buttons */
+        button {
+            font-family: inherit;
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            background: var(--accent);
+            color: white;
+            border: none;
+            border-radius: var(--radius);
+            font-weight: 500;
+            cursor: pointer;
+            transition: all var(--duration) var(--easing);
+            font-size: 1rem;
+        }
+
+        .btn:hover {
+            background: #4338ca;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            nav {
+                padding: 1rem;
+                font-size: 0.95rem;
+            }
+
+            main {
+                padding: 2rem 1rem;
+                margin-top: 3.5rem;
+            }
+
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .hero p {
+                font-size: 1rem;
+            }
+
+            .case-study {
+                padding: 1.5rem;
+            }
+
+            .tabs-nav {
+                gap: 0.5rem;
+            }
+
+            .tabs-nav button {
+                padding: 0.75rem 1rem;
+                font-size: 0.9rem;
+            }
+
+            .dashboard-stats {
+                grid-template-columns: 1fr;
+            }
+
+            .metric-value {
+                font-size: 2rem;
+            }
+
+            .cta-section h2 {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <a href="../index.html">Back to Portfolio</a>
+    </nav>
+
+    <main>
+        <!-- Hero Section -->
+        <section class="hero">
+            <h1>Web Apps & Interactive Dashboards</h1>
+            <p>Full-stack web applications with beautiful UIs, real-time features, and intuitive user experiences</p>
+        </section>
+
+        <!-- Interactive Demos -->
+        <section class="tabs-container">
+            <div class="tabs-nav">
+                <button class="tab-btn active" data-tab="quiz">Career Quiz</button>
+                <button class="tab-btn" data-tab="spending">Spending Tracker</button>
+                <button class="tab-btn" data-tab="dashboard">Dashboard View</button>
+            </div>
+
+            <!-- Career Quiz Demo -->
+            <div id="quiz" class="tab-content active">
+                <div class="demo-container">
+                    <div class="quiz-progress">
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="quizProgressFill"></div>
+                        </div>
+                        <div class="progress-text" id="quizProgressText">Question 1 of 3</div>
+                    </div>
+
+                    <div class="quiz-step active">
+                        <div class="quiz-question">
+                            <h3>1. When faced with a new problem, do you prefer to:</h3>
+                            <div class="quiz-options">
+                                <label class="quiz-option">
+                                    <input type="radio" name="q1" value="intuition"> Trust your gut instinct and jump in
+                                </label>
+                                <label class="quiz-option">
+                                    <input type="radio" name="q1" value="technical"> Analyze data and research thoroughly
+                                </label>
+                                <label class="quiz-option">
+                                    <input type="radio" name="q1" value="safety"> Check protocols and minimize risk
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="quiz-step">
+                        <div class="quiz-question">
+                            <h3>2. Your ideal work environment is:</h3>
+                            <div class="quiz-options">
+                                <label class="quiz-option">
+                                    <input type="radio" name="q2" value="intuition"> Fast-paced and unpredictable
+                                </label>
+                                <label class="quiz-option">
+                                    <input type="radio" name="q2" value="technical"> Structured with clear systems
+                                </label>
+                                <label class="quiz-option">
+                                    <input type="radio" name="q2" value="safety"> Stable and rule-based
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="quiz-step">
+                        <div class="quiz-question">
+                            <h3>3. When learning something new, you:</h3>
+                            <div class="quiz-options">
+                                <label class="quiz-option">
+                                    <input type="radio" name="q3" value="intuition"> Learn by experimenting
+                                </label>
+                                <label class="quiz-option">
+                                    <input type="radio" name="q3" value="technical"> Deep dive into documentation
+                                </label>
+                                <label class="quiz-option">
+                                    <input type="radio" name="q3" value="safety"> Follow proven best practices
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="quiz-results" id="quizResults">
+                        <div class="results-heading">Your Results</div>
+
+                        <div class="dimension-bar">
+                            <div class="dimension-label">
+                                <span>Intuition</span>
+                                <span id="intuitionScore">0%</span>
+                            </div>
+                            <div class="dimension-track">
+                                <div class="dimension-fill" id="intuitionFill"></div>
+                            </div>
+                        </div>
+
+                        <div class="dimension-bar">
+                            <div class="dimension-label">
+                                <span>Technical</span>
+                                <span id="technicalScore">0%</span>
+                            </div>
+                            <div class="dimension-track">
+                                <div class="dimension-fill" id="technicalFill"></div>
+                            </div>
+                        </div>
+
+                        <div class="dimension-bar">
+                            <div class="dimension-label">
+                                <span>Safety-Focused</span>
+                                <span id="safetyScore">0%</span>
+                            </div>
+                            <div class="dimension-track">
+                                <div class="dimension-fill" id="safetyFill"></div>
+                            </div>
+                        </div>
+
+                        <button class="btn" onclick="resetQuiz()" style="margin-top: 2rem;">Start Over</button>
+                    </div>
+
+                    <div id="quizNavButtons" style="display: flex; gap: 1rem; justify-content: center; margin-top: 2rem;">
+                        <button class="btn" id="prevBtn" onclick="prevStep()" style="display: none;">← Previous</button>
+                        <button class="btn" id="nextBtn" onclick="nextStep()">Next →</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Spending Tracker Demo -->
+            <div id="spending" class="tab-content">
+                <div class="demo-container">
+                    <div class="tracker-stats">
+                        <div class="stat-card">
+                            <div class="stat-value">$2,450</div>
+                            <div class="stat-label">Total Spent</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value">$612</div>
+                            <div class="stat-label">This Week</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value">$350</div>
+                            <div class="stat-label">Budget Remaining</div>
+                        </div>
+                    </div>
+
+                    <h3 style="text-align: center; margin: 2rem 0 1rem; color: var(--text);">Spending Breakdown</h3>
+                    <div class="pie-chart"></div>
+
+                    <div class="pie-legend">
+                        <div class="legend-item">
+                            <div class="legend-color cat1"></div>
+                            <span>Food & Dining (35%)</span>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-color cat2"></div>
+                            <span>Transportation (25%)</span>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-color cat3"></div>
+                            <span>Entertainment (20%)</span>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-color cat4"></div>
+                            <span>Other (20%)</span>
+                        </div>
+                    </div>
+
+                    <div class="transactions-list">
+                        <h3 style="margin-bottom: 1rem; color: var(--text);">Recent Transactions</h3>
+                        <div class="transaction-item">
+                            <span class="transaction-name">Coffee Shop</span>
+                            <span class="transaction-amount">-$5.50</span>
+                        </div>
+                        <div class="transaction-item">
+                            <span class="transaction-name">Grocery Store</span>
+                            <span class="transaction-amount">-$67.24</span>
+                        </div>
+                        <div class="transaction-item">
+                            <span class="transaction-name">Gas Station</span>
+                            <span class="transaction-amount">-$45.00</span>
+                        </div>
+                        <div class="transaction-item">
+                            <span class="transaction-name">Movie Tickets</span>
+                            <span class="transaction-amount">-$28.00</span>
+                        </div>
+                        <div class="transaction-item">
+                            <span class="transaction-name">Restaurant</span>
+                            <span class="transaction-amount">-$62.45</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Dashboard Demo -->
+            <div id="dashboard" class="tab-content">
+                <div class="demo-container">
+                    <div class="dashboard-stats">
+                        <div class="metric-card">
+                            <h3>Users</h3>
+                            <div class="metric-value">12,485</div>
+                            <div class="metric-change">↑ 8.2% from last month</div>
+                        </div>
+                        <div class="metric-card">
+                            <h3>Revenue</h3>
+                            <div class="metric-value">$48,290</div>
+                            <div class="metric-change">↑ 12.5% from last month</div>
+                        </div>
+                        <div class="metric-card">
+                            <h3>Conversion Rate</h3>
+                            <div class="metric-value">3.2%</div>
+                            <div class="metric-change">↑ 0.5% from last month</div>
+                        </div>
+                        <div class="metric-card">
+                            <h3>Active Sessions</h3>
+                            <div class="metric-value">2,047</div>
+                            <div class="metric-change">↑ 15.3% from last month</div>
+                        </div>
+                    </div>
+
+                    <div class="chart-container">
+                        <div class="chart-title">Revenue Trend (Last 7 Days)</div>
+                        <svg viewBox="0 0 600 250" xmlns="http://www.w3.org/2000/svg">
+                            <!-- Grid lines -->
+                            <line x1="50" y1="200" x2="550" y2="200" stroke="var(--border)" stroke-width="1"/>
+                            <line x1="50" y1="150" x2="550" y2="150" stroke="var(--border)" stroke-width="1" opacity="0.5"/>
+                            <line x1="50" y1="100" x2="550" y2="100" stroke="var(--border)" stroke-width="1" opacity="0.5"/>
+                            <line x1="50" y1="50" x2="550" y2="50" stroke="var(--border)" stroke-width="1" opacity="0.5"/>
+
+                            <!-- Y axis labels -->
+                            <text x="20" y="205" font-size="12" fill="var(--text-muted)" text-anchor="end">$0</text>
+                            <text x="20" y="155" font-size="12" fill="var(--text-muted)" text-anchor="end">$2K</text>
+                            <text x="20" y="105" font-size="12" fill="var(--text-muted)" text-anchor="end">$4K</text>
+                            <text x="20" y="55" font-size="12" fill="var(--text-muted)" text-anchor="end">$6K</text>
+
+                            <!-- Area fill -->
+                            <defs>
+                                <linearGradient id="areaGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                                    <stop offset="0%" style="stop-color:#4f46e5;stop-opacity:0.3" />
+                                    <stop offset="100%" style="stop-color:#4f46e5;stop-opacity:0" />
+                                </linearGradient>
+                            </defs>
+
+                            <!-- Area under line -->
+                            <path d="M 50 120 L 120 90 L 190 110 L 260 70 L 330 95 L 400 65 L 470 85 L 540 60 L 540 200 L 50 200 Z" fill="url(#areaGradient)"/>
+
+                            <!-- Line -->
+                            <polyline points="50,120 120,90 190,110 260,70 330,95 400,65 470,85 540,60" stroke="#4f46e5" stroke-width="3" fill="none"/>
+
+                            <!-- Points -->
+                            <circle cx="50" cy="120" r="4" fill="#4f46e5"/>
+                            <circle cx="120" cy="90" r="4" fill="#4f46e5"/>
+                            <circle cx="190" cy="110" r="4" fill="#4f46e5"/>
+                            <circle cx="260" cy="70" r="4" fill="#4f46e5"/>
+                            <circle cx="330" cy="95" r="4" fill="#4f46e5"/>
+                            <circle cx="400" cy="65" r="4" fill="#4f46e5"/>
+                            <circle cx="470" cy="85" r="4" fill="#4f46e5"/>
+                            <circle cx="540" cy="60" r="4" fill="#4f46e5"/>
+
+                            <!-- X axis labels -->
+                            <text x="50" y="225" font-size="12" fill="var(--text-muted)" text-anchor="middle">Mon</text>
+                            <text x="120" y="225" font-size="12" fill="var(--text-muted)" text-anchor="middle">Tue</text>
+                            <text x="190" y="225" font-size="12" fill="var(--text-muted)" text-anchor="middle">Wed</text>
+                            <text x="260" y="225" font-size="12" fill="var(--text-muted)" text-anchor="middle">Thu</text>
+                            <text x="330" y="225" font-size="12" fill="var(--text-muted)" text-anchor="middle">Fri</text>
+                            <text x="400" y="225" font-size="12" fill="var(--text-muted)" text-anchor="middle">Sat</text>
+                            <text x="470" y="225" font-size="12" fill="var(--text-muted)" text-anchor="middle">Sun</text>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Case Study -->
+        <section class="case-study">
+            <h2>The CouldI Project</h2>
+
+            <div class="case-study-section">
+                <h3>The Problem</h3>
+                <p>People exploring career changes faced a critical challenge: how could they test their aptitude across multiple dimensions before committing to a new path? Traditional career assessments were one-dimensional and didn't capture the complex nature of real-world career fit.</p>
+            </div>
+
+            <div class="case-study-section">
+                <h3>The Solution</h3>
+                <p>I built CouldI, a Next.js career quiz platform that helps users discover their career fit across 15 different paths spanning trades, tech, emergency services, and creative fields. The platform uses multi-dimensional scoring to evaluate users across intuition, technical ability, safety focus, and pattern recognition—the dimensions that actually matter for career success.</p>
+                <p>A standout feature: the "Challenge This Answer" feedback system lets users flag questions they disagree with, creating a feedback loop that makes the platform smarter over time.</p>
+            </div>
+
+            <div class="case-study-section">
+                <h3>The Tech Stack</h3>
+                <p>Built with modern web technologies designed for scale and performance:</p>
+                <div class="tech-tags">
+                    <span class="tech-tag">Next.js</span>
+                    <span class="tech-tag">TypeScript</span>
+                    <span class="tech-tag">Multi-dimensional Scoring Engine</span>
+                    <span class="tech-tag">localStorage Persistence</span>
+                    <span class="tech-tag">Responsive Design</span>
+                </div>
+            </div>
+
+            <div class="case-study-section">
+                <h3>The Result</h3>
+                <p>A polished, production-ready web app that demonstrates full-stack capability from concept to deployment. The platform successfully combines intuitive UX with sophisticated backend logic, delivering real value to users exploring their career options.</p>
+            </div>
+        </section>
+
+        <!-- What You Get -->
+        <section>
+            <h2 style="font-size: 2rem; margin-bottom: 2rem; text-align: center; color: var(--text);">What You Get With Custom Web Apps</h2>
+            <div class="features-grid">
+                <div class="feature-item">
+                    <h3>Custom UI/UX</h3>
+                    <p>Beautiful, intuitive interfaces designed for your specific users and use cases</p>
+                </div>
+                <div class="feature-item">
+                    <h3>Database Integration</h3>
+                    <p>Robust data storage and retrieval with proper schema design and optimization</p>
+                </div>
+                <div class="feature-item">
+                    <h3>User Authentication</h3>
+                    <p>Secure user management with authentication, authorization, and privacy controls</p>
+                </div>
+                <div class="feature-item">
+                    <h3>Real-Time Features</h3>
+                    <p>Live updates, notifications, and interactive experiences that respond instantly</p>
+                </div>
+                <div class="feature-item">
+                    <h3>Mobile Responsive</h3>
+                    <p>Perfect experience on all devices, from smartphones to large desktop screens</p>
+                </div>
+                <div class="feature-item">
+                    <h3>Deployment & Hosting</h3>
+                    <p>Production-ready deployment with monitoring, scaling, and reliability built in</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- CTA -->
+        <section class="cta-section">
+            <h2>Ready to Build Something Great?</h2>
+            <p>Let's discuss your next web app project and bring your vision to life</p>
+            <a href="mailto:contact@christopherhardin.dev" class="cta-button">Get in Touch</a>
+        </section>
+    </main>
+
+    <script>
+        // Tab switching
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const tabName = btn.getAttribute('data-tab');
+
+                // Hide all tabs
+                document.querySelectorAll('.tab-content').forEach(tab => {
+                    tab.classList.remove('active');
+                });
+
+                // Remove active class from all buttons
+                document.querySelectorAll('.tab-btn').forEach(b => {
+                    b.classList.remove('active');
+                });
+
+                // Show selected tab and mark button active
+                document.getElementById(tabName).classList.add('active');
+                btn.classList.add('active');
+            });
+        });
+
+        // Quiz logic
+        let currentQuizStep = 0;
+        const quizAnswers = {};
+
+        function updateQuizProgress() {
+            const progress = ((currentQuizStep) / 3) * 100;
+            document.getElementById('quizProgressFill').style.width = progress + '%';
+            document.getElementById('quizProgressText').textContent = `Question ${currentQuizStep + 1} of 3`;
+
+            document.getElementById('prevBtn').style.display = currentQuizStep > 0 ? 'block' : 'none';
+
+            if (currentQuizStep === 2) {
+                document.getElementById('nextBtn').textContent = 'See Results →';
+            } else {
+                document.getElementById('nextBtn').textContent = 'Next →';
+            }
+        }
+
+        function showQuizStep(step) {
+            if (step < 0 || step > 2) return;
+
+            document.querySelectorAll('.quiz-step').forEach(s => {
+                s.classList.remove('active');
+            });
+
+            document.querySelectorAll('.quiz-step')[step].classList.add('active');
+            currentQuizStep = step;
+            updateQuizProgress();
+        }
+
+        function nextStep() {
+            const currentQuestion = `q${currentQuizStep + 1}`;
+            const selected = document.querySelector(`input[name="${currentQuestion}"]:checked`);
+
+            if (!selected) {
+                alert('Please select an answer');
+                return;
+            }
+
+            quizAnswers[currentQuestion] = selected.value;
+
+            if (currentQuizStep < 2) {
+                showQuizStep(currentQuizStep + 1);
+            } else {
+                showQuizResults();
+            }
+        }
+
+        function prevStep() {
+            if (currentQuizStep > 0) {
+                showQuizStep(currentQuizStep - 1);
+            }
+        }
+
+        function showQuizResults() {
+            document.querySelectorAll('.quiz-step').forEach(s => {
+                s.classList.remove('active');
+            });
+            document.getElementById('quizResults').classList.add('show');
+            document.getElementById('quizNavButtons').style.display = 'none';
+            document.getElementById('quizProgressFill').style.width = '100%';
+            document.getElementById('quizProgressText').textContent = 'Quiz Complete';
+
+            // Calculate scores
+            const scores = { intuition: 0, technical: 0, safety: 0 };
+
+            Object.values(quizAnswers).forEach(answer => {
+                scores[answer]++;
+            });
+
+            // Normalize to percentages
+            const total = Object.values(scores).reduce((a, b) => a + b, 1);
+            const intuitionPct = Math.round((scores.intuition / total) * 100);
+            const technicalPct = Math.round((scores.technical / total) * 100);
+            const safetyPct = Math.round((scores.safety / total) * 100);
+
+            // Animate bars
+            setTimeout(() => {
+                document.getElementById('intuitionFill').style.width = intuitionPct + '%';
+                document.getElementById('intuitionScore').textContent = intuitionPct + '%';
+
+                document.getElementById('technicalFill').style.width = technicalPct + '%';
+                document.getElementById('technicalScore').textContent = technicalPct + '%';
+
+                document.getElementById('safetyFill').style.width = safetyPct + '%';
+                document.getElementById('safetyScore').textContent = safetyPct + '%';
+            }, 200);
+        }
+
+        function resetQuiz() {
+            currentQuizStep = 0;
+            Object.keys(quizAnswers).forEach(key => delete quizAnswers[key]);
+
+            document.querySelectorAll('input[type="radio"]').forEach(input => {
+                input.checked = false;
+            });
+
+            document.getElementById('quizResults').classList.remove('show');
+            document.getElementById('quizNavButtons').style.display = 'flex';
+
+            showQuizStep(0);
+        }
+
+        // Initialize
+        updateQuizProgress();
+    </script>
+</body>
+</html>
