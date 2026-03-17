@@ -1,0 +1,782 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mission Built | Automation Workflows & Pipelines</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --accent: #4f46e5;
+            --bg: #fafbfc;
+            --text: #1a1a2e;
+            --text-muted: #6b7280;
+            --border: #e5e7eb;
+            --surface: #ffffff;
+            --surface-2: #f3f4f6;
+            --radius: 16px;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            color: var(--text);
+            background: var(--bg);
+            line-height: 1.6;
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: var(--surface);
+            border-bottom: 1px solid var(--border);
+            padding: 1.5rem 2rem;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+        }
+
+        .nav-back {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 500;
+            transition: gap 0.3s ease;
+        }
+
+        .nav-back:hover {
+            gap: 0.75rem;
+        }
+
+        /* Layout */
+        main {
+            margin-top: 80px;
+            max-width: 1200px;
+            margin-left: auto;
+            margin-right: auto;
+            padding: 0 2rem 4rem;
+        }
+
+        /* Hero Section */
+        .hero {
+            padding: 4rem 0 3rem;
+            text-align: center;
+            border-bottom: 1px solid var(--border);
+            margin-bottom: 4rem;
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            color: var(--text);
+        }
+
+        .hero p {
+            font-size: 1.25rem;
+            color: var(--text-muted);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Section Styling */
+        section {
+            margin-bottom: 5rem;
+        }
+
+        h2 {
+            font-size: 2rem;
+            margin-bottom: 2rem;
+            color: var(--text);
+        }
+
+        h3 {
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+            color: var(--text);
+        }
+
+        /* Pipeline Visualizer */
+        .pipeline-container {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .pipeline-controls {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .btn-primary {
+            background: var(--accent);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #4338ca;
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: var(--surface-2);
+            color: var(--text);
+            border: 1px solid var(--border);
+        }
+
+        .btn-secondary:hover {
+            background: var(--border);
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 6px;
+            background: var(--surface-2);
+            border-radius: 3px;
+            margin-bottom: 2rem;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent), #7c3aed);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        .live-status {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+            padding: 1.5rem;
+            background: var(--surface-2);
+            border-radius: var(--radius);
+        }
+
+        .status-item {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .status-label {
+            font-size: 0.875rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 0.25rem;
+        }
+
+        .status-value {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--text);
+        }
+
+        .status-indicator {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            width: fit-content;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #10b981;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .pipeline-viz {
+            display: flex;
+            gap: 1rem;
+            overflow-x: auto;
+            padding: 2rem 0;
+            margin-bottom: 2rem;
+        }
+
+        .pipeline-step {
+            flex: 1;
+            min-width: 150px;
+            background: linear-gradient(135deg, var(--accent), #7c3aed);
+            border-radius: 12px;
+            padding: 1.5rem;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            opacity: 0.6;
+        }
+
+        .pipeline-step.active {
+            opacity: 1;
+            transform: scale(1.05);
+            box-shadow: 0 8px 24px rgba(79, 70, 229, 0.3);
+        }
+
+        .pipeline-step h4 {
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+            color: white;
+        }
+
+        .pipeline-step p {
+            font-size: 0.875rem;
+            opacity: 0.9;
+        }
+
+        .pipeline-arrow {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            opacity: 0.3;
+        }
+
+        .step-details {
+            background: var(--surface-2);
+            border-radius: var(--radius);
+            padding: 1.5rem;
+            display: none;
+        }
+
+        .step-details.expanded {
+            display: block;
+        }
+
+        .details-row {
+            margin-bottom: 1rem;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .details-label {
+            font-size: 0.875rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 0.5rem;
+        }
+
+        .details-value {
+            font-size: 1rem;
+            color: var(--text);
+        }
+
+        .tag {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.875rem;
+            margin-right: 0.5rem;
+            margin-bottom: 0.25rem;
+        }
+
+        /* Case Study */
+        .case-study {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 2.5rem;
+        }
+
+        .case-section {
+            margin-bottom: 2.5rem;
+        }
+
+        .case-section:last-child {
+            margin-bottom: 0;
+        }
+
+        .case-section h3 {
+            color: var(--accent);
+            margin-bottom: 1rem;
+        }
+
+        .result-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .result-card {
+            background: var(--surface-2);
+            padding: 1.5rem;
+            border-radius: 12px;
+            border-left: 4px solid var(--accent);
+        }
+
+        .result-card strong {
+            display: block;
+            color: var(--accent);
+            font-size: 1.25rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .result-card p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+
+        .tech-stack {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        /* Capabilities Grid */
+        .capabilities {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .capability-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 2rem;
+            transition: all 0.3s ease;
+        }
+
+        .capability-card:hover {
+            border-color: var(--accent);
+            box-shadow: 0 4px 12px rgba(79, 70, 229, 0.1);
+        }
+
+        .capability-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .capability-card h3 {
+            margin-bottom: 0.75rem;
+        }
+
+        .capability-card p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+
+        /* CTA Section */
+        .cta-section {
+            background: linear-gradient(135deg, var(--accent), #7c3aed);
+            border-radius: var(--radius);
+            padding: 3rem;
+            color: white;
+            text-align: center;
+        }
+
+        .cta-section h2 {
+            color: white;
+            margin-bottom: 1rem;
+        }
+
+        .cta-section p {
+            font-size: 1.1rem;
+            margin-bottom: 2rem;
+            opacity: 0.95;
+        }
+
+        .cta-link {
+            display: inline-block;
+            background: white;
+            color: var(--accent);
+            padding: 0.75rem 2rem;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .cta-link:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            main {
+                padding: 0 1rem 2rem;
+            }
+
+            nav {
+                padding: 1rem;
+            }
+
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .hero p {
+                font-size: 1rem;
+            }
+
+            h2 {
+                font-size: 1.5rem;
+            }
+
+            .pipeline-container {
+                padding: 1.5rem;
+            }
+
+            .case-study {
+                padding: 1.5rem;
+            }
+
+            .cta-section {
+                padding: 2rem 1rem;
+            }
+
+            .pipeline-viz {
+                flex-direction: column;
+                gap: 0.5rem;
+                padding: 1rem 0;
+            }
+
+            .pipeline-arrow {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <a href="../index.html" class="nav-back">
+            <span>←</span>
+            <span>Back to Portfolio</span>
+        </a>
+    </nav>
+
+    <main>
+        <!-- Hero Section -->
+        <section class="hero">
+            <h1>Automation Workflows & Pipelines</h1>
+            <p>Turn repetitive tasks into hands-off systems. Build scalable automation that saves time, reduces errors, and scales your business.</p>
+        </section>
+
+        <!-- Interactive Pipeline Builder -->
+        <section>
+            <h2>Pipeline Visualizer</h2>
+            <div class="pipeline-container">
+                <div class="pipeline-controls">
+                    <button class="btn btn-primary" id="autoPlayBtn">▶ Auto-Play Animation</button>
+                    <button class="btn btn-secondary" id="resetBtn">Reset</button>
+                </div>
+
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill"></div>
+                </div>
+
+                <div class="live-status">
+                    <div class="status-item">
+                        <span class="status-label">Last Run</span>
+                        <span class="status-value">2 hours ago</span>
+                    </div>
+                    <div class="status-item">
+                        <span class="status-label">Next Run</span>
+                        <span class="status-value">in 4 hours</span>
+                    </div>
+                    <div class="status-item">
+                        <span class="status-label">System Status</span>
+                        <span class="status-value"><span class="status-indicator"><span class="status-dot"></span>All systems green</span></span>
+                    </div>
+                </div>
+
+                <div class="pipeline-viz" id="pipelineViz">
+                    <div class="pipeline-step" data-step="0">
+                        <h4>Trigger</h4>
+                        <p>Scheduled / Webhook</p>
+                    </div>
+                    <div class="pipeline-arrow">→</div>
+                    <div class="pipeline-step" data-step="1">
+                        <h4>Data Collection</h4>
+                        <p>RSS / API / Scraping</p>
+                    </div>
+                    <div class="pipeline-arrow">→</div>
+                    <div class="pipeline-step" data-step="2">
+                        <h4>AI Processing</h4>
+                        <p>Claude API</p>
+                    </div>
+                    <div class="pipeline-arrow">→</div>
+                    <div class="pipeline-step" data-step="3">
+                        <h4>Content Generation</h4>
+                        <p>Write & Format</p>
+                    </div>
+                    <div class="pipeline-arrow">→</div>
+                    <div class="pipeline-step" data-step="4">
+                        <h4>Multi-Platform Publishing</h4>
+                        <p>APIs & Integrations</p>
+                    </div>
+                    <div class="pipeline-arrow">→</div>
+                    <div class="pipeline-step" data-step="5">
+                        <h4>Analytics & Monitoring</h4>
+                        <p>Logging & Alerts</p>
+                    </div>
+                </div>
+
+                <div class="step-details" id="stepDetails">
+                    <div class="details-row">
+                        <span class="details-label">What Happens</span>
+                        <span class="details-value" id="detailsWhat"></span>
+                    </div>
+                    <div class="details-row">
+                        <span class="details-label">Tools Used</span>
+                        <div class="tech-stack" id="detailsTools"></div>
+                    </div>
+                    <div class="details-row">
+                        <span class="details-label">Data Flow</span>
+                        <span class="details-value" id="detailsFlow"></span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Case Study -->
+        <section>
+            <h2>Case Study: FB-AMZ Marketing Pipeline</h2>
+            <div class="case-study">
+                <div class="case-section">
+                    <h3>The Problem</h3>
+                    <p>Chris wanted to monetize a tech deals blog but faced a critical bottleneck: manually finding deals, writing blog posts, and sharing on social media 3 times daily was unsustainable and consumed all his time.</p>
+                </div>
+
+                <div class="case-section">
+                    <h3>The Solution</h3>
+                    <p>Built a fully automated end-to-end pipeline that runs like clockwork:</p>
+                    <ul style="margin-left: 1.5rem; margin-top: 1rem; color: var(--text-muted);">
+                        <li>Python scripts scrape Slickdeals RSS feeds for trending tech deals</li>
+                        <li>Extract Amazon product data automatically</li>
+                        <li>Send curated deals to Claude API for intelligent blog post generation in consistent brand voice</li>
+                        <li>Auto-publish posts to Google Blogger via API</li>
+                        <li>Generate social media teasers and post to Facebook Graph API</li>
+                        <li>Runs 3x daily (8AM, 1PM, 6PM ET) plus weekly roundups</li>
+                        <li>Includes retry logic, error handling, and jitter to avoid rate limits</li>
+                    </ul>
+                </div>
+
+                <div class="case-section">
+                    <h3>Tech Stack</h3>
+                    <div class="tech-stack">
+                        <span class="tag">Python</span>
+                        <span class="tag">Claude API</span>
+                        <span class="tag">Google Blogger API</span>
+                        <span class="tag">Facebook Graph API</span>
+                        <span class="tag">APScheduler</span>
+                        <span class="tag">BeautifulSoup</span>
+                        <span class="tag">feedparser</span>
+                        <span class="tag">Railway</span>
+                    </div>
+                </div>
+
+                <div class="case-section">
+                    <h3>The Results</h3>
+                    <div class="result-grid">
+                        <div class="result-card">
+                            <strong>3 posts/day</strong>
+                            <p>Automatic content published to blog and social media without manual intervention</p>
+                        </div>
+                        <div class="result-card">
+                            <strong>100% hands-off</strong>
+                            <p>System handles deal sourcing, writing, publishing, and social sharing autonomously</p>
+                        </div>
+                        <div class="result-card">
+                            <strong>Passive revenue</strong>
+                            <p>Affiliate commissions flow continuously as the blog stays active and engaged</p>
+                        </div>
+                        <div class="result-card">
+                            <strong>0 errors</strong>
+                            <p>Robust error handling, rate limit management, and automatic retry logic ensure reliability</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Capabilities -->
+        <section>
+            <h2>What You Get</h2>
+            <div class="capabilities">
+                <div class="capability-card">
+                    <div class="capability-icon">⏰</div>
+                    <h3>Scheduled Automation</h3>
+                    <p>Set it and forget it. Workflows run on your schedule—hourly, daily, weekly—with precision timing and timezone support.</p>
+                </div>
+                <div class="capability-card">
+                    <div class="capability-icon">🔗</div>
+                    <h3>Multi-API Orchestration</h3>
+                    <p>Connect multiple APIs seamlessly. Coordinate data flow between different platforms and services with intelligent routing.</p>
+                </div>
+                <div class="capability-card">
+                    <div class="capability-icon">🛡️</div>
+                    <h3>Error Recovery & Monitoring</h3>
+                    <p>Automatic retry logic, dead letter queues, and real-time alerts keep your workflows running smoothly even when things go wrong.</p>
+                </div>
+                <div class="capability-card">
+                    <div class="capability-icon">📈</div>
+                    <h3>Scalable Architecture</h3>
+                    <p>Built to grow with you. Handle increasing data volumes, API calls, and complexity without breaking a sweat.</p>
+                </div>
+                <div class="capability-card">
+                    <div class="capability-icon">🤖</div>
+                    <h3>AI-Powered Processing</h3>
+                    <p>Leverage Claude API for intelligent content generation, data analysis, and decision-making within your workflows.</p>
+                </div>
+                <div class="capability-card">
+                    <div class="capability-icon">📊</div>
+                    <h3>Analytics & Insights</h3>
+                    <p>Track workflow performance, identify bottlenecks, and optimize based on real execution data and metrics.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- CTA -->
+        <section class="cta-section">
+            <h2>Ready to Automate?</h2>
+            <p>Let's build a workflow that transforms your business. Get in touch to discuss your automation goals.</p>
+            <a href="../index.html#contact" class="cta-link">Start a Project</a>
+        </section>
+    </main>
+
+    <script>
+        const pipelineSteps = [
+            {
+                title: 'Trigger',
+                what: 'Workflow activation via scheduled event or webhook POST request',
+                tools: ['APScheduler', 'Flask/FastAPI'],
+                flow: 'Time-based or external event → Pipeline initiation'
+            },
+            {
+                title: 'Data Collection',
+                what: 'Fetch data from multiple sources: RSS feeds, REST APIs, web scraping',
+                tools: ['feedparser', 'BeautifulSoup', 'requests', 'aiohttp'],
+                flow: 'External sources → Normalized data objects → Queue for processing'
+            },
+            {
+                title: 'AI Processing',
+                what: 'Send data to Claude API for intelligent analysis, enrichment, and decision-making',
+                tools: ['Anthropic Claude API', 'prompt engineering'],
+                flow: 'Raw data → Prompt crafting → AI analysis → Structured output'
+            },
+            {
+                title: 'Content Generation',
+                what: 'Transform processed data into formatted, publishable content ready for distribution',
+                tools: ['Jinja2 templates', 'Markdown', 'HTML formatting'],
+                flow: 'Structured data → Templates → Formatted content → Validation'
+            },
+            {
+                title: 'Multi-Platform Publishing',
+                what: 'Simultaneously publish to multiple platforms using their APIs with error handling',
+                tools: ['Google Blogger API', 'Facebook Graph API', 'Twitter API'],
+                flow: 'Content → API requests → Multi-platform distribution → Status tracking'
+            },
+            {
+                title: 'Analytics & Monitoring',
+                what: 'Log execution details, monitor performance, trigger alerts for failures, track metrics',
+                tools: ['Python logging', 'Datadog/CloudWatch', 'email alerts'],
+                flow: 'Execution data → Logs → Dashboards → Notifications on anomalies'
+            }
+        ];
+
+        let currentStep = null;
+        let isAnimating = false;
+
+        const steps = document.querySelectorAll('.pipeline-step');
+        const stepDetails = document.getElementById('stepDetails');
+        const autoPlayBtn = document.getElementById('autoPlayBtn');
+        const resetBtn = document.getElementById('resetBtn');
+        const progressFill = document.getElementById('progressFill');
+
+        // Pipeline step click handler
+        steps.forEach((step, index) => {
+            step.addEventListener('click', () => showStepDetails(index));
+        });
+
+        function showStepDetails(index) {
+            // Remove active class from all steps
+            steps.forEach(step => step.classList.remove('active'));
+
+            // Add active class to clicked step
+            steps[index].classList.add('active');
+
+            // Update details
+            const stepData = pipelineSteps[index];
+            document.getElementById('detailsWhat').textContent = stepData.what;
+            document.getElementById('detailsFlow').textContent = stepData.flow;
+
+            const toolsDiv = document.getElementById('detailsTools');
+            toolsDiv.innerHTML = stepData.tools.map(tool => `<span class="tag">${tool}</span>`).join('');
+
+            stepDetails.classList.add('expanded');
+            currentStep = index;
+        }
+
+        // Auto-play animation
+        autoPlayBtn.addEventListener('click', async () => {
+            if (isAnimating) return;
+            isAnimating = true;
+            autoPlayBtn.disabled = true;
+            autoPlayBtn.textContent = '▶ Playing...';
+
+            for (let i = 0; i < pipelineSteps.length; i++) {
+                showStepDetails(i);
+                progressFill.style.width = ((i + 1) / pipelineSteps.length * 100) + '%';
+                await new Promise(resolve => setTimeout(resolve, 1500));
+            }
+
+            isAnimating = false;
+            autoPlayBtn.disabled = false;
+            autoPlayBtn.textContent = '▶ Auto-Play Animation';
+
+            // Reset after animation completes
+            setTimeout(() => {
+                resetBtn.click();
+            }, 500);
+        });
+
+        // Reset button
+        resetBtn.addEventListener('click', () => {
+            steps.forEach(step => step.classList.remove('active'));
+            stepDetails.classList.remove('expanded');
+            progressFill.style.width = '0%';
+            currentStep = null;
+        });
+
+        // Initialize - show first step on load
+        window.addEventListener('load', () => {
+            showStepDetails(0);
+        });
+    </script>
+</body>
+</html>
