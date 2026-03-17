@@ -37,23 +37,111 @@
             right: 0;
             background: var(--surface);
             border-bottom: 1px solid var(--border);
+            z-index: 1000;
             padding: 1rem 2rem;
-            z-index: 100;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            backdrop-filter: blur(10px);
+            background-color: rgba(255, 255, 255, 0.95);
         }
 
         nav a {
-            display: inline-flex;
+            display: flex;
             align-items: center;
             gap: 0.5rem;
-            color: var(--accent);
+            color: var(--text);
             text-decoration: none;
             font-weight: 500;
-            transition: opacity 0.2s;
+            transition: color 0.2s;
         }
 
         nav a:hover {
-            opacity: 0.7;
+            color: var(--accent);
+        }
+
+        .logo {
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: var(--accent);
+            text-decoration: none;
+        }
+
+        .logo span { color: var(--text); }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .nav-dropdown {
+            position: relative;
+        }
+
+        .nav-dropdown-btn {
+            background: none;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 0.5rem 1rem;
+            font-family: inherit;
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: var(--text);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.2s;
+        }
+
+        .nav-dropdown-btn:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        .nav-dropdown-menu {
+            display: none;
+            position: absolute;
+            right: 0;
+            top: calc(100% + 8px);
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+            min-width: 280px;
+            z-index: 1001;
+            overflow: hidden;
+        }
+
+        .nav-dropdown.open .nav-dropdown-menu {
+            display: block;
+        }
+
+        .nav-dropdown-menu a {
+            display: block;
+            padding: 0.75rem 1.25rem;
+            color: var(--text);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 400;
+            transition: background 0.15s;
+            border-bottom: 1px solid var(--surface-2);
+        }
+
+        .nav-dropdown-menu a:last-child {
+            border-bottom: none;
+        }
+
+        .nav-dropdown-menu a:hover {
+            background: var(--surface-2);
+            color: var(--accent);
+        }
+
+        .nav-dropdown-menu a.active {
+            background: rgba(79, 70, 229, 0.06);
+            color: var(--accent);
+            font-weight: 600;
         }
 
         /* Layout */
@@ -426,7 +514,26 @@
 </head>
 <body>
     <nav>
-        <a href="../index.html">← Back to Portfolio</a>
+        <a href="../index.html" class="logo">Mission<span>Built</span>.dev</a>
+        <div class="nav-right">
+            <a href="../index.html" style="font-size:0.9rem;">Home</a>
+            <div class="nav-dropdown" id="navDropdown">
+                <button class="nav-dropdown-btn" onclick="document.getElementById('navDropdown').classList.toggle('open')">
+                    Services ▾
+                </button>
+                <div class="nav-dropdown-menu">
+                    <a href="chatbots.html">AI Chatbots</a>
+                    <a href="automation.html">Automation Workflows</a>
+                    <a href="webapps.html">Web Apps & Dashboards</a>
+                    <a href="content.html">AI Content Generation</a>
+                    <a href="api-integrations.html">API Integrations</a>
+                    <a href="funnel-crm.html" class="active">Funnel & CRM Automation</a>
+                    <a href="feedback.html">Feedback & Support</a>
+                    <a href="custom-ai.html">Custom AI Solutions</a>
+                </div>
+            </div>
+            <a href="../index.html#contact" style="font-size:0.9rem;">Contact</a>
+        </div>
     </nav>
 
     <main>
@@ -656,6 +763,12 @@
             setTimeout(() => {
                 simulateBtn.disabled = false;
             }, 12500);
+        });
+
+        // Click outside to close dropdown
+        document.addEventListener('click', (e) => {
+            const dd = document.getElementById('navDropdown');
+            if (dd && !dd.contains(e.target)) dd.classList.remove('open');
         });
     </script>
 </body>
