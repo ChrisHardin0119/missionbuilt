@@ -1,0 +1,982 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mission Built | API Integrations & Data Systems</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --accent: #4f46e5;
+            --bg: #fafbfc;
+            --text: #1a1a2e;
+            --text-muted: #6b7280;
+            --border: #e5e7eb;
+            --surface: #ffffff;
+            --surface-2: #f3f4f6;
+            --radius: 16px;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: var(--surface);
+            border-bottom: 1px solid var(--border);
+            padding: 1.25rem 2rem;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        }
+
+        nav a {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 500;
+            transition: opacity 0.2s;
+        }
+
+        nav a:hover {
+            opacity: 0.8;
+        }
+
+        nav a::before {
+            content: '←';
+            font-size: 1.25rem;
+        }
+
+        main {
+            margin-top: 70px;
+            padding: 0;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, var(--surface) 0%, var(--surface-2) 100%);
+            padding: 4rem 2rem;
+            text-align: center;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            color: var(--text);
+            font-weight: 700;
+        }
+
+        .hero p {
+            font-size: 1.1rem;
+            color: var(--text-muted);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Container */
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        /* Section Spacing */
+        section {
+            padding: 4rem 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        section:last-child {
+            border-bottom: none;
+        }
+
+        h2 {
+            font-size: 2rem;
+            margin-bottom: 2rem;
+            color: var(--text);
+            font-weight: 700;
+        }
+
+        h3 {
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+            color: var(--text);
+            font-weight: 600;
+        }
+
+        p {
+            color: var(--text-muted);
+            margin-bottom: 1rem;
+            line-height: 1.8;
+        }
+
+        /* Live Demo Section */
+        .demo-container {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .visualizer-wrapper {
+            display: flex;
+            gap: 2rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+            align-items: flex-start;
+        }
+
+        .network-diagram {
+            flex: 1;
+            min-width: 300px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        canvas {
+            max-width: 100%;
+            height: auto;
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            background: var(--surface-2);
+        }
+
+        .request-panel {
+            flex: 1;
+            min-width: 300px;
+            background: var(--surface-2);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 1.5rem;
+            font-family: 'Monaco', 'Menlo', monospace;
+            font-size: 0.875rem;
+            color: var(--text);
+            max-height: 400px;
+            overflow-y: auto;
+            display: none;
+        }
+
+        .request-panel.active {
+            display: block;
+        }
+
+        .request-panel.empty {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-muted);
+            font-family: inherit;
+            min-height: 150px;
+        }
+
+        .code-block {
+            background: var(--text);
+            color: #e8f4f8;
+            padding: 1rem;
+            border-radius: 8px;
+            overflow-x: auto;
+            white-space: pre-wrap;
+            word-break: break-all;
+            margin-bottom: 1rem;
+        }
+
+        .code-block:last-child {
+            margin-bottom: 0;
+        }
+
+        .request-label {
+            color: var(--accent);
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        /* Controls */
+        .demo-controls {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin-bottom: 2rem;
+        }
+
+        button {
+            padding: 0.75rem 1.5rem;
+            background: var(--accent);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.2s;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        button.secondary {
+            background: var(--surface-2);
+            color: var(--text);
+            border: 1px solid var(--border);
+        }
+
+        button.secondary:hover {
+            background: var(--border);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* Case Study */
+        .case-study {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 2rem;
+        }
+
+        .case-study-section {
+            margin-bottom: 2rem;
+        }
+
+        .case-study-section:last-child {
+            margin-bottom: 0;
+        }
+
+        .case-study-section h4 {
+            font-size: 1.1rem;
+            color: var(--accent);
+            margin-bottom: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .auth-flow {
+            display: grid;
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .auth-item {
+            background: var(--surface-2);
+            padding: 1.5rem;
+            border-radius: 8px;
+            border-left: 4px solid var(--accent);
+        }
+
+        .auth-item-name {
+            font-weight: 600;
+            color: var(--text);
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .auth-item-method {
+            font-size: 0.875rem;
+            color: var(--accent);
+            font-family: 'Monaco', monospace;
+            margin-bottom: 0.5rem;
+        }
+
+        .auth-item-details {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            line-height: 1.6;
+        }
+
+        /* APIs Grid */
+        .apis-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .api-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 2rem;
+            text-align: center;
+            transition: all 0.3s;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 150px;
+        }
+
+        .api-card:hover {
+            border-color: var(--accent);
+            box-shadow: 0 4px 12px rgba(79, 70, 229, 0.1);
+            transform: translateY(-4px);
+        }
+
+        .api-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .api-name {
+            font-weight: 600;
+            color: var(--text);
+        }
+
+        /* CTA Section */
+        .cta {
+            background: linear-gradient(135deg, var(--accent) 0%, #6366f1 100%);
+            color: white;
+            text-align: center;
+            padding: 3rem 2rem;
+            border-radius: var(--radius);
+        }
+
+        .cta h2 {
+            color: white;
+            margin-bottom: 1rem;
+        }
+
+        .cta p {
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 1.5rem;
+        }
+
+        .cta a {
+            display: inline-block;
+            background: white;
+            color: var(--accent);
+            padding: 0.75rem 2rem;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+
+        .cta a:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Footer */
+        footer {
+            background: var(--surface);
+            border-top: 1px solid var(--border);
+            padding: 2rem;
+            text-align: center;
+            color: var(--text-muted);
+        }
+
+        footer a {
+            color: var(--accent);
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            h2 {
+                font-size: 1.5rem;
+            }
+
+            nav {
+                padding: 1rem;
+            }
+
+            main {
+                margin-top: 60px;
+            }
+
+            .visualizer-wrapper {
+                flex-direction: column;
+            }
+
+            .demo-controls {
+                flex-direction: column;
+            }
+
+            button {
+                width: 100%;
+            }
+
+            .apis-grid {
+                grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            }
+
+            section {
+                padding: 2rem 0;
+            }
+        }
+
+        /* Animation */
+        @keyframes pulse {
+            0%, 100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.5;
+            }
+        }
+
+        .animating {
+            animation: pulse 0.6s ease-in-out;
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <a href="../index.html">Back to Portfolio</a>
+    </nav>
+
+    <main>
+        <!-- Hero -->
+        <div class="hero">
+            <h1>API Integrations & Data Systems</h1>
+            <p>Building seamless connections between multiple APIs and services to create powerful automated workflows</p>
+        </div>
+
+        <section class="container">
+            <!-- Live Demo -->
+            <h2>Interactive API Visualizer</h2>
+            <div class="demo-container">
+                <div class="visualizer-wrapper">
+                    <div class="network-diagram">
+                        <canvas id="networkCanvas" width="400" height="400"></canvas>
+                    </div>
+                    <div class="request-panel empty" id="requestPanel">
+                        Click a connection to view API request/response details
+                    </div>
+                </div>
+
+                <div class="demo-controls">
+                    <button id="resetBtn" class="secondary">Reset Diagram</button>
+                    <button id="pipelineBtn">Run Full Pipeline</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Case Study -->
+        <section class="container">
+            <h2>Case Study: Multi-API Pipeline</h2>
+            <div class="case-study">
+                <div class="case-study-section">
+                    <h4>The Problem</h4>
+                    <p>Needed to connect 5+ APIs into a single automated workflow: Slickdeals RSS, Amazon Product API, Anthropic Claude, Google Blogger, and Facebook Graph API. Each has different authentication methods (API keys, OAuth2, access tokens), rate limits, and data formats—requiring careful orchestration to function seamlessly.</p>
+                </div>
+
+                <div class="case-study-section">
+                    <h4>The Solution</h4>
+                    <p>Built a unified Python pipeline that handles OAuth2 token refresh for Google, manages Facebook access tokens, processes RSS/XML feeds, makes authenticated Amazon requests, and orchestrates Claude API calls—all with robust error handling and retry logic.</p>
+
+                    <h4 style="margin-top: 1.5rem;">Authentication Flows</h4>
+                    <div class="auth-flow">
+                        <div class="auth-item">
+                            <div class="auth-item-name">🔐 Google APIs (Blogger)</div>
+                            <div class="auth-item-method">Method: OAuth2 + Token Refresh</div>
+                            <div class="auth-item-details">Handles automatic token refresh cycles, manages authorization scopes for Blogger API, securely stores refresh tokens with encryption.</div>
+                        </div>
+
+                        <div class="auth-item">
+                            <div class="auth-item-name">📘 Facebook Graph API</div>
+                            <div class="auth-item-method">Method: Access Token Management</div>
+                            <div class="auth-item-details">Manages long-lived access tokens, handles token expiration checks, implements graceful fallback for permission errors.</div>
+                        </div>
+
+                        <div class="auth-item">
+                            <div class="auth-item-name">🤖 Anthropic Claude API</div>
+                            <div class="auth-item-method">Method: API Key Authentication</div>
+                            <div class="auth-item-details">Direct API key authentication, rate limiting awareness, streaming response handling for large outputs.</div>
+                        </div>
+
+                        <div class="auth-item">
+                            <div class="auth-item-name">📦 Amazon Associates API</div>
+                            <div class="auth-item-method">Method: Signed Request Authentication</div>
+                            <div class="auth-item-details">AWS Signature Version 4 signing, associate tag management, region-specific endpoint routing.</div>
+                        </div>
+
+                        <div class="auth-item">
+                            <div class="auth-item-name">📡 RSS/Atom Feeds</div>
+                            <div class="auth-item-method">Method: No Authentication</div>
+                            <div class="auth-item-details">Public feed parsing with XML handling, feed validation, duplicate detection across multiple sources.</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="case-study-section">
+                    <h4>Technical Architecture</h4>
+                    <p><strong>Data Flow:</strong> RSS feeds → Claude analysis → Google Blogger publication → Facebook distribution → Amazon affiliate integration</p>
+                    <p><strong>Key Features:</strong></p>
+                    <ul style="margin: 1rem 0 0 2rem; color: var(--text-muted);">
+                        <li>Centralized OAuth2 token management with automatic refresh</li>
+                        <li>Rate limiting across all APIs with queue management</li>
+                        <li>Error handling and automatic retry with exponential backoff</li>
+                        <li>Comprehensive logging for debugging and monitoring</li>
+                        <li>Data validation and transformation between formats</li>
+                    </ul>
+                </div>
+
+                <div class="case-study-section">
+                    <h4>The Result</h4>
+                    <p><strong>Five different APIs working together seamlessly, running autonomously 3 times daily.</strong> The pipeline automatically discovers deal content, enriches it with AI analysis, publishes to blog and social media, and generates affiliate links—all without manual intervention. Handles edge cases, recovers from API outages, and maintains data integrity across all platforms.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- APIs Grid -->
+        <section class="container">
+            <h2>APIs I've Worked With</h2>
+            <div class="apis-grid">
+                <div class="api-card">
+                    <div class="api-icon">🤖</div>
+                    <div class="api-name">Anthropic Claude</div>
+                </div>
+                <div class="api-card">
+                    <div class="api-icon">🔍</div>
+                    <div class="api-name">Google APIs</div>
+                </div>
+                <div class="api-card">
+                    <div class="api-icon">📘</div>
+                    <div class="api-name">Facebook Graph</div>
+                </div>
+                <div class="api-card">
+                    <div class="api-icon">📦</div>
+                    <div class="api-name">Amazon Associates</div>
+                </div>
+                <div class="api-card">
+                    <div class="api-icon">💳</div>
+                    <div class="api-name">Stripe</div>
+                </div>
+                <div class="api-card">
+                    <div class="api-icon">📡</div>
+                    <div class="api-name">RSS/Atom Feeds</div>
+                </div>
+                <div class="api-card">
+                    <div class="api-icon">💼</div>
+                    <div class="api-name">CRM Systems</div>
+                </div>
+                <div class="api-card">
+                    <div class="api-icon">📧</div>
+                    <div class="api-name">Email Services</div>
+                </div>
+                <div class="api-card">
+                    <div class="api-icon">🗄️</div>
+                    <div class="api-name">Databases</div>
+                </div>
+                <div class="api-card">
+                    <div class="api-icon">✨</div>
+                    <div class="api-name">Your API Here</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CTA -->
+        <section class="container">
+            <div class="cta">
+                <h2>Ready to Integrate Your Systems?</h2>
+                <p>Let's discuss how to connect your APIs and build powerful automated workflows</p>
+                <a href="../index.html#contact">Get in Touch</a>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 MissionBuilt.dev | Christopher Hardin. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // API Nodes Configuration
+        const apis = [
+            { name: 'Claude AI', icon: '🤖', color: '#8b5cf6' },
+            { name: 'Google APIs', icon: '🔍', color: '#4285f4' },
+            { name: 'Facebook API', icon: '📘', color: '#1877f2' },
+            { name: 'Amazon', icon: '📦', color: '#ff9900' },
+            { name: 'Stripe', icon: '💳', color: '#635bff' },
+            { name: 'CRM', icon: '💼', color: '#00a4ef' }
+        ];
+
+        const canvas = document.getElementById('networkCanvas');
+        const ctx = canvas.getContext('2d');
+        const requestPanel = document.getElementById('requestPanel');
+        const resetBtn = document.getElementById('resetBtn');
+        const pipelineBtn = document.getElementById('pipelineBtn');
+
+        let animatingConnection = null;
+        let pipelineRunning = false;
+
+        // Resize canvas for high DPI
+        function resizeCanvas() {
+            const rect = canvas.getBoundingClientRect();
+            canvas.width = rect.width * window.devicePixelRatio;
+            canvas.height = rect.height * window.devicePixelRatio;
+            ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
+        }
+
+        resizeCanvas();
+        window.addEventListener('resize', resizeCanvas);
+
+        // Draw network diagram
+        function drawNetwork() {
+            const width = canvas.width / window.devicePixelRatio;
+            const height = canvas.height / window.devicePixelRatio;
+            const centerX = width / 2;
+            const centerY = height / 2;
+            const radius = Math.min(width, height) * 0.35;
+
+            // Clear canvas
+            ctx.fillStyle = '#ffffff';
+            ctx.fillRect(0, 0, width, height);
+
+            // Draw grid background
+            ctx.strokeStyle = '#e5e7eb';
+            ctx.lineWidth = 1;
+            for (let i = 0; i < width; i += 40) {
+                ctx.beginPath();
+                ctx.moveTo(i, 0);
+                ctx.lineTo(i, height);
+                ctx.stroke();
+            }
+            for (let i = 0; i < height; i += 40) {
+                ctx.beginPath();
+                ctx.moveTo(0, i);
+                ctx.lineTo(width, i);
+                ctx.stroke();
+            }
+
+            // Draw connections
+            apis.forEach((api, index) => {
+                const angle = (index / apis.length) * Math.PI * 2 - Math.PI / 2;
+                const x = centerX + radius * Math.cos(angle);
+                const y = centerY + radius * Math.sin(angle);
+
+                // Connection line
+                ctx.strokeStyle = animatingConnection === index ? '#4f46e5' : '#e5e7eb';
+                ctx.lineWidth = animatingConnection === index ? 3 : 1;
+                ctx.setLineDash(animatingConnection === index ? [5, 5] : []);
+                ctx.beginPath();
+                ctx.moveTo(centerX, centerY);
+                ctx.lineTo(x, y);
+                ctx.stroke();
+                ctx.setLineDash([]);
+            });
+
+            // Draw center hub
+            ctx.fillStyle = '#4f46e5';
+            ctx.beginPath();
+            ctx.arc(centerX, centerY, 25, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.fillStyle = '#ffffff';
+            ctx.font = 'bold 16px system-ui';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText('APP', centerX, centerY);
+
+            // Draw API nodes
+            apis.forEach((api, index) => {
+                const angle = (index / apis.length) * Math.PI * 2 - Math.PI / 2;
+                const x = centerX + radius * Math.cos(angle);
+                const y = centerY + radius * Math.sin(angle);
+
+                const isAnimating = animatingConnection === index;
+                const nodeRadius = isAnimating ? 22 : 18;
+
+                ctx.fillStyle = api.color;
+                ctx.beginPath();
+                ctx.arc(x, y, nodeRadius, 0, Math.PI * 2);
+                ctx.fill();
+
+                ctx.fillStyle = '#ffffff';
+                ctx.font = isAnimating ? 'bold 18px system-ui' : '16px system-ui';
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.fillText(api.icon, x, y);
+
+                // API label
+                ctx.fillStyle = '#1a1a2e';
+                ctx.font = '11px system-ui';
+                ctx.textAlign = 'center';
+                ctx.fillText(api.name, x, y + nodeRadius + 20);
+            });
+        }
+
+        // Show request/response
+        function showRequest(apiIndex) {
+            const api = apis[apiIndex];
+            const requests = {
+                0: {
+                    title: 'Claude API Request',
+                    request: `POST /v1/messages HTTP/1.1
+Host: api.anthropic.com
+Content-Type: application/json
+Authorization: Bearer sk-ant-...
+
+{
+  "model": "claude-3-sonnet-20240229",
+  "max_tokens": 1024,
+  "messages": [{
+    "role": "user",
+    "content": "Analyze this deal and generate description"
+  }]
+}`,
+                    response: `HTTP/1.1 200 OK
+Content-Type: application/json
+
+{
+  "id": "msg_123456",
+  "type": "message",
+  "role": "assistant",
+  "content": [{
+    "type": "text",
+    "text": "This is a great deal on a..."
+  }],
+  "usage": {
+    "input_tokens": 152,
+    "output_tokens": 287
+  }
+}`
+                },
+                1: {
+                    title: 'Google Blogger API Request',
+                    request: `POST /v3/blogs/{blogId}/posts HTTP/1.1
+Host: www.googleapis.com
+Authorization: Bearer {accessToken}
+Content-Type: application/json
+
+{
+  "kind": "blogger#post",
+  "title": "Amazing Deal Found Today",
+  "content": "<p>Check out this incredible offer...</p>",
+  "labels": ["deals", "tech"],
+  "published": "2026-03-17T10:30:00Z"
+}`,
+                    response: `HTTP/1.1 200 OK
+Content-Type: application/json
+
+{
+  "kind": "blogger#post",
+  "id": "8234567890",
+  "blog": {
+    "id": "1234567890"
+  },
+  "published": "2026-03-17T10:30:00Z",
+  "url": "https://blog.example.com/post-123",
+  "title": "Amazing Deal Found Today"
+}`
+                },
+                2: {
+                    title: 'Facebook Graph API Request',
+                    request: `POST /me/feed HTTP/1.1
+Host: graph.facebook.com
+Authorization: Bearer {accessToken}
+
+{
+  "message": "Check out this deal!",
+  "link": "https://example.com/deal",
+  "picture": "https://example.com/image.jpg",
+  "name": "Amazing Offer",
+  "description": "Limited time deal..."
+}`,
+                    response: `HTTP/1.1 200 OK
+Content-Type: application/json
+
+{
+  "id": "1234567_987654321",
+  "created_time": "2026-03-17T10:30:00+0000"
+}`
+                },
+                3: {
+                    title: 'Amazon Product API Request',
+                    request: `GET /onca/xml?Service=AWSECommerceService
+&Operation=ItemSearch
+&SearchIndex=All
+&Keywords=wireless+headphones
+&AssociateTag=myassoctag
+&Timestamp=...
+&Signature=...`,
+                    response: `HTTP/1.1 200 OK
+Content-Type: application/xml
+
+<ItemSearchResponse>
+  <Items>
+    <Item>
+      <ASIN>B0123456789</ASIN>
+      <ItemAttributes>
+        <Title>Premium Wireless Headphones</Title>
+        <ListPrice>
+          <Amount>9999</Amount>
+          <CurrencyCode>USD</CurrencyCode>
+        </ListPrice>
+      </ItemAttributes>
+      <DetailPageURL>https://amazon.com/dp/B0123456789</DetailPageURL>
+    </Item>
+  </Items>
+</ItemSearchResponse>`
+                },
+                4: {
+                    title: 'Stripe Payment API Request',
+                    request: `POST /v1/charges HTTP/1.1
+Host: api.stripe.com
+Authorization: Bearer sk_live_...
+Content-Type: application/x-www-form-urlencoded
+
+amount=2999&currency=usd&source=tok_visa&description=Deal%20purchase`,
+                    response: `HTTP/1.1 200 OK
+Content-Type: application/json
+
+{
+  "id": "ch_1A8WCo...",
+  "object": "charge",
+  "amount": 2999,
+  "currency": "usd",
+  "status": "succeeded",
+  "paid": true,
+  "created": 1489520581
+}`
+                },
+                5: {
+                    title: 'RSS Feed Request',
+                    request: `GET /deals/feed.xml HTTP/1.1
+Host: slickdeals.example.com
+
+(No authentication required)`,
+                    response: `HTTP/1.1 200 OK
+Content-Type: application/rss+xml
+
+<?xml version="1.0"?>
+<rss version="2.0">
+  <channel>
+    <item>
+      <title>$50 Off Premium Headphones</title>
+      <link>https://slickdeals.example.com/deal-123</link>
+      <pubDate>Mon, 17 Mar 2026 10:00:00 GMT</pubDate>
+      <description>Limited time offer...</description>
+    </item>
+  </channel>
+</rss>`
+                }
+            };
+
+            const data = requests[apiIndex] || requests[0];
+            requestPanel.innerHTML = `
+                <div class="request-label">📤 ${data.title}</div>
+                <div class="code-block">${escapeHtml(data.request)}</div>
+                <div class="request-label">📥 Response</div>
+                <div class="code-block">${escapeHtml(data.response)}</div>
+            `;
+            requestPanel.classList.remove('empty');
+            requestPanel.classList.add('active');
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        // Canvas click handler
+        canvas.addEventListener('click', (e) => {
+            const rect = canvas.getBoundingClientRect();
+            const scaleX = canvas.width / rect.width;
+            const scaleY = canvas.height / rect.height;
+            const clickX = (e.clientX - rect.left) * scaleX / window.devicePixelRatio;
+            const clickY = (e.clientY - rect.top) * scaleY / window.devicePixelRatio;
+
+            const width = canvas.width / window.devicePixelRatio;
+            const height = canvas.height / window.devicePixelRatio;
+            const centerX = width / 2;
+            const centerY = height / 2;
+            const radius = Math.min(width, height) * 0.35;
+
+            // Check if clicked on an API node
+            apis.forEach((api, index) => {
+                const angle = (index / apis.length) * Math.PI * 2 - Math.PI / 2;
+                const x = centerX + radius * Math.cos(angle);
+                const y = centerY + radius * Math.sin(angle);
+
+                const distance = Math.sqrt((clickX - x) ** 2 + (clickY - y) ** 2);
+                if (distance < 25) {
+                    animatingConnection = index;
+                    showRequest(index);
+                    drawNetwork();
+                    setTimeout(() => {
+                        animatingConnection = null;
+                        drawNetwork();
+                    }, 1500);
+                }
+            });
+        });
+
+        // Pipeline animation
+        async function runPipeline() {
+            if (pipelineRunning) return;
+            pipelineRunning = true;
+            pipelineBtn.disabled = true;
+
+            const sequence = [0, 1, 2, 3, 4, 5]; // All APIs in order
+
+            for (const apiIndex of sequence) {
+                animatingConnection = apiIndex;
+                showRequest(apiIndex);
+                drawNetwork();
+                await new Promise(resolve => setTimeout(resolve, 800));
+            }
+
+            animatingConnection = null;
+            drawNetwork();
+            pipelineRunning = false;
+            pipelineBtn.disabled = false;
+        }
+
+        // Reset button
+        resetBtn.addEventListener('click', () => {
+            animatingConnection = null;
+            requestPanel.innerHTML = 'Click a connection to view API request/response details';
+            requestPanel.classList.add('empty');
+            requestPanel.classList.remove('active');
+            drawNetwork();
+        });
+
+        // Pipeline button
+        pipelineBtn.addEventListener('click', runPipeline);
+
+        // Initial draw
+        drawNetwork();
+    </script>
+</body>
+</html>
