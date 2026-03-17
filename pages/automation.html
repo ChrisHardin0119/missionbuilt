@@ -61,13 +61,14 @@
         }
 
         .logo {
-            font-weight: 700;
-            font-size: 1.1rem;
-            color: var(--accent);
+            font-weight: 800;
+            font-size: 1.15rem;
+            letter-spacing: -0.02em;
             text-decoration: none;
+            color: var(--text);
         }
 
-        .logo span { color: var(--text); }
+        .logo span { color: var(--accent); }
 
         .nav-right {
             display: flex;
@@ -594,7 +595,6 @@
             <h2>Pipeline Visualizer</h2>
             <div class="pipeline-container">
                 <div class="pipeline-controls">
-                    <button class="btn btn-primary" id="autoPlayBtn">▶ Auto-Play Animation</button>
                     <button class="btn btn-secondary" id="resetBtn">Reset</button>
                 </div>
 
@@ -668,16 +668,16 @@
 
         <!-- Case Study -->
         <section>
-            <h2>Case Study: FB-AMZ Marketing Pipeline</h2>
+            <h2>Example Scenario: Tech Deals Blog Automation</h2>
             <div class="case-study">
                 <div class="case-section">
-                    <h3>The Problem</h3>
-                    <p>Chris wanted to monetize a tech deals blog but faced a critical bottleneck: manually finding deals, writing blog posts, and sharing on social media 3 times daily was unsustainable and consumed all his time.</p>
+                    <h3>The Challenge</h3>
+                    <p>Imagine you're running a tech deals blog and want to monetize it, but manually finding deals, writing blog posts, and sharing on social media 3 times daily is unsustainable. You're stuck choosing between: spending all your time on content creation, or abandoning the project because it's not scalable.</p>
                 </div>
 
                 <div class="case-section">
-                    <h3>The Solution</h3>
-                    <p>Built a fully automated end-to-end pipeline that runs like clockwork:</p>
+                    <h3>What I'd Build</h3>
+                    <p>A fully automated end-to-end pipeline that runs like clockwork:</p>
                     <ul style="margin-left: 1.5rem; margin-top: 1rem; color: var(--text-muted);">
                         <li>Python scripts scrape Slickdeals RSS feeds for trending tech deals</li>
                         <li>Extract Amazon product data automatically</li>
@@ -704,7 +704,7 @@
                 </div>
 
                 <div class="case-section">
-                    <h3>The Results</h3>
+                    <h3>Expected Impact</h3>
                     <div class="result-grid">
                         <div class="result-card">
                             <strong>3 posts/day</strong>
@@ -817,7 +817,6 @@
 
         const steps = document.querySelectorAll('.pipeline-step');
         const stepDetails = document.getElementById('stepDetails');
-        const autoPlayBtn = document.getElementById('autoPlayBtn');
         const resetBtn = document.getElementById('resetBtn');
         const progressFill = document.getElementById('progressFill');
 
@@ -844,29 +843,6 @@
             stepDetails.classList.add('expanded');
             currentStep = index;
         }
-
-        // Auto-play animation
-        autoPlayBtn.addEventListener('click', async () => {
-            if (isAnimating) return;
-            isAnimating = true;
-            autoPlayBtn.disabled = true;
-            autoPlayBtn.textContent = '▶ Playing...';
-
-            for (let i = 0; i < pipelineSteps.length; i++) {
-                showStepDetails(i);
-                progressFill.style.width = ((i + 1) / pipelineSteps.length * 100) + '%';
-                await new Promise(resolve => setTimeout(resolve, 1500));
-            }
-
-            isAnimating = false;
-            autoPlayBtn.disabled = false;
-            autoPlayBtn.textContent = '▶ Auto-Play Animation';
-
-            // Reset after animation completes
-            setTimeout(() => {
-                resetBtn.click();
-            }, 500);
-        });
 
         // Reset button
         resetBtn.addEventListener('click', () => {
