@@ -634,46 +634,8 @@
     </main>
 
     <script>
-        const responses = {
-            'dental': {
-                reply: "Great! A chatbot for a dental practice is perfect. You can handle appointment inquiries, answer questions about procedures, explain insurance, and capture contact info after hours. This usually increases lead capture by 30-40%. Are you interested in learning more?",
-                followUps: ['Tell me about pricing', 'How does it integrate with my booking system?']
-            },
-            'ecommerce': {
-                reply: "Perfect use case! An e-commerce chatbot can help customers find products, answer sizing/shipping questions, handle returns, and drive upsells. You can integrate it with your inventory and shopping cart. Many stores see a 25%+ boost in conversion rate. What would be most valuable for your store?",
-                followUps: ['Tell me about pricing', 'How does it track sales?']
-            },
-            'realestate': {
-                reply: "Real estate agents love this. A chatbot can qualify leads 24/7, answer questions about listings, schedule showings, and capture contact info from site visitors. You get a lead-gen machine that never sleeps. Agents typically see 40%+ more qualified inquiries. Interested?",
-                followUps: ['Tell me about pricing', 'Can it schedule showings?']
-            },
-            'pricing': {
-                reply: "I charge based on complexity and integration needs. A basic chatbot with email integration runs $2,500-$5,000. Custom integrations with APIs or CRM systems typically range $5,000-$10,000+. You also have monthly hosting and maintenance options. Happy to discuss what makes sense for your business. What's your budget looking like?",
-                followUps: ['Tell me more about features', 'How long does implementation take?']
-            },
-            'features': {
-                reply: "Standard features include: 24/7 availability, lead qualification, FAQs, appointment scheduling integration, CRM sync, analytics dashboard, and human handoff. Advanced options: multi-language support, payment processing, document uploads, and custom API connections. What's most important for your business?",
-                followUps: ['Tell me about pricing', 'How does integration work?']
-            },
-            'integration': {
-                reply: "I can integrate with most tools: Zapier, Make, your booking system, CRM (HubSpot, Salesforce, Pipedrive), email platforms, and payment processors. If your tool has an API, we can probably connect it. I'll handle the technical side. What systems are you currently using?",
-                followUps: ['Tell me about pricing', 'How long does implementation take?']
-            },
-            'default': {
-                reply: "That's a great question! Let me give you a bit more context. I help businesses like yours build AI chatbots that engage visitors 24/7, qualify leads, and integrate with your existing tools. Want to know more about a specific industry or feature?"
-            }
-        };
-
-        function categorizeInput(input) {
-            const lower = input.toLowerCase();
-            if (lower.includes('dental') || lower.includes('dentist') || lower.includes('medical') || lower.includes('doctor')) return 'dental';
-            if (lower.includes('ecommerce') || lower.includes('e-commerce') || lower.includes('store') || lower.includes('shop')) return 'ecommerce';
-            if (lower.includes('real estate') || lower.includes('agent') || lower.includes('property') || lower.includes('listing')) return 'realestate';
-            if (lower.includes('price') || lower.includes('cost') || lower.includes('how much') || lower.includes('budget')) return 'pricing';
-            if (lower.includes('feature') || lower.includes('what can') || lower.includes('what do')) return 'features';
-            if (lower.includes('integrat') || lower.includes('connect') || lower.includes('sync') || lower.includes('api') || lower.includes('zapier') || lower.includes('crm') || lower.includes('booking')) return 'integration';
-            return 'default';
-        }
+        // Live Claude API chatbot (same as main page)
+        const chatSessionId = 'chatpage_' + Math.random().toString(36).substr(2, 9) + '_' + Date.now();
 
         function handleQuickReply(text) {
             document.getElementById('chatInput').value = text;
@@ -683,7 +645,6 @@
         function sendMessage() {
             const input = document.getElementById('chatInput');
             const message = input.value.trim();
-
             if (!message) return;
 
             const messagesDiv = document.getElementById('chatMessages');
@@ -695,23 +656,58 @@
             messagesDiv.appendChild(userMsg);
 
             input.value = '';
-
-            // Scroll to bottom
             messagesDiv.scrollTop = messagesDiv.scrollHeight;
 
-            // Simulate typing delay
-            setTimeout(() => {
-                const category = categorizeInput(message);
-                const responseData = responses[category] || responses['default'];
-                const reply = responseData.reply;
+            // Show typing indicator
+            const typingId = 'typing_' + Date.now();
+            const typingMsg = document.createElement('div');
+            typingMsg.className = 'message bot';
+            typingMsg.id = typingId;
+            typingMsg.innerHTML = '<div class="message-bubble" style="opacity:0.6;">Thinking...</div>';
+            messagesDiv.appendChild(typingMsg);
+            messagesDiv.scrollTop = messagesDiv.scrollHeight;
 
-                const botMsg = document.createElement('div');
-                botMsg.className = 'message bot';
-                botMsg.innerHTML = `<div class="message-bubble">${reply}</div>`;
-                messagesDiv.appendChild(botMsg);
+            // Call the live Claude API
+            fetch('/api/chat', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ message: message, sessionId: chatSessionId })
+            })
+            .then(res => res.json())
+            .then(data => {
+                const typingEl = document.getElementById(typingId);
+                if (typingEl) typingEl.remove();
 
+                if (data.reply) {
+                    const botMsg = document.createElement('div');
+                    botMsg.className = 'message bot';
+                    botMsg.innerHTML = `<div class="message-bubble">${data.reply}</div>`;
+                    messagesDiv.appendChild(botMsg);
+
+                    if (data.messagesRemaining !== undefined && data.messagesRemaining <= 5 && data.messagesRemaining > 0) {
+                        const countMsg = document.createElement('div');
+                        countMsg.className = 'message bot';
+                        countMsg.innerHTML = `<div class="message-bubble" style="opacity:0.6;font-size:0.85rem;">(${data.messagesRemaining} messages remaining in this demo)</div>`;
+                        messagesDiv.appendChild(countMsg);
+                    }
+                } else {
+                    const errMsg = document.createElement('div');
+                    errMsg.className = 'message bot';
+                    errMsg.innerHTML = '<div class="message-bubble">Sorry, something went wrong. Please try again.</div>';
+                    messagesDiv.appendChild(errMsg);
+                }
                 messagesDiv.scrollTop = messagesDiv.scrollHeight;
-            }, 500);
+            })
+            .catch(err => {
+                const typingEl = document.getElementById(typingId);
+                if (typingEl) typingEl.remove();
+
+                const errMsg = document.createElement('div');
+                errMsg.className = 'message bot';
+                errMsg.innerHTML = '<div class="message-bubble">Connection error. Please try again later or reach out through the contact form!</div>';
+                messagesDiv.appendChild(errMsg);
+                messagesDiv.scrollTop = messagesDiv.scrollHeight;
+            });
 
             input.focus();
         }
