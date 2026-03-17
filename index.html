@@ -1643,12 +1643,38 @@
     updateContentDisplay();
   }
 
+  function formatEmailContent(html) {
+    // If this is email content with a Subject: line, reformat it
+    if (currentContentTab === 'email' && html.includes('<strong>Subject:</strong>')) {
+      // Extract the day label, subject, and body
+      const dayMatch = html.match(/<p style="font-weight:700[^"]*">(.*?)<\/p>/);
+      const subjectMatch = html.match(/<strong>Subject:<\/strong>\s*(.*?)<\/p>/);
+      const dayLabel = dayMatch ? dayMatch[1] : 'Email';
+      const subjectLine = subjectMatch ? subjectMatch[1].trim() : '';
+      // Get body content - everything after the Subject </p> tag
+      const bodyStart = html.indexOf('</p>', html.indexOf('<strong>Subject:</strong>')) + 4;
+      let bodyContent = html.substring(bodyStart).trim();
+      // Clean up body - remove wrapping <p> tags if present
+      bodyContent = bodyContent.replace(/^<p>/, '').replace(/<\/p>$/, '');
+
+      return `
+        <p style="font-weight:700;font-size:1.1rem;margin-bottom:12px;">${dayLabel}</p>
+        <div style="background:white;border:1px solid var(--border);border-radius:12px;overflow:hidden;">
+          <div style="background:var(--accent);color:white;padding:10px 14px;font-weight:600;font-size:0.8rem;letter-spacing:0.03em;">SUBJECT LINE</div>
+          <div style="padding:14px;font-size:1rem;font-weight:600;border-bottom:1px solid var(--border);">${subjectLine}</div>
+          <div style="background:var(--surface-2);padding:8px 14px;font-weight:600;font-size:0.8rem;color:var(--text-muted);letter-spacing:0.03em;">EMAIL BODY</div>
+          <div style="padding:14px;line-height:1.7;color:var(--text-muted);font-size:0.92rem;">${bodyContent}</div>
+        </div>`;
+    }
+    return html;
+  }
+
   function updateContentDisplay() {
     currentBusinessType = document.getElementById('businessType').value;
     currentContentIndex = 0;
     const data = contentData[currentBusinessType][currentContentTab];
     const content = data[currentContentIndex];
-    document.getElementById('contentOutput').innerHTML = content;
+    document.getElementById('contentOutput').innerHTML = formatEmailContent(content);
   }
 
   function cycleContentExample() {
@@ -1656,7 +1682,7 @@
     currentContentIndex = (currentContentIndex + 1) % data.length;
     const outputEl = document.getElementById('contentOutput');
     const scrollY = window.scrollY;
-    outputEl.innerHTML = data[currentContentIndex];
+    outputEl.innerHTML = formatEmailContent(data[currentContentIndex]);
     window.scrollTo(0, scrollY);
   }
 
@@ -1716,22 +1742,32 @@
     if (text.includes('add') || text.includes('feature') || text.includes('wish')) category = 'Feature Request';
     if (text.includes('bug') || text.includes('broken') || text.includes('error') || text.includes('crash')) category = 'Bug Report';
 
-    // Priority
+    // Priority — based on rating, sentiment, and category
     let priority = 'Low';
-    if (category === 'Bug Report') priority = 'High';
-    if (sentiment === 'Negative') priority = 'Medium';
-    if (currentRating === 1) priority = 'High';
+    let priorityColor = 'var(--success)';
+    if (currentRating === 5) { priority = 'Low'; priorityColor = 'var(--success)'; }
+    else if (currentRating === 4) { priority = 'Low'; priorityColor = 'var(--success)'; }
+    else if (currentRating === 3) { priority = 'Medium'; priorityColor = '#f59e0b'; }
+    else if (currentRating === 2) { priority = 'High'; priorityColor = '#ef4444'; }
+    else if (currentRating === 1) { priority = 'Urgent'; priorityColor = '#ef4444'; }
+    if (sentiment === 'Negative' && priority === 'Low') { priority = 'Medium'; priorityColor = '#f59e0b'; }
+    if (category === 'Bug Report') { priority = 'High'; priorityColor = '#ef4444'; }
+    if (category === 'Bug Report' && currentRating <= 2) { priority = 'Urgent'; priorityColor = '#ef4444'; }
 
-    // Route
+    // Route — intelligent routing based on all signals
     let route = 'Feedback Dashboard';
-    if (category === 'Bug Report') route = 'Development Team (Priority)';
-    if (category === 'Feature Request') route = 'Product Team';
-    if (sentiment === 'Negative' && currentRating <= 2) route = 'Support Team (Priority)';
+    let routeIcon = '📊';
+    if (category === 'Bug Report') { route = 'Engineering Team'; routeIcon = '🔧'; }
+    if (category === 'Feature Request') { route = 'Product Team'; routeIcon = '💡'; }
+    if (category === 'Customer Service') { route = 'Support Team'; routeIcon = '🎧'; }
+    if (category === 'Pricing') { route = 'Sales Team'; routeIcon = '💰'; }
+    if (sentiment === 'Negative' && currentRating <= 2) { route = 'Support Manager (Escalated)'; routeIcon = '🚨'; }
+    if (priority === 'Urgent') { route += ' — URGENT'; }
 
     document.getElementById('sentimentValue').innerHTML = `<span class="${sentimentClass}">${sentiment}</span>`;
     document.getElementById('categoryValue').textContent = category;
-    document.getElementById('priorityValue').textContent = priority;
-    document.getElementById('routeValue').textContent = route;
+    document.getElementById('priorityValue').innerHTML = `<span style="color:${priorityColor};font-weight:600;">${priority}</span>`;
+    document.getElementById('routeValue').textContent = `${routeIcon} ${route}`;
   }
 
   function submitFeedback() {
