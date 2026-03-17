@@ -523,8 +523,6 @@
         }
 
         .system-item:hover {
-            border-color: var(--accent);
-            box-shadow: 0 4px 12px rgba(79, 70, 229, 0.1);
         }
 
         .system-item-name {
@@ -740,11 +738,6 @@
                             <input type="email" id="email" placeholder="your@email.com">
                         </div>
 
-                        <div class="checkbox-group">
-                            <input type="checkbox" id="challenge" />
-                            <label for="challenge">Challenge This Answer (Structured Dispute)</label>
-                        </div>
-
                         <button type="submit" class="btn btn-primary">Submit Feedback</button>
                     </form>
                 </div>
@@ -890,7 +883,7 @@
             const category = document.getElementById('category').value;
             const feedback = document.getElementById('feedback').value;
             const email = document.getElementById('email').value;
-            const isChallenge = document.getElementById('challenge').checked;
+            const isChallenge = false;
 
             // Validation
             if (rating === 0) {
