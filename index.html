@@ -1,0 +1,1055 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mission Built | AI Solutions by Christopher Hardin</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --bg: #fafbfc;
+    --surface: #ffffff;
+    --surface-2: #f3f4f6;
+    --text: #1a1a2e;
+    --text-muted: #6b7280;
+    --accent: #4f46e5;
+    --accent-light: #818cf8;
+    --accent-glow: rgba(79, 70, 229, 0.12);
+    --border: #e5e7eb;
+    --success: #10b981;
+    --radius: 16px;
+  }
+
+  body {
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    background: rgba(255,255,255,0.92);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    padding: 16px 24px;
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .nav-logo {
+    font-weight: 800; font-size: 1.15rem; letter-spacing: -0.02em;
+  }
+  .nav-logo span { color: var(--accent); }
+  .nav-links { display: flex; gap: 24px; }
+  .nav-links a {
+    color: var(--text-muted); text-decoration: none; font-size: 0.9rem;
+    font-weight: 500; transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--accent); }
+
+  /* HERO */
+  .hero {
+    padding: 140px 24px 80px;
+    text-align: center;
+    max-width: 800px;
+    margin: 0 auto;
+  }
+  .hero-badge {
+    display: inline-block;
+    background: var(--accent-glow);
+    color: var(--accent);
+    padding: 6px 18px;
+    border-radius: 999px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    margin-bottom: 24px;
+    border: 1px solid rgba(79,70,229,0.2);
+  }
+  .hero h1 {
+    font-size: clamp(2.2rem, 5vw, 3.2rem);
+    font-weight: 800;
+    line-height: 1.15;
+    letter-spacing: -0.03em;
+    margin-bottom: 20px;
+  }
+  .hero h1 .highlight { color: var(--accent); }
+  .hero p {
+    font-size: 1.15rem;
+    color: var(--text-muted);
+    max-width: 600px;
+    margin: 0 auto 36px;
+    line-height: 1.7;
+  }
+  .hero-cta {
+    display: inline-block;
+    background: var(--accent);
+    color: white;
+    padding: 14px 36px;
+    border-radius: 12px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 1rem;
+    transition: transform 0.2s, box-shadow 0.2s;
+    box-shadow: 0 4px 20px rgba(79,70,229,0.3);
+  }
+  .hero-cta:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(79,70,229,0.4); }
+
+  /* SECTION */
+  .section {
+    padding: 80px 24px;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+  .section-header {
+    text-align: center;
+    margin-bottom: 56px;
+  }
+  .section-header h2 {
+    font-size: 2rem;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    margin-bottom: 12px;
+  }
+  .section-header p {
+    color: var(--text-muted);
+    font-size: 1.05rem;
+    max-width: 600px;
+    margin: 0 auto;
+  }
+
+  /* SERVICES GRID */
+  .services-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 24px;
+  }
+  .service-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 32px;
+    transition: transform 0.25s, box-shadow 0.25s, border-color 0.25s;
+    cursor: default;
+    position: relative;
+    overflow: hidden;
+  }
+  .service-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 40px rgba(0,0,0,0.08);
+    border-color: var(--accent-light);
+  }
+  .service-icon {
+    width: 52px; height: 52px;
+    border-radius: 14px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+  }
+  .service-card h3 {
+    font-size: 1.2rem;
+    font-weight: 700;
+    margin-bottom: 10px;
+    letter-spacing: -0.01em;
+  }
+  .service-card p {
+    color: var(--text-muted);
+    font-size: 0.95rem;
+    line-height: 1.6;
+    margin-bottom: 20px;
+  }
+  .service-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 20px;
+  }
+  .service-tag {
+    background: var(--surface-2);
+    color: var(--text-muted);
+    padding: 4px 12px;
+    border-radius: 999px;
+    font-size: 0.78rem;
+    font-weight: 500;
+  }
+  .service-link {
+    color: var(--accent);
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.9rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: gap 0.2s;
+  }
+  .service-link:hover { gap: 10px; }
+
+  /* DEMO SECTION */
+  .demo-section {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 40px;
+    margin-bottom: 32px;
+  }
+  .demo-section h3 {
+    font-size: 1.3rem;
+    font-weight: 700;
+    margin-bottom: 8px;
+  }
+  .demo-section .demo-subtitle {
+    color: var(--text-muted);
+    font-size: 0.95rem;
+    margin-bottom: 24px;
+  }
+
+  /* CHATBOT DEMO */
+  .chat-container {
+    background: var(--surface-2);
+    border-radius: 14px;
+    padding: 20px;
+    max-height: 360px;
+    overflow-y: auto;
+    margin-bottom: 16px;
+  }
+  .chat-message {
+    margin-bottom: 14px;
+    display: flex;
+    gap: 10px;
+    animation: fadeUp 0.3s ease;
+  }
+  .chat-message.bot { flex-direction: row; }
+  .chat-message.user { flex-direction: row-reverse; }
+  .chat-avatar {
+    width: 32px; height: 32px;
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.85rem;
+    flex-shrink: 0;
+  }
+  .chat-message.bot .chat-avatar { background: var(--accent-glow); }
+  .chat-message.user .chat-avatar { background: #e0e7ff; }
+  .chat-bubble {
+    padding: 10px 16px;
+    border-radius: 14px;
+    max-width: 75%;
+    font-size: 0.92rem;
+    line-height: 1.5;
+  }
+  .chat-message.bot .chat-bubble { background: white; border: 1px solid var(--border); }
+  .chat-message.user .chat-bubble { background: var(--accent); color: white; }
+  .chat-input-row {
+    display: flex; gap: 10px;
+  }
+  .chat-input {
+    flex: 1;
+    padding: 12px 16px;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    font-size: 0.92rem;
+    outline: none;
+    font-family: inherit;
+    transition: border-color 0.2s;
+  }
+  .chat-input:focus { border-color: var(--accent); }
+  .chat-send {
+    background: var(--accent);
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: background 0.2s;
+  }
+  .chat-send:hover { background: #4338ca; }
+  .chat-options {
+    display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px;
+  }
+  .chat-option-btn {
+    background: white;
+    border: 1px solid var(--accent);
+    color: var(--accent);
+    padding: 8px 16px;
+    border-radius: 10px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .chat-option-btn:hover { background: var(--accent); color: white; }
+
+  /* WORKFLOW DEMO */
+  .workflow-visual {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    overflow-x: auto;
+    padding: 20px 0;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .workflow-step {
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 18px 22px;
+    text-align: center;
+    min-width: 140px;
+    transition: all 0.3s;
+    cursor: pointer;
+  }
+  .workflow-step.active {
+    background: var(--accent-glow);
+    border-color: var(--accent);
+    transform: scale(1.05);
+  }
+  .workflow-step-icon { font-size: 1.5rem; margin-bottom: 8px; }
+  .workflow-step-label { font-size: 0.82rem; font-weight: 600; }
+  .workflow-step-desc { font-size: 0.75rem; color: var(--text-muted); margin-top: 4px; }
+  .workflow-arrow { color: var(--accent-light); font-size: 1.3rem; font-weight: bold; }
+
+  /* FEEDBACK DEMO */
+  .feedback-form {
+    background: var(--surface-2);
+    border-radius: 14px;
+    padding: 24px;
+  }
+  .feedback-stars {
+    display: flex; gap: 8px; margin-bottom: 16px;
+  }
+  .feedback-star {
+    font-size: 2rem;
+    cursor: pointer;
+    transition: transform 0.15s;
+    filter: grayscale(1);
+  }
+  .feedback-star.active { filter: grayscale(0); transform: scale(1.15); }
+  .feedback-star:hover { transform: scale(1.2); }
+  .feedback-textarea {
+    width: 100%;
+    min-height: 80px;
+    padding: 14px;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    font-family: inherit;
+    font-size: 0.92rem;
+    resize: vertical;
+    outline: none;
+    margin-bottom: 12px;
+    transition: border-color 0.2s;
+  }
+  .feedback-textarea:focus { border-color: var(--accent); }
+  .feedback-submit {
+    background: var(--accent);
+    color: white;
+    border: none;
+    padding: 12px 28px;
+    border-radius: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    font-size: 0.92rem;
+    transition: background 0.2s;
+  }
+  .feedback-submit:hover { background: #4338ca; }
+  .feedback-success {
+    background: rgba(16,185,129,0.1);
+    border: 1px solid var(--success);
+    color: var(--success);
+    padding: 14px 20px;
+    border-radius: 12px;
+    font-weight: 600;
+    text-align: center;
+    display: none;
+  }
+
+  /* FUNNEL DEMO */
+  .funnel-container {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    align-items: center;
+  }
+  .funnel-stage {
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 16px 24px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    width: 100%;
+    max-width: 480px;
+    transition: all 0.3s;
+    cursor: pointer;
+  }
+  .funnel-stage.active {
+    background: var(--accent-glow);
+    border-color: var(--accent);
+  }
+  .funnel-stage-num {
+    background: var(--accent);
+    color: white;
+    width: 32px; height: 32px;
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700;
+    font-size: 0.85rem;
+    flex-shrink: 0;
+  }
+  .funnel-stage-text h4 { font-size: 0.95rem; font-weight: 600; }
+  .funnel-stage-text p { font-size: 0.82rem; color: var(--text-muted); }
+  .funnel-connector {
+    width: 2px; height: 20px;
+    background: var(--border);
+  }
+
+  /* CONTACT */
+  .contact-section {
+    text-align: center;
+    padding: 80px 24px;
+    max-width: 600px;
+    margin: 0 auto;
+  }
+  .contact-section h2 {
+    font-size: 2rem;
+    font-weight: 800;
+    margin-bottom: 16px;
+  }
+  .contact-section p {
+    color: var(--text-muted);
+    margin-bottom: 32px;
+    font-size: 1.05rem;
+  }
+  .contact-btn {
+    display: inline-block;
+    background: var(--accent);
+    color: white;
+    padding: 16px 40px;
+    border-radius: 12px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 1.05rem;
+    transition: transform 0.2s, box-shadow 0.2s;
+    box-shadow: 0 4px 20px rgba(79,70,229,0.3);
+  }
+  .contact-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(79,70,229,0.4); }
+
+  /* CONTACT FORM */
+  .contact-form {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 40px;
+    max-width: 500px;
+    margin: 32px auto 0;
+  }
+  .form-group {
+    margin-bottom: 20px;
+  }
+  .form-group label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 8px;
+    font-size: 0.95rem;
+    color: var(--text);
+  }
+  .form-group input,
+  .form-group select,
+  .form-group textarea {
+    width: 100%;
+    padding: 12px 16px;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    font-family: inherit;
+    font-size: 0.92rem;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  .form-group input:focus,
+  .form-group select:focus,
+  .form-group textarea:focus {
+    border-color: var(--accent);
+  }
+  .form-group textarea {
+    min-height: 100px;
+    resize: vertical;
+  }
+  .form-submit {
+    width: 100%;
+    background: var(--accent);
+    color: white;
+    padding: 14px 24px;
+    border: none;
+    border-radius: 12px;
+    font-weight: 600;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  .form-submit:hover {
+    background: #4338ca;
+  }
+  .form-success {
+    background: rgba(16,185,129,0.1);
+    border: 1px solid var(--success);
+    color: var(--success);
+    padding: 16px 24px;
+    border-radius: 12px;
+    font-weight: 600;
+    text-align: center;
+    display: none;
+  }
+
+  /* DEMO BANNER */
+  .demo-banner {
+    background: rgba(245,158,11,0.08);
+    border: 1px solid rgba(245,158,11,0.3);
+    color: rgba(0,0,0,0.7);
+    padding: 12px 16px;
+    border-radius: 10px;
+    font-size: 0.85rem;
+    margin-bottom: 20px;
+    text-align: center;
+  }
+
+  /* FOOTER */
+  footer {
+    text-align: center;
+    padding: 40px 24px;
+    color: var(--text-muted);
+    font-size: 0.85rem;
+    border-top: 1px solid var(--border);
+  }
+
+  /* ANIMATIONS */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .fade-in { animation: fadeUp 0.5s ease both; }
+
+  /* RESPONSIVE */
+  @media (max-width: 640px) {
+    .nav-links { display: none; }
+    .services-grid { grid-template-columns: 1fr; }
+    .workflow-visual { flex-direction: column; }
+    .workflow-arrow { transform: rotate(90deg); }
+    .demo-section { padding: 24px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">Mission<span>Built</span>.dev</div>
+  <div class="nav-links">
+    <a href="#services">Services</a>
+    <a href="#demos">Live Demos</a>
+    <a href="#contact">Contact</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-badge">AI Solutions Developer</div>
+  <h1>I build <span class="highlight">AI-powered systems</span> that work while you sleep.</h1>
+  <p>From intelligent chatbots to fully automated content pipelines, I design and build the AI tools your business actually needs. Everything you see on this page is something I can build for you.</p>
+  <a href="#services" class="hero-cta">See What I Build</a>
+</section>
+
+<!-- SERVICES GRID -->
+<section class="section" id="services">
+  <div class="section-header">
+    <h2>What I Can Build For You</h2>
+    <p>Each card below represents a real capability. Click "See it in action" to try a live demo.</p>
+  </div>
+
+  <div class="services-grid">
+
+    <div class="service-card">
+      <div class="service-icon" style="background: rgba(79,70,229,0.1);">&#129302;</div>
+      <h3>AI Chatbots & Conversational Agents</h3>
+      <p>Custom chatbots that handle leads, answer FAQs, qualify prospects, and book appointments. Trained on your business, speaking in your voice.</p>
+      <div class="service-tags">
+        <span class="service-tag">Lead Capture</span>
+        <span class="service-tag">FAQ Handling</span>
+        <span class="service-tag">Appointment Booking</span>
+        <span class="service-tag">24/7 Support</span>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 10px;">
+        <a href="pages/chatbots.html" class="service-link">Learn more &#8594;</a>
+        <a href="#demo-chatbot" class="service-link" style="color: var(--text-muted); font-weight: 500;">Try the demo ↓</a>
+      </div>
+    </div>
+
+    <div class="service-card">
+      <div class="service-icon" style="background: rgba(16,185,129,0.1);">&#9889;</div>
+      <h3>Automation Workflows & Pipelines</h3>
+      <p>End-to-end automated systems that collect data, process it through AI, and publish or act on the results. Runs on schedule with zero babysitting.</p>
+      <div class="service-tags">
+        <span class="service-tag">Scheduled Pipelines</span>
+        <span class="service-tag">API Integrations</span>
+        <span class="service-tag">Error Recovery</span>
+        <span class="service-tag">Multi-Platform</span>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 10px;">
+        <a href="pages/automation.html" class="service-link">Learn more &#8594;</a>
+        <a href="#demo-workflow" class="service-link" style="color: var(--text-muted); font-weight: 500;">Try the demo ↓</a>
+      </div>
+    </div>
+
+    <div class="service-card">
+      <div class="service-icon" style="background: rgba(245,158,11,0.1);">&#128187;</div>
+      <h3>Web Apps & Interactive Dashboards</h3>
+      <p>Full-stack web applications with beautiful UIs, real-time data, user authentication, and AI features baked in. From concept to deployed.</p>
+      <div class="service-tags">
+        <span class="service-tag">React / Next.js</span>
+        <span class="service-tag">Databases</span>
+        <span class="service-tag">User Auth</span>
+        <span class="service-tag">Responsive Design</span>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 10px;">
+        <a href="pages/webapps.html" class="service-link">Learn more &#8594;</a>
+        <a href="#demo-webapp" class="service-link" style="color: var(--text-muted); font-weight: 500;">Try the demo ↓</a>
+      </div>
+    </div>
+
+    <div class="service-card">
+      <div class="service-icon" style="background: rgba(236,72,153,0.1);">&#9997;&#65039;</div>
+      <h3>AI Content Generation</h3>
+      <p>Automated content systems that write blog posts, social media, email sequences, and marketing copy in your brand's voice. Consistent, on-schedule, on-brand.</p>
+      <div class="service-tags">
+        <span class="service-tag">Blog Automation</span>
+        <span class="service-tag">Brand Voice</span>
+        <span class="service-tag">Social Media</span>
+        <span class="service-tag">SEO Content</span>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 10px;">
+        <a href="pages/content.html" class="service-link">Learn more &#8594;</a>
+        <a href="#demo-content" class="service-link" style="color: var(--text-muted); font-weight: 500;">Try the demo ↓</a>
+      </div>
+    </div>
+
+    <div class="service-card">
+      <div class="service-icon" style="background: rgba(99,102,241,0.1);">&#128279;</div>
+      <h3>API Integrations & Data Systems</h3>
+      <p>Connect your tools. I build the bridges between your CRM, email platform, social media, payment system, and AI models so data flows automatically.</p>
+      <div class="service-tags">
+        <span class="service-tag">REST APIs</span>
+        <span class="service-tag">OAuth / Auth</span>
+        <span class="service-tag">Webhooks</span>
+        <span class="service-tag">Data Pipelines</span>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 10px;">
+        <a href="pages/api-integrations.html" class="service-link">Learn more &#8594;</a>
+        <a href="#demo-workflow" class="service-link" style="color: var(--text-muted); font-weight: 500;">Try the demo ↓</a>
+      </div>
+    </div>
+
+    <div class="service-card">
+      <div class="service-icon" style="background: rgba(234,88,12,0.1);">&#127919;</div>
+      <h3>Funnel & CRM Automation</h3>
+      <p>Automated sales funnels, lead nurture sequences, and CRM workflows that move prospects from first click to paying customer without manual follow-up.</p>
+      <div class="service-tags">
+        <span class="service-tag">Lead Nurture</span>
+        <span class="service-tag">Email Sequences</span>
+        <span class="service-tag">Pipeline Management</span>
+        <span class="service-tag">GoHighLevel</span>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 10px;">
+        <a href="pages/funnel-crm.html" class="service-link">Learn more &#8594;</a>
+        <a href="#demo-funnel" class="service-link" style="color: var(--text-muted); font-weight: 500;">Try the demo ↓</a>
+      </div>
+    </div>
+
+    <div class="service-card">
+      <div class="service-icon" style="background: rgba(6,182,212,0.1);">&#128172;</div>
+      <h3>Feedback & Support Systems</h3>
+      <p>Smart feedback collection, user challenge systems, and automated support triage. Users submit issues, AI categorizes and routes them, you see structured data.</p>
+      <div class="service-tags">
+        <span class="service-tag">Feedback Forms</span>
+        <span class="service-tag">Issue Triage</span>
+        <span class="service-tag">Rating Systems</span>
+        <span class="service-tag">Auto-Routing</span>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 10px;">
+        <a href="pages/feedback.html" class="service-link">Learn more &#8594;</a>
+        <a href="#demo-feedback" class="service-link" style="color: var(--text-muted); font-weight: 500;">Try the demo ↓</a>
+      </div>
+    </div>
+
+    <div class="service-card">
+      <div class="service-icon" style="background: rgba(168,85,247,0.1);">&#129520;</div>
+      <h3>Custom AI Solutions</h3>
+      <p>Have something specific in mind? I build custom AI tools tailored to your exact business problem. If AI can solve it, I can build it.</p>
+      <div class="service-tags">
+        <span class="service-tag">Prompt Engineering</span>
+        <span class="service-tag">Custom Models</span>
+        <span class="service-tag">Unique Workflows</span>
+        <span class="service-tag">Consulting</span>
+      </div>
+      <a href="#contact" class="service-link">Let's talk &#8594;</a>
+    </div>
+
+  </div>
+</section>
+
+<!-- LIVE DEMOS -->
+<section class="section" id="demos">
+  <div class="section-header">
+    <h2>Try It Yourself</h2>
+    <p>These are live, interactive demos. Everything below is the kind of system I can build for your business.</p>
+  </div>
+
+  <!-- CHATBOT DEMO -->
+  <div class="demo-section" id="demo-chatbot">
+    <div class="demo-banner">This is a demo chatbot. For demonstration purposes only.</div>
+    <h3>AI Chatbot Demo</h3>
+    <p class="demo-subtitle">A lead-capture chatbot that qualifies prospects and answers questions in your brand's voice.</p>
+    <div class="chat-container" id="chatMessages">
+      <div class="chat-message bot">
+        <div class="chat-avatar">AI</div>
+        <div>
+          <div class="chat-bubble">Hey! Welcome to the demo. I'm an AI assistant built by Chris. What are you looking for today?</div>
+          <div class="chat-options">
+            <button class="chat-option-btn" onclick="chatReply('I need a chatbot for my business')">I need a chatbot</button>
+            <button class="chat-option-btn" onclick="chatReply('I want to automate my workflows')">Automate workflows</button>
+            <button class="chat-option-btn" onclick="chatReply('I need a website or app built')">Build me an app</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="chat-input-row">
+      <input class="chat-input" id="chatInput" placeholder="Type a message..." onkeydown="if(event.key==='Enter')sendChat()">
+      <button class="chat-send" onclick="sendChat()">Send</button>
+    </div>
+  </div>
+
+  <!-- WORKFLOW DEMO -->
+  <div class="demo-section" id="demo-workflow">
+    <h3>Automation Pipeline Demo</h3>
+    <p class="demo-subtitle">Click each step to see how a real automated content pipeline flows. This is a system I built and run in production.</p>
+    <div class="workflow-visual" id="workflowVisual">
+      <div class="workflow-step active" onclick="activateStep(0)">
+        <div class="workflow-step-icon">&#128225;</div>
+        <div class="workflow-step-label">Data Collection</div>
+        <div class="workflow-step-desc">RSS feeds & web scraping</div>
+      </div>
+      <div class="workflow-arrow">&#8594;</div>
+      <div class="workflow-step" onclick="activateStep(1)">
+        <div class="workflow-step-icon">&#129302;</div>
+        <div class="workflow-step-label">AI Processing</div>
+        <div class="workflow-step-desc">Claude API generates content</div>
+      </div>
+      <div class="workflow-arrow">&#8594;</div>
+      <div class="workflow-step" onclick="activateStep(2)">
+        <div class="workflow-step-icon">&#128240;</div>
+        <div class="workflow-step-label">Blog Publishing</div>
+        <div class="workflow-step-desc">Auto-publish via Blogger API</div>
+      </div>
+      <div class="workflow-arrow">&#8594;</div>
+      <div class="workflow-step" onclick="activateStep(3)">
+        <div class="workflow-step-icon">&#128227;</div>
+        <div class="workflow-step-label">Social Media</div>
+        <div class="workflow-step-desc">Facebook Graph API post</div>
+      </div>
+      <div class="workflow-arrow">&#8594;</div>
+      <div class="workflow-step" onclick="activateStep(4)">
+        <div class="workflow-step-icon">&#128176;</div>
+        <div class="workflow-step-label">Monetization</div>
+        <div class="workflow-step-desc">Affiliate links embedded</div>
+      </div>
+    </div>
+    <div id="workflowDetail" style="background: var(--surface-2); border-radius: 14px; padding: 20px; margin-top: 20px;">
+      <p style="font-weight: 600; margin-bottom: 6px;">Data Collection</p>
+      <p style="color: var(--text-muted); font-size: 0.92rem;">The system scrapes real-time deals from multiple RSS feeds and e-commerce sources, rotates through search keywords, deduplicates results, and selects the best items. All automated, all scheduled.</p>
+    </div>
+  </div>
+
+  <!-- WEB APP DEMO -->
+  <div class="demo-section" id="demo-webapp">
+    <h3>Web App Demo</h3>
+    <p class="demo-subtitle">An interactive career quiz scoring engine. Users answer questions, the system calculates multi-dimensional scores in real time.</p>
+    <div style="background: var(--surface-2); border-radius: 14px; padding: 24px;">
+      <p style="font-weight: 600; margin-bottom: 16px;">Sample Question: What causes an aircraft to stall?</p>
+      <div style="display: flex; flex-direction: column; gap: 10px;" id="quizOptions">
+        <button onclick="selectQuizOption(this, false)" style="text-align:left; padding: 14px 18px; border: 1px solid var(--border); border-radius: 12px; background: white; cursor: pointer; font-size: 0.92rem; font-family: inherit; transition: all 0.2s;">A. Engine failure</button>
+        <button onclick="selectQuizOption(this, false)" style="text-align:left; padding: 14px 18px; border: 1px solid var(--border); border-radius: 12px; background: white; cursor: pointer; font-size: 0.92rem; font-family: inherit; transition: all 0.2s;">B. Flying too slowly</button>
+        <button onclick="selectQuizOption(this, true)" style="text-align:left; padding: 14px 18px; border: 1px solid var(--border); border-radius: 12px; background: white; cursor: pointer; font-size: 0.92rem; font-family: inherit; transition: all 0.2s;">C. Exceeding the critical angle of attack</button>
+        <button onclick="selectQuizOption(this, false)" style="text-align:left; padding: 14px 18px; border: 1px solid var(--border); border-radius: 12px; background: white; cursor: pointer; font-size: 0.92rem; font-family: inherit; transition: all 0.2s;">D. Running out of fuel</button>
+      </div>
+      <div id="quizResult" style="display: none; margin-top: 16px; padding: 16px; border-radius: 12px;"></div>
+    </div>
+  </div>
+
+  <!-- CONTENT GENERATION DEMO -->
+  <div class="demo-section" id="demo-content">
+    <h3>AI Content Generation Demo</h3>
+    <p class="demo-subtitle">Select a content type to see how AI generates tailored, on-brand content automatically.</p>
+    <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 20px;">
+      <button class="chat-option-btn" onclick="showContent('blog')" style="font-size: 0.9rem;">Blog Post</button>
+      <button class="chat-option-btn" onclick="showContent('social')" style="font-size: 0.9rem;">Social Media</button>
+      <button class="chat-option-btn" onclick="showContent('email')" style="font-size: 0.9rem;">Email Sequence</button>
+    </div>
+    <div id="contentOutput" style="background: var(--surface-2); border-radius: 14px; padding: 24px; min-height: 120px;">
+      <p style="color: var(--text-muted); font-style: italic;">Click a content type above to see AI-generated output.</p>
+    </div>
+  </div>
+
+  <!-- FUNNEL DEMO -->
+  <div class="demo-section" id="demo-funnel">
+    <h3>Sales Funnel Demo</h3>
+    <p class="demo-subtitle">Click through each stage to see how an automated funnel moves leads from first touch to conversion.</p>
+    <div class="funnel-container" id="funnelContainer">
+      <div class="funnel-stage active" onclick="activateFunnel(0)">
+        <div class="funnel-stage-num">1</div>
+        <div class="funnel-stage-text">
+          <h4>Ad Click / Landing Page</h4>
+          <p>Prospect clicks your ad and lands on an optimized page</p>
+        </div>
+      </div>
+      <div class="funnel-connector"></div>
+      <div class="funnel-stage" onclick="activateFunnel(1)">
+        <div class="funnel-stage-num">2</div>
+        <div class="funnel-stage-text">
+          <h4>Lead Capture Form</h4>
+          <p>Name and email collected, tagged by source</p>
+        </div>
+      </div>
+      <div class="funnel-connector"></div>
+      <div class="funnel-stage" onclick="activateFunnel(2)">
+        <div class="funnel-stage-num">3</div>
+        <div class="funnel-stage-text">
+          <h4>AI Follow-Up Sequence</h4>
+          <p>Personalized emails and texts over 7 days</p>
+        </div>
+      </div>
+      <div class="funnel-connector"></div>
+      <div class="funnel-stage" onclick="activateFunnel(3)">
+        <div class="funnel-stage-num">4</div>
+        <div class="funnel-stage-text">
+          <h4>Booking / Conversion</h4>
+          <p>Prospect books a call or makes a purchase</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FEEDBACK DEMO -->
+  <div class="demo-section" id="demo-feedback">
+    <h3>Feedback & Support System Demo</h3>
+    <p class="demo-subtitle">An interactive rating and feedback form with smart categorization. Try it out.</p>
+    <div class="feedback-form" id="feedbackForm">
+      <p style="font-weight: 600; margin-bottom: 12px;">How was your experience?</p>
+      <div class="feedback-stars" id="feedbackStars">
+        <span class="feedback-star" onclick="setRating(1)">&#11088;</span>
+        <span class="feedback-star" onclick="setRating(2)">&#11088;</span>
+        <span class="feedback-star" onclick="setRating(3)">&#11088;</span>
+        <span class="feedback-star" onclick="setRating(4)">&#11088;</span>
+        <span class="feedback-star" onclick="setRating(5)">&#11088;</span>
+      </div>
+      <textarea class="feedback-textarea" id="feedbackText" placeholder="Tell us more about your experience..."></textarea>
+      <button class="feedback-submit" onclick="submitFeedback()">Submit Feedback</button>
+    </div>
+    <div class="feedback-success" id="feedbackSuccess">Thanks for your feedback! Your response has been categorized and routed automatically.</div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section class="contact-section" id="contact">
+  <h2>Let's Build Something</h2>
+  <p>Have a project in mind? I'd love to hear about it. Every system on this page is something I can build for your business.</p>
+
+  <div class="contact-form" id="contactForm">
+    <form onsubmit="submitContactForm(event)">
+      <div class="form-group">
+        <label for="name">Your Name</label>
+        <input type="text" id="name" name="name" required>
+      </div>
+
+      <div class="form-group">
+        <label for="email">Email Address</label>
+        <input type="email" id="email" name="email" required>
+      </div>
+
+      <div class="form-group">
+        <label for="service">What are you looking for?</label>
+        <select id="service" name="service" required>
+          <option value="">Select an option...</option>
+          <option value="AI Chatbot">AI Chatbot</option>
+          <option value="Automation/Workflow">Automation/Workflow</option>
+          <option value="Web App">Web App</option>
+          <option value="Content Generation">Content Generation</option>
+          <option value="API Integration">API Integration</option>
+          <option value="Funnel/CRM Automation">Funnel/CRM Automation</option>
+          <option value="Feedback System">Feedback System</option>
+          <option value="Custom AI Solution">Custom AI Solution</option>
+          <option value="Not Sure Yet">Not Sure Yet</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="budget">Budget Range</label>
+        <select id="budget" name="budget" required>
+          <option value="">Select a range...</option>
+          <option value="Under $500">Under $500</option>
+          <option value="$500-$1000">$500-$1000</option>
+          <option value="$1000-$2500">$1000-$2500</option>
+          <option value="$2500-$5000">$2500-$5000</option>
+          <option value="$5000+">$5000+</option>
+          <option value="Just Exploring">Just Exploring</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="message">Message</label>
+        <textarea id="message" name="message" placeholder="Tell me about your project..." required></textarea>
+      </div>
+
+      <button type="submit" class="form-submit">Send My Project Details</button>
+    </form>
+  </div>
+
+  <div class="form-success" id="contactSuccess">
+    <strong>Thanks for reaching out!</strong><br>
+    <span style="font-size:0.9rem;font-weight:400;">I've received your details and will get back to you within 24 hours.</span>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <p>MissionBuilt.dev | Christopher Hardin | AI Solutions Developer | Omaha, NE</p>
+  <p style="margin-top: 8px;">USAF Veteran | TS/SCI Eligible | Available for Contract & Full-Time</p>
+</footer>
+
+<script>
+  // === CHATBOT DEMO ===
+  const chatResponses = {
+    'chatbot': "Great choice! I build custom AI chatbots that integrate with your website, handle lead qualification, answer FAQs, and book appointments automatically. They run 24/7 and speak in your brand's voice. What industry are you in?",
+    'automate': "Smart move. I've built production automation pipelines that run 3x daily, pull data from multiple sources, generate AI content, and publish across platforms with zero human involvement. What processes are eating up your time?",
+    'app': "I build full-stack web apps with AI baked in. Think interactive dashboards, quiz platforms, data tools, or customer-facing apps. I handle everything from UI design to database to deployment. What's the idea?",
+    'default': "That's an interesting use case! I work with Claude, ChatGPT, and custom AI integrations to build exactly what businesses need. Whether it's automation, chatbots, content generation, or a full web app, I can make it happen. Want to tell me more about what you're looking for?"
+  };
+
+  function chatReply(text) { addMessage(text, 'user'); setTimeout(() => botReply(text), 800); }
+  function sendChat() {
+    const input = document.getElementById('chatInput');
+    if (!input.value.trim()) return;
+    addMessage(input.value, 'user');
+    const val = input.value; input.value = '';
+    setTimeout(() => botReply(val), 800);
+  }
+  function addMessage(text, sender) {
+    const container = document.getElementById('chatMessages');
+    const avatar = sender === 'bot' ? 'AI' : 'You';
+    container.innerHTML += `<div class="chat-message ${sender}"><div class="chat-avatar">${avatar}</div><div class="chat-bubble">${text}</div></div>`;
+    container.scrollTop = container.scrollHeight;
+  }
+  function botReply(userText) {
+    const lower = userText.toLowerCase();
+    let response = chatResponses.default;
+    if (lower.includes('chatbot') || lower.includes('chat bot')) response = chatResponses.chatbot;
+    else if (lower.includes('automat') || lower.includes('workflow') || lower.includes('pipeline')) response = chatResponses.automate;
+    else if (lower.includes('app') || lower.includes('website') || lower.includes('web')) response = chatResponses.app;
+    addMessage(response, 'bot');
+  }
+
+  // === WORKFLOW DEMO ===
+  const workflowDetails = [
+    { title: 'Data Collection', desc: 'The system scrapes real-time deals from multiple RSS feeds and e-commerce sources, rotates through search keywords, deduplicates results, and selects the best items. All automated, all scheduled.' },
+    { title: 'AI Processing', desc: 'Collected data is sent to the Claude API with custom prompt engineering. The AI generates original blog content with a consistent brand voice, plus separate social media teasers. Different prompt architectures for different content types.' },
+    { title: 'Blog Publishing', desc: 'Generated HTML content is automatically published to a blog via the Google Blogger API with OAuth2 authentication. Token refresh is handled automatically. Posts go live immediately.' },
+    { title: 'Social Media', desc: 'The system generates a platform-specific teaser post and publishes it to Facebook via the Graph API, driving traffic back to the blog. Timed to post at optimal engagement hours.' },
+    { title: 'Monetization', desc: 'Every product link includes embedded affiliate tracking. The system automatically builds monetization into every piece of content it generates. Revenue is earned passively while the system runs.' },
+  ];
+  function activateStep(idx) {
+    document.querySelectorAll('.workflow-step').forEach((s,i) => s.classList.toggle('active', i===idx));
+    const d = workflowDetails[idx];
+    document.getElementById('workflowDetail').innerHTML = `<p style="font-weight:600;margin-bottom:6px;">${d.title}</p><p style="color:var(--text-muted);font-size:0.92rem;">${d.desc}</p>`;
+  }
+
+  // === QUIZ DEMO ===
+  function selectQuizOption(btn, correct) {
+    document.querySelectorAll('#quizOptions button').forEach(b => { b.style.pointerEvents = 'none'; b.style.opacity = '0.6'; });
+    btn.style.opacity = '1';
+    const result = document.getElementById('quizResult');
+    if (correct) {
+      btn.style.borderColor = 'var(--success)'; btn.style.background = 'rgba(16,185,129,0.1)';
+      result.innerHTML = '<p style="color:var(--success);font-weight:600;">Correct!</p><p style="color:var(--text-muted);font-size:0.92rem;margin-top:6px;">A stall occurs when the wing exceeds its critical angle of attack, disrupting airflow regardless of speed. This is the kind of multi-dimensional scoring my quiz apps calculate across intuition, technical knowledge, safety awareness, and pattern recognition.</p>';
+      result.style.background = 'rgba(16,185,129,0.08)'; result.style.border = '1px solid var(--success)';
+    } else {
+      btn.style.borderColor = 'var(--accent)'; btn.style.background = 'rgba(79,70,229,0.1)';
+      document.querySelectorAll('#quizOptions button')[2].style.borderColor = 'var(--success)';
+      document.querySelectorAll('#quizOptions button')[2].style.background = 'rgba(16,185,129,0.1)';
+      document.querySelectorAll('#quizOptions button')[2].style.opacity = '1';
+      result.innerHTML = '<p style="color:var(--accent);font-weight:600;">Not quite!</p><p style="color:var(--text-muted);font-size:0.92rem;margin-top:6px;">The correct answer is C. A stall happens when the wing exceeds its critical angle of attack. Common misconception that it\'s about speed or engine failure. My quiz systems provide instant feedback, explanations, and multi-category scoring.</p>';
+      result.style.background = 'var(--accent-glow)'; result.style.border = '1px solid var(--accent)';
+    }
+    result.style.display = 'block';
+  }
+
+  // === CONTENT DEMO ===
+  const contentExamples = {
+    blog: `<p style="font-weight:700;font-size:1.1rem;margin-bottom:12px;">Today's Top Tech Deals You Don't Want to Miss</p><p style="color:var(--text-muted);font-size:0.92rem;line-height:1.7;">Listen, I don't usually get excited about USB-C hubs. But when a 7-in-1 dock drops from $45 to $18? That's worth talking about. Whether you're working from a laptop at the coffee shop or running a dual-monitor setup at home, this little hub handles HDMI, USB-A, SD cards, and 100W passthrough charging. At this price, grab two.</p><p style="margin-top:12px;font-size:0.82rem;color:var(--accent);font-weight:600;">Generated automatically by AI with consistent brand voice, affiliate links embedded, and published across blog + social media.</p>`,
+    social: `<p style="font-weight:700;font-size:1.1rem;margin-bottom:12px;">Facebook Post (Auto-Generated)</p><p style="color:var(--text-muted);font-size:0.92rem;line-height:1.7;background:white;padding:16px;border-radius:12px;border:1px solid var(--border);">That USB-C hub everyone's been recommending just dropped to $18. Yeah, the 7-in-1 one. Full roundup on the blog with 6 more deals just as good.<br><br>Link in comments.</p><p style="margin-top:12px;font-size:0.82rem;color:var(--accent);font-weight:600;">Short, punchy, curiosity-driven. Generated from the same deal data as the blog post but optimized for social engagement.</p>`,
+    email: `<p style="font-weight:700;font-size:1.1rem;margin-bottom:12px;">Automated Email Sequence (Day 1 of 7)</p><p style="color:var(--text-muted);font-size:0.92rem;line-height:1.7;background:white;padding:16px;border-radius:12px;border:1px solid var(--border);"><strong>Subject:</strong> Quick question about your [business type]<br><br>Hi [Name],<br><br>Thanks for checking us out. I noticed you were looking at our [service]. Most of our clients in [industry] start seeing results within the first two weeks.<br><br>Would it help if I sent over a quick case study from a similar business?<br><br>Talk soon,<br>[Your Name]</p><p style="margin-top:12px;font-size:0.82rem;color:var(--accent);font-weight:600;">AI generates personalized sequences based on lead source, industry, and behavior. Each follow-up adapts based on engagement.</p>`,
+  };
+  function showContent(type) { document.getElementById('contentOutput').innerHTML = contentExamples[type]; }
+
+  // === FUNNEL DEMO ===
+  function activateFunnel(idx) {
+    document.querySelectorAll('.funnel-stage').forEach((s,i) => s.classList.toggle('active', i <= idx));
+  }
+
+  // === FEEDBACK DEMO ===
+  let currentRating = 0;
+  function setRating(n) {
+    currentRating = n;
+    document.querySelectorAll('.feedback-star').forEach((s,i) => s.classList.toggle('active', i < n));
+  }
+  function submitFeedback() {
+    if (!currentRating) return;
+    document.getElementById('feedbackForm').style.display = 'none';
+    const success = document.getElementById('feedbackSuccess');
+    success.style.display = 'block';
+    success.innerHTML = `<strong>Thanks for your feedback!</strong><br><span style="font-size:0.85rem;font-weight:400;">Rating: ${currentRating}/5 | Category: ${currentRating >= 4 ? 'Positive' : currentRating >= 3 ? 'Neutral' : 'Needs Attention'} | Auto-routed to: ${currentRating < 3 ? 'Support Team (Priority)' : 'Feedback Dashboard'}</span>`;
+  }
+
+  // === CONTACT FORM ===
+  function submitContactForm(event) {
+    event.preventDefault();
+
+    const name = document.getElementById('name').value;
+    const email = document.getElementById('email').value;
+    const service = document.getElementById('service').value;
+    const budget = document.getElementById('budget').value;
+    const message = document.getElementById('message').value;
+
+    const subject = encodeURIComponent(`New Project Inquiry: ${service}`);
+    const body = encodeURIComponent(
+      `Name: ${name}\nEmail: ${email}\n\nLooking for: ${service}\nBudget: ${budget}\n\nMessage:\n${message}`
+    );
+
+    const mailtoLink = `mailto:chrishardin.als@gmail.com?subject=${subject}&body=${body}`;
+
+    window.location.href = mailtoLink;
+
+    document.getElementById('contactForm').style.display = 'none';
+    document.getElementById('contactSuccess').style.display = 'block';
+  }
+
+  // Smooth scroll for anchor links
+  document.querySelectorAll('a[href^="#"]').forEach(a => {
+    a.addEventListener('click', e => {
+      e.preventDefault();
+      document.querySelector(a.getAttribute('href'))?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+  });
+</script>
+
+</body>
+</html>
