@@ -1,0 +1,25 @@
+{
+  "name": "portfolio-ai-chatbot",
+  "version": "1.0.0",
+  "description": "AI chatbot server for Christopher Hardin's portfolio website",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "keywords": [
+    "chatbot",
+    "ai",
+    "express",
+    "anthropic",
+    "claude"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.18.2",
+    "cors": "^2.8.5",
+    "@anthropic-ai/sdk": "^0.24.0",
+    "dotenv": "^16.4.5"
+  }
+}
