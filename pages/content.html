@@ -1,0 +1,749 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mission Built | AI Content Generation</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --accent: #4f46e5;
+            --bg: #fafbfc;
+            --text: #1a1a2e;
+            --text-muted: #6b7280;
+            --border: #e5e7eb;
+            --surface: #ffffff;
+            --surface-2: #f3f4f6;
+            --radius: 16px;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            color: var(--text);
+            background-color: var(--bg);
+            line-height: 1.6;
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background-color: var(--surface);
+            border-bottom: 1px solid var(--border);
+            z-index: 1000;
+            padding: 1rem 2rem;
+            display: flex;
+            align-items: center;
+        }
+
+        nav a {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 500;
+            transition: opacity 0.2s;
+        }
+
+        nav a:hover {
+            opacity: 0.8;
+        }
+
+        nav a::before {
+            content: "←";
+        }
+
+        main {
+            margin-top: 60px;
+            padding: 2rem;
+        }
+
+        /* Hero Section */
+        .hero {
+            max-width: 1200px;
+            margin: 0 auto 4rem;
+            padding: 4rem 2rem;
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            color: var(--text);
+        }
+
+        .hero p {
+            font-size: 1.25rem;
+            color: var(--text-muted);
+        }
+
+        /* Demo Section */
+        .demo-section {
+            max-width: 1200px;
+            margin: 0 auto 4rem;
+            padding: 2rem;
+            background-color: var(--surface);
+            border-radius: var(--radius);
+            border: 1px solid var(--border);
+        }
+
+        .demo-section h2 {
+            font-size: 1.75rem;
+            margin-bottom: 2rem;
+            color: var(--text);
+        }
+
+        .demo-controls {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .control-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .control-group label {
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+            color: var(--text);
+        }
+
+        .control-group select,
+        .control-group input {
+            padding: 0.75rem;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-size: 1rem;
+            font-family: inherit;
+            background-color: var(--surface);
+            color: var(--text);
+        }
+
+        .control-group select:focus,
+        .control-group input:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+        }
+
+        .generate-btn {
+            grid-column: 1 / -1;
+            padding: 1rem;
+            background-color: var(--accent);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .generate-btn:hover {
+            background-color: #4338ca;
+        }
+
+        .generate-btn:active {
+            transform: scale(0.98);
+        }
+
+        .demo-output {
+            margin-top: 2rem;
+        }
+
+        .output-card {
+            background-color: var(--surface-2);
+            padding: 2rem;
+            border-radius: var(--radius);
+            border: 1px solid var(--border);
+        }
+
+        .output-card h3 {
+            margin-bottom: 1rem;
+            color: var(--text);
+        }
+
+        .output-content {
+            min-height: 150px;
+            margin-bottom: 1.5rem;
+            line-height: 1.8;
+            color: var(--text);
+        }
+
+        .typing-animation {
+            animation: typing 2s steps(40, end);
+        }
+
+        @keyframes typing {
+            from {
+                width: 0;
+                opacity: 0;
+            }
+            to {
+                width: 100%;
+                opacity: 1;
+            }
+        }
+
+        .copy-btn {
+            padding: 0.5rem 1rem;
+            background-color: var(--accent);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: background-color 0.2s;
+        }
+
+        .copy-btn:hover {
+            background-color: #4338ca;
+        }
+
+        .copy-btn.copied {
+            background-color: #10b981;
+        }
+
+        .brand-voice-meter {
+            margin-top: 1.5rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--border);
+        }
+
+        .meter-label {
+            font-size: 0.875rem;
+            color: var(--text-muted);
+            margin-bottom: 0.5rem;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .meter-bar {
+            height: 8px;
+            background-color: var(--surface);
+            border-radius: 4px;
+            overflow: hidden;
+            border: 1px solid var(--border);
+        }
+
+        .meter-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent), #818cf8);
+            border-radius: 4px;
+            width: 96%;
+            transition: width 0.5s ease;
+        }
+
+        /* Case Study Section */
+        .case-study {
+            max-width: 1200px;
+            margin: 0 auto 4rem;
+            padding: 2rem;
+            background-color: var(--surface);
+            border-radius: var(--radius);
+            border: 1px solid var(--border);
+        }
+
+        .case-study h2 {
+            font-size: 1.75rem;
+            margin-bottom: 2rem;
+            color: var(--text);
+        }
+
+        .case-study-section {
+            margin-bottom: 2rem;
+        }
+
+        .case-study-section h3 {
+            font-size: 1.25rem;
+            color: var(--accent);
+            margin-bottom: 1rem;
+        }
+
+        .case-study-section p {
+            color: var(--text);
+            margin-bottom: 1rem;
+            line-height: 1.8;
+        }
+
+        .case-study-section ul {
+            margin-left: 2rem;
+            color: var(--text);
+        }
+
+        .case-study-section li {
+            margin-bottom: 0.5rem;
+        }
+
+        /* Content Types Grid */
+        .content-types {
+            max-width: 1200px;
+            margin: 0 auto 4rem;
+            padding: 2rem;
+        }
+
+        .content-types h2 {
+            font-size: 1.75rem;
+            margin-bottom: 2rem;
+            text-align: center;
+            color: var(--text);
+        }
+
+        .types-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .type-card {
+            background-color: var(--surface);
+            padding: 2rem;
+            border-radius: var(--radius);
+            border: 1px solid var(--border);
+            text-align: center;
+            transition: all 0.3s;
+        }
+
+        .type-card:hover {
+            border-color: var(--accent);
+            box-shadow: 0 4px 12px rgba(79, 70, 229, 0.1);
+        }
+
+        .type-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .type-card h3 {
+            font-size: 1.125rem;
+            margin-bottom: 0.5rem;
+            color: var(--text);
+        }
+
+        .type-card p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+
+        /* CTA Section */
+        .cta-section {
+            max-width: 1200px;
+            margin: 0 auto 4rem;
+            padding: 3rem 2rem;
+            text-align: center;
+            background: linear-gradient(135deg, var(--accent), #818cf8);
+            border-radius: var(--radius);
+            color: white;
+        }
+
+        .cta-section h2 {
+            font-size: 1.75rem;
+            margin-bottom: 1rem;
+        }
+
+        .cta-section p {
+            font-size: 1.125rem;
+            margin-bottom: 2rem;
+            opacity: 0.95;
+        }
+
+        .cta-btn {
+            display: inline-block;
+            padding: 1rem 2rem;
+            background-color: white;
+            color: var(--accent);
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .cta-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Footer Padding */
+        footer {
+            height: 2rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            nav {
+                padding: 1rem;
+            }
+
+            main {
+                padding: 1rem;
+                margin-top: 70px;
+            }
+
+            .hero {
+                padding: 2rem 1rem;
+            }
+
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .demo-controls {
+                grid-template-columns: 1fr;
+            }
+
+            .types-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <a href="../index.html">Back to Portfolio</a>
+    </nav>
+
+    <main>
+        <!-- Hero Section -->
+        <section class="hero">
+            <h1>AI Content Generation</h1>
+            <p>Automate consistent, engaging content at scale with intelligent AI systems</p>
+        </section>
+
+        <!-- Live Demo -->
+        <section class="demo-section">
+            <h2>Content Generator Playground</h2>
+            <div class="demo-controls">
+                <div class="control-group">
+                    <label for="content-type">Content Type</label>
+                    <select id="content-type">
+                        <option value="blog">Blog Post</option>
+                        <option value="social">Social Media Post</option>
+                        <option value="email">Email Sequence</option>
+                        <option value="product">Product Description</option>
+                        <option value="ad">Ad Copy</option>
+                    </select>
+                </div>
+
+                <div class="control-group">
+                    <label for="tone">Tone</label>
+                    <select id="tone">
+                        <option value="professional">Professional</option>
+                        <option value="casual">Casual</option>
+                        <option value="witty">Witty</option>
+                        <option value="urgent">Urgent</option>
+                        <option value="friendly">Friendly</option>
+                    </select>
+                </div>
+
+                <div class="control-group">
+                    <label for="topic">Topic/Product Name</label>
+                    <input type="text" id="topic" placeholder="e.g., AI Writing Assistant, Budget Planner" value="AI Writing Assistant">
+                </div>
+
+                <button class="generate-btn" onclick="generateContent()">Generate</button>
+            </div>
+
+            <div class="demo-output" id="demo-output" style="display: none;">
+                <div class="output-card">
+                    <h3 id="output-title">Generated Content</h3>
+                    <div class="output-content" id="output-content"></div>
+                    <button class="copy-btn" onclick="copyToClipboard()">Copy Content</button>
+                    <div class="brand-voice-meter">
+                        <div class="meter-label">
+                            <span>Brand Voice Consistency</span>
+                            <span>96%</span>
+                        </div>
+                        <div class="meter-bar">
+                            <div class="meter-fill" style="width: 96%;"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Case Study -->
+        <section class="case-study">
+            <h2>Case Study: FB-AMZ Content Engine</h2>
+
+            <div class="case-study-section">
+                <h3>The Problem</h3>
+                <p>The client needed consistent, engaging blog content about tech deals published 3 times daily without writing a single word manually. Maintaining brand voice, freshness, and SEO quality across hundreds of posts seemed impossible with manual creation.</p>
+            </div>
+
+            <div class="case-study-section">
+                <h3>The Solution</h3>
+                <p>I built a Claude API-powered content engine with custom prompt engineering. The system maintains a consistent brand voice across every post, generates both long-form blog content and short social teasers from the same source data, and embeds affiliate links naturally within the narrative.</p>
+            </div>
+
+            <div class="case-study-section">
+                <h3>How It Works</h3>
+                <p>The process follows a simple pipeline:</p>
+                <ul>
+                    <li><strong>Source Data</strong>: Product details, deal info, market context</li>
+                    <li><strong>Prompt Template</strong>: Custom instructions with brand voice guidelines</li>
+                    <li><strong>Claude API</strong>: Generates unique, conversational content</li>
+                    <li><strong>HTML Formatting</strong>: Automatic styling and structure</li>
+                    <li><strong>Auto-Publish</strong>: Direct to website or CMS</li>
+                </ul>
+            </div>
+
+            <div class="case-study-section">
+                <h3>The Result</h3>
+                <p>Hundreds of unique blog posts generated, each maintaining the same conversational, deal-hunter personality. The client got consistent content output without the writing burden, while readers experienced a cohesive brand voice that kept them coming back. Affiliate revenue increased significantly thanks to natural link placement and higher volume of engaging content.</p>
+            </div>
+        </section>
+
+        <!-- Content Types Grid -->
+        <section class="content-types">
+            <h2>Content Types I Can Automate</h2>
+            <div class="types-grid">
+                <div class="type-card">
+                    <div class="type-icon">📝</div>
+                    <h3>Blog Posts</h3>
+                    <p>Long-form, SEO-optimized articles with consistent voice and natural calls-to-action</p>
+                </div>
+
+                <div class="type-card">
+                    <div class="type-icon">📱</div>
+                    <h3>Social Media</h3>
+                    <p>Platform-optimized posts, captions, and hashtag strategies that drive engagement</p>
+                </div>
+
+                <div class="type-card">
+                    <div class="type-icon">✉️</div>
+                    <h3>Email Sequences</h3>
+                    <p>Multi-part email campaigns with personalization and conversion optimization</p>
+                </div>
+
+                <div class="type-card">
+                    <div class="type-icon">🛍️</div>
+                    <h3>Product Descriptions</h3>
+                    <p>Compelling product copy that highlights benefits and drives purchase intent</p>
+                </div>
+
+                <div class="type-card">
+                    <div class="type-icon">📢</div>
+                    <h3>Ad Copy</h3>
+                    <p>High-converting ads for Google, Facebook, and other platforms tested and optimized</p>
+                </div>
+
+                <div class="type-card">
+                    <div class="type-icon">🔍</div>
+                    <h3>SEO Content</h3>
+                    <p>Keyword-optimized content that ranks and attracts qualified organic traffic</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- CTA Section -->
+        <section class="cta-section">
+            <h2>Ready to Automate Your Content?</h2>
+            <p>Let's talk about how AI can transform your content strategy</p>
+            <a href="mailto:contact@example.com" class="cta-btn">Get In Touch</a>
+        </section>
+    </main>
+
+    <footer></footer>
+
+    <script>
+        const sampleContent = {
+            blog: {
+                professional: [
+                    "This innovative solution streamlines your workflow with cutting-edge technology. Users report a 45% increase in productivity within the first month of implementation. The intuitive interface requires minimal training, allowing your team to adopt the platform quickly and efficiently.",
+                    "Enterprise-grade security features protect your sensitive data with military-level encryption. Compliance with SOC 2, GDPR, and HIPAA standards ensures your organization meets regulatory requirements. Automated backups and disaster recovery procedures provide peace of mind.",
+                    "Advanced analytics provide actionable insights into your operations. Real-time dashboards track key performance indicators, while customizable reports help stakeholders understand trends. Integration with existing tools reduces manual data entry and improves accuracy."
+                ],
+                casual: [
+                    "So we've been using this tool for a few weeks now, and honestly, it's a game-changer. It just works, no fuss, no complicated setup. Our team's been way more productive, and everyone actually enjoys using it. Definitely worth checking out if you're looking to simplify things.",
+                    "The best part? No more endless configuration. You just plug it in and start getting value immediately. Our clients noticed the difference right away. Customer service even said they're getting fewer confused support tickets because everything's so straightforward.",
+                    "We were skeptical at first, but the ROI was obvious within weeks. Less time spent on tedious stuff means more time for what actually matters. Pretty solid investment, and the support team is super helpful whenever we have questions."
+                ],
+                witty: [
+                    "If your current solution makes you want to pull your hair out, we have good news: there's a better way. This platform doesn't just solve problems—it makes you wonder how you ever lived without it. Fair warning: you might become annoyingly enthusiastic about it at team meetings.",
+                    "We've seen unicorns implemented faster than some legacy systems. Not really, but it feels that way. The setup is so smooth that your IT team might actually thank you for choosing it. Revolutionary concept, we know.",
+                    "Tired of software that requires a PhD to operate? This ain't it. It's the kind of tool that makes you look like a genius, even when you're not. Your future self will thank you."
+                ],
+                urgent: [
+                    "Don't wait—every day without this solution is costing you valuable resources. Competitors are already implementing similar tools and gaining significant advantages. The time to act is now, before you fall further behind.",
+                    "Limited-time opportunity: Organizations that adopt this solution in the next 30 days will save thousands in operational costs. The longer you wait, the more you're leaving on the table. Act fast.",
+                    "Market leaders are already using this. Can your organization afford to be left behind? Get started today and see results within weeks. Delay could mean missing critical advantages in your industry."
+                ],
+                friendly: [
+                    "Hey! We're so glad you're here. This tool is designed by people who actually use it, so it just feels right. Whether you're a small team or a growing company, we've got your back. Let's make your work easier together!",
+                    "Welcome aboard! You've just joined thousands of happy users who've simplified their lives with our platform. We're here to help you every step of the way, and we love seeing our users succeed.",
+                    "Great choice! We think you're going to love how much smoother things become. Our community is incredibly supportive, and if you ever need help, we're just a message away. Here's to making your life easier!"
+                ]
+            },
+            social: {
+                professional: [
+                    "Introducing our latest innovation: a solution designed to transform how teams work. With 45% faster implementation and enterprise-grade security, we're setting a new standard in the industry. Learn more about the future of productivity.",
+                    "Join 10,000+ organizations already experiencing the benefits of streamlined operations. Our platform delivers measurable results in weeks, not months. Ready to lead your industry?",
+                    "Data-driven decisions made easy. Our advanced analytics give you the insights you need to stay ahead of the curve. Explore what's possible with real-time visibility."
+                ],
+                casual: [
+                    "Plot twist: this tool actually makes work easier (we know, shocking). Join our community of happy users who are getting more done in less time. Try it free—no credit card needed.",
+                    "Your new favorite productivity hack just dropped. Seriously, check out what people are saying. It's the kind of tool you'll wonder how you ever lived without.",
+                    "No more boring workflows. Just smart, simple solutions that actually save you time. Welcome to the good side of productivity."
+                ],
+                witty: [
+                    "We heard you like tools that don't make you want to scream into the void. You're welcome. 🎉",
+                    "Breaking: Local team discovers software that actually works as advertised. More at 11.",
+                    "If your current setup requires therapy to explain to new team members, we have a better way. Just saying."
+                ],
+                urgent: [
+                    "48-hour flash sale: 50% off annual plans. Your competitors aren't sleeping—why should you? Secure your spot now before capacity fills up.",
+                    "This offer expires tonight at midnight. Early adopters are already seeing results. Don't miss out.",
+                    "Last call: Get premium features at startup prices. This ends in hours. Get started now →"
+                ],
+                friendly: [
+                    "Guess what? We just made something we think you'll absolutely love. Come hang with us and see what all the fuss is about! 😊",
+                    "Welcome to the community! We're so excited to have you here. Stick around, drop your questions, and let's grow together.",
+                    "Your team is going to love this as much as you do. Share it with someone who needs a productivity boost. Let's make work better together!"
+                ]
+            },
+            email: {
+                professional: [
+                    "Subject: Transform Your Operations This Quarter\n\nDear [Name],\n\nOur latest solution delivers measurable results that your stakeholders will notice immediately. With implementation in just weeks, you'll see improved efficiency across your entire organization.\n\nLet's schedule a brief conversation to explore how this can benefit your team.\n\nBest regards,\n[Signature]",
+                    "Subject: Enterprise Solutions Tailored for You\n\nHello [Name],\n\nWe've helped organizations like yours streamline operations and reduce costs by up to 40%. I'd love to show you exactly how we can achieve similar results for your company.\n\nWould you be available for a 15-minute call this week?\n\nRegards,\n[Signature]",
+                    "Subject: Your Competitive Advantage Awaits\n\nHi [Name],\n\nIndustry leaders are already implementing next-generation solutions. Don't let your organization fall behind. Let's discuss how you can stay ahead of the curve.\n\nI'm here to help.\n\nBest,\n[Signature]"
+                ],
+                casual: [
+                    "Subject: Quick thought—this might be perfect for your team\n\nHey [Name],\n\nI stumbled across something I think you'd really like. It's helped a bunch of teams cut their workload in half, and honestly, the setup was way easier than expected.\n\nWould love to show you a quick demo sometime.\n\nCheers,\n[Name]",
+                    "Subject: Made something you might want to see\n\nHi [Name],\n\nOur team's been using this, and it's been such a game-changer. I think you'd appreciate it too.\n\nNo pressure, but if you're curious, let's grab coffee and I'll walk you through it.\n\nTalk soon,\n[Name]",
+                    "Subject: This is actually pretty cool\n\nHey,\n\nYou know how we're always looking for better ways to do things? I think I found one.\n\nLet me know if you want to check it out together.\n\n[Name]"
+                ],
+                witty: [
+                    "Subject: We fixed the thing that's been annoying you\n\nDear [Name],\n\nRemember complaining about [pain point]? Yeah, we built something that eliminates that entirely.\n\nYou're welcome.\n\nLet's talk: [link]\n\n[Name]",
+                    "Subject: Your productivity called. It wants a raise.\n\n[Name],\n\nThat's what happens when you automate the boring stuff. More time for what actually matters.\n\nIntrigued? Let's chat.\n\n[Name]",
+                    "Subject: This one's a winner\n\nHey [Name],\n\nWe've done a lot of things, but this one? This one actually works.\n\nSee for yourself.\n\n[Name]"
+                ],
+                urgent: [
+                    "Subject: URGENT: Limited slots available—deadline Friday\n\n[Name],\n\nDue to overwhelming demand, we can only onboard 5 more clients this month at the introductory rate.\n\nIf you're interested, respond today to secure your spot.\n\nThis ends Friday at 5 PM.\n\n[Signature]",
+                    "Subject: Your last chance: 50% off ends tonight\n\nQuick reminder: Our special pricing expires at midnight tonight.\n\nDon't miss out on this opportunity.\n\nSecure your access now: [link]\n\n[Signature]",
+                    "Subject: 24 hours left—early adopter pricing\n\n[Name],\n\nYour exclusive access to our founding member rate closes tomorrow.\n\nLock in this price now before it increases.\n\n[link]\n\n[Signature]"
+                ],
+                friendly: [
+                    "Subject: We created something special—just for you\n\nHey [Name],\n\nWe've been working on something we're really proud of, and we thought you'd be one of the first to know.\n\nWe'd love to hear what you think!\n\nCheck it out: [link]\n\nCheers,\n[Name]",
+                    "Subject: Join us on this adventure\n\nHi [Name],\n\nWe're building something amazing, and we'd love to have you be part of it.\n\nLet's chat about what we're creating together.\n\nTalk soon,\n[Name]",
+                    "Subject: Excited to show you this\n\n[Name],\n\nWe've created something we think you'll absolutely love.\n\nLet's schedule a time to connect and explore what's possible together.\n\nWould love to hear your thoughts!\n\n[Name]"
+                ]
+            },
+            product: {
+                professional: [
+                    "Introducing a solution engineered for enterprise excellence. Our platform combines cutting-edge technology with intuitive design, enabling teams to achieve unprecedented levels of efficiency. Built on scalable infrastructure, it grows with your business while maintaining enterprise-grade security and compliance standards.",
+                    "Purpose-built for high-performance operations. This solution delivers measurable ROI within weeks through streamlined workflows, reduced manual processes, and intelligent automation. Organizations report 40% improvement in productivity metrics and significant cost savings across their operations.",
+                    "Excellence meets accessibility. Our enterprise solution provides the power of advanced technology without the complexity. Comprehensive analytics, seamless integrations, and dedicated support ensure your team succeeds from day one."
+                ],
+                casual: [
+                    "This is the tool we actually use ourselves, so you know it's legit. It just works—no weird bugs, no strange quirks. Set it up, and you're off to the races. Our team swears by it, and we think you will too.",
+                    "Designed by people who got tired of using bad software. It does exactly what it says, nothing more, nothing less. Great value, easy to use, and backed by a team that actually cares about your success.",
+                    "We've been there—frustrated with clunky tools that do too much and help too little. This is different. Simple, powerful, and genuinely useful. Try it and see what all the fuss is about."
+                ],
+                witty: [
+                    "Finally, a tool that doesn't insult your intelligence. It's straightforward, effective, and almost suspiciously good at what it does. No upsells, no nonsense, just results.",
+                    "We could tell you it's 'revolutionary,' but let's be honest: it just works better than the alternatives. Revolutionary: yes. Confusing: absolutely not.",
+                    "Warning: You may become annoyingly enthusiastic about this product at social gatherings. Fair warning: your friends might ask you to stop talking about how great it is."
+                ],
+                urgent: [
+                    "Limited-time opportunity: This exclusive pricing ends in 48 hours. Organizations implementing now will gain competitive advantages that justify the investment immediately. Secure your access before availability is limited.",
+                    "Act fast: Early adopter pricing is only available for the next 30 clients. After that, pricing increases significantly. Don't miss this window of opportunity.",
+                    "Urgent: Global demand is exceeding supply. Reserve yours today to guarantee access. This shortage won't last long at these prices."
+                ],
+                friendly: [
+                    "We created this because we wanted something we could feel good about recommending. It does the job, it's built right, and the team behind it actually cares. We think you'll love it as much as we do.",
+                    "Welcome! You're about to discover why so many people love this solution. We're here to help every step of the way. Our community is fantastic—you're going to fit right in.",
+                    "We're thrilled you're considering this. It's been a game-changer for our team, and we genuinely believe it'll make your life easier too. Let's chat about how we can help you succeed."
+                ]
+            },
+            ad: {
+                professional: [
+                    "Transform Your Business Operations. Enterprise-grade solution delivering 45% productivity gains in 4 weeks. Trusted by 500+ organizations. Request your personalized demo today.",
+                    "Cut Costs, Boost Results. Reduce operational expenses by up to 40% while improving efficiency. See measurable ROI within 30 days. Schedule your consultation now.",
+                    "Industry Leaders Choose Us. Join the organizations winning in your market. Advanced analytics. Seamless integration. Dedicated support. Learn how we can elevate your business."
+                ],
+                casual: [
+                    "Stop Wasting Time on Tedious Work. Our solution cuts through the noise and gets you results—fast. Try it free. No credit card needed.",
+                    "Your Team Deserves Better. Introduce them to a tool that actually works. More productivity. Less headaches. Start your free trial today.",
+                    "The Secret Successful Teams Won't Tell You: They're using this tool. See what everyone's talking about. Join thousands of happy users."
+                ],
+                witty: [
+                    "We Eliminated the Annoying Parts. The rest? We made it even better. Try it now and thank us later.",
+                    "Tired of Software That Sounds Like a Bad Boyfriend? We Built the Opposite. See what we mean.",
+                    "Plot Twist: This Tool Actually Works. Don't just take our word for it. Test drive it free."
+                ],
+                urgent: [
+                    "Only 5 Spots Left at This Price. Early adopter rate expires tonight at midnight. Secure yours now before it's gone.",
+                    "Flash Sale: 50% Off for 48 Hours Only. Don't sleep on this deal. Limited inventory. Get it now.",
+                    "Last Chance: Founding Member Pricing Ends Friday. Lock in this rate before prices jump. Act now →"
+                ],
+                friendly: [
+                    "Meet Your New Favorite Tool. Join a community of people who actually enjoy their software. Welcome aboard!",
+                    "We Built This For You. Let us show you what we've created. Start your free trial and discover the difference.",
+                    "Your Success Story Starts Here. We're ready when you are. Let's create something amazing together."
+                ]
+            }
+        };
+
+        function generateContent() {
+            const contentType = document.getElementById('content-type').value;
+            const tone = document.getElementById('tone').value;
+            const topic = document.getElementById('topic').value || 'your product';
+
+            // Get random sample from appropriate content type
+            const samples = sampleContent[contentType]?.[tone] || sampleContent.blog.professional;
+            const randomIndex = Math.floor(Math.random() * samples.length);
+            const content = samples[randomIndex];
+
+            // Display output
+            const output = document.getElementById('demo-output');
+            const title = document.getElementById('output-title');
+            const contentArea = document.getElementById('output-content');
+
+            const contentTypeLabel = {
+                blog: 'Blog Post',
+                social: 'Social Media Post',
+                email: 'Email Sequence',
+                product: 'Product Description',
+                ad: 'Ad Copy'
+            };
+
+            title.textContent = `Generated ${contentTypeLabel[contentType]} (${tone} tone)`;
+            contentArea.textContent = content.replace(/\[Name\]/g, 'John').replace(/\[Signature\]/g, 'Christopher Hardin');
+            output.style.display = 'block';
+
+            // Scroll to output
+            setTimeout(() => {
+                output.scrollIntoView({ behavior: 'smooth' });
+            }, 100);
+        }
+
+        function copyToClipboard() {
+            const content = document.getElementById('output-content').textContent;
+            navigator.clipboard.writeText(content).then(() => {
+                const btn = event.target;
+                const originalText = btn.textContent;
+                btn.textContent = 'Copied!';
+                btn.classList.add('copied');
+                setTimeout(() => {
+                    btn.textContent = originalText;
+                    btn.classList.remove('copied');
+                }, 2000);
+            });
+        }
+
+        // Generate on page load
+        window.addEventListener('load', generateContent);
+    </script>
+</body>
+</html>
