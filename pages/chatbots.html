@@ -1,0 +1,741 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mission Built | AI Chatbots & Conversational Agents</title>
+    <style>
+        :root {
+            --accent: #4f46e5;
+            --bg: #fafbfc;
+            --text: #1a1a2e;
+            --text-muted: #6b7280;
+            --border: #e5e7eb;
+            --surface: #ffffff;
+            --surface-2: #f3f4f6;
+            --radius: 16px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            color: var(--text);
+            background-color: var(--bg);
+            line-height: 1.6;
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: var(--surface);
+            border-bottom: 1px solid var(--border);
+            z-index: 1000;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            backdrop-filter: blur(10px);
+            background-color: rgba(255, 255, 255, 0.95);
+        }
+
+        nav a {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--text);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+
+        nav a:hover {
+            color: var(--accent);
+        }
+
+        .logo {
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: var(--accent);
+        }
+
+        main {
+            margin-top: 60px;
+            padding-bottom: 4rem;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, var(--surface) 0%, var(--surface-2) 100%);
+            padding: 4rem 2rem;
+            text-align: center;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .hero-content {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            color: var(--text);
+        }
+
+        .hero-subtitle {
+            font-size: 1.25rem;
+            color: var(--text-muted);
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        /* Sections */
+        section {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 4rem 2rem;
+        }
+
+        h2 {
+            font-size: 2rem;
+            margin-bottom: 2rem;
+            color: var(--text);
+        }
+
+        h3 {
+            font-size: 1.3rem;
+            margin-top: 1.5rem;
+            margin-bottom: 0.75rem;
+            color: var(--text);
+        }
+
+        p {
+            color: var(--text-muted);
+            margin-bottom: 1rem;
+            line-height: 1.8;
+        }
+
+        /* Demo Banner */
+        .demo-banner {
+            background-color: #fef3c7;
+            border: 1px solid #fcd34d;
+            border-radius: var(--radius);
+            padding: 1rem;
+            margin-bottom: 1.5rem;
+            color: #92400e;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .demo-banner::before {
+            content: "ℹ";
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        /* Chat Demo */
+        .chat-demo {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            height: 500px;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.07);
+        }
+
+        .chat-header {
+            background: linear-gradient(135deg, var(--accent) 0%, #6366f1 100%);
+            color: white;
+            padding: 1rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .chat-header::before {
+            content: "●";
+            font-size: 1.5rem;
+            opacity: 0.8;
+        }
+
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            background: var(--surface);
+        }
+
+        .message {
+            display: flex;
+            gap: 0.75rem;
+            animation: fadeIn 0.3s ease-in;
+        }
+
+        .message.user {
+            justify-content: flex-end;
+        }
+
+        .message-bubble {
+            max-width: 70%;
+            padding: 0.75rem 1rem;
+            border-radius: 12px;
+            word-wrap: break-word;
+        }
+
+        .message.bot .message-bubble {
+            background: var(--surface-2);
+            color: var(--text);
+            border-left: 3px solid var(--accent);
+        }
+
+        .message.user .message-bubble {
+            background: var(--accent);
+            color: white;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .chat-input-area {
+            border-top: 1px solid var(--border);
+            padding: 1rem;
+            background: var(--surface-2);
+        }
+
+        .quick-replies {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.75rem;
+            margin-bottom: 1rem;
+        }
+
+        .quick-reply {
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 0.75rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 0.9rem;
+            text-align: left;
+            color: var(--text);
+        }
+
+        .quick-reply:hover {
+            border-color: var(--accent);
+            background: rgba(79, 70, 229, 0.05);
+        }
+
+        .input-row {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        #chatInput {
+            flex: 1;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 0.75rem 1rem;
+            font-family: inherit;
+            color: var(--text);
+            background: white;
+        }
+
+        #chatInput:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+        }
+
+        .send-btn {
+            background: var(--accent);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 0.75rem 1.5rem;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background 0.2s;
+        }
+
+        .send-btn:hover {
+            background: #4338ca;
+        }
+
+        /* Case Study */
+        .case-study {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 2rem;
+            margin: 2rem 0;
+        }
+
+        .case-study-section {
+            margin-bottom: 2rem;
+        }
+
+        .case-study-section:last-child {
+            margin-bottom: 0;
+        }
+
+        .case-study h3 {
+            color: var(--accent);
+            margin-top: 0;
+        }
+
+        .case-study p {
+            margin-bottom: 1rem;
+        }
+
+        .build-steps {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .build-step {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .step-number {
+            background: var(--accent);
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        .step-content h4 {
+            color: var(--text);
+            margin-bottom: 0.25rem;
+            font-weight: 600;
+        }
+
+        .step-content p {
+            font-size: 0.9rem;
+            margin: 0;
+        }
+
+        /* What You Get Grid */
+        .deliverables {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .deliverable-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 2rem;
+            text-align: center;
+            transition: all 0.3s;
+        }
+
+        .deliverable-card:hover {
+            border-color: var(--accent);
+            box-shadow: 0 4px 12px rgba(79, 70, 229, 0.1);
+        }
+
+        .card-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .deliverable-card h4 {
+            color: var(--text);
+            font-size: 1.1rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .deliverable-card p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            margin: 0;
+        }
+
+        /* CTA Section */
+        .cta-section {
+            background: linear-gradient(135deg, var(--accent) 0%, #6366f1 100%);
+            color: white;
+            text-align: center;
+            border-radius: var(--radius);
+            padding: 3rem 2rem;
+            margin-top: 3rem;
+        }
+
+        .cta-section h2 {
+            color: white;
+            margin-bottom: 1rem;
+        }
+
+        .cta-section p {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 1.1rem;
+            margin-bottom: 2rem;
+        }
+
+        .cta-button {
+            display: inline-block;
+            background: white;
+            color: var(--accent);
+            padding: 0.875rem 2rem;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: transform 0.2s, box-shadow 0.2s;
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2rem;
+            }
+
+            .hero-subtitle {
+                font-size: 1rem;
+            }
+
+            h2 {
+                font-size: 1.5rem;
+            }
+
+            nav {
+                padding: 1rem;
+            }
+
+            .quick-replies {
+                grid-template-columns: 1fr;
+            }
+
+            .build-steps {
+                grid-template-columns: 1fr;
+            }
+
+            .message-bubble {
+                max-width: 90%;
+            }
+
+            .chat-demo {
+                height: 400px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            section {
+                padding: 2rem 1rem;
+            }
+
+            h1 {
+                font-size: 1.5rem;
+            }
+
+            .hero {
+                padding: 2rem 1rem;
+            }
+
+            .case-study {
+                padding: 1.5rem;
+            }
+
+            .deliverables {
+                grid-template-columns: 1fr;
+            }
+
+            .cta-section {
+                padding: 2rem 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav>
+        <a href="../index.html">← Back to Portfolio</a>
+        <span class="logo">MissionBuilt.dev</span>
+    </nav>
+
+    <main>
+        <!-- Hero Section -->
+        <section class="hero">
+            <div class="hero-content">
+                <h1>AI Chatbots & Conversational Agents</h1>
+                <p class="hero-subtitle">Custom-trained chatbots that qualify leads, answer questions, and engage customers 24/7 — no more missed opportunities.</p>
+            </div>
+        </section>
+
+        <!-- Live Demo Section -->
+        <section>
+            <h2>See It In Action</h2>
+            <div class="demo-banner">Demo chatbot - for demonstration purposes only</div>
+
+            <div class="chat-demo">
+                <div class="chat-header">Chris's Chatbot</div>
+                <div class="chat-messages" id="chatMessages">
+                    <div class="message bot">
+                        <div class="message-bubble">Hi there! 👋 I'm here to help. What's your business like?</div>
+                    </div>
+                </div>
+                <div class="chat-input-area">
+                    <div class="quick-replies">
+                        <button class="quick-reply" onclick="handleQuickReply('I run a dental practice')">🦷 Dental Practice</button>
+                        <button class="quick-reply" onclick="handleQuickReply('I have an e-commerce store')">🛍️ E-commerce Store</button>
+                        <button class="quick-reply" onclick="handleQuickReply('I\'m a real estate agent')">🏠 Real Estate Agent</button>
+                        <button class="quick-reply" onclick="handleQuickReply('Tell me about pricing')">💰 Pricing</button>
+                    </div>
+                    <div class="input-row">
+                        <input type="text" id="chatInput" placeholder="Or type your question..." />
+                        <button class="send-btn" onclick="sendMessage()">Send</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Case Study Section -->
+        <section>
+            <h2>How I'd Build This For You</h2>
+            <div class="case-study">
+                <div class="case-study-section">
+                    <h3>The Problem</h3>
+                    <p>A local dental practice was losing leads after hours. Potential patients would call and get voicemail. Website visitors browsing treatment options had questions with no way to get answers in real-time. They'd bounce to a competitor's site. The practice had solid reviews and good services, but the business was leaving money on the table.</p>
+                </div>
+
+                <div class="case-study-section">
+                    <h3>The Solution</h3>
+                    <p>We built a 24/7 AI chatbot trained on their services, pricing, FAQ, insurance accepted, and appointment policies. The bot greets visitors, answers common questions, qualifies whether someone's actually a good fit for their practice, and captures contact information for follow-up. It's integrated with their booking system so visitors can check real availability and schedule directly.</p>
+                </div>
+
+                <div class="case-study-section">
+                    <h3>The Build</h3>
+                    <p>Here's how we got from concept to deployment:</p>
+                    <div class="build-steps">
+                        <div class="build-step">
+                            <div class="step-number">1</div>
+                            <div class="step-content">
+                                <h4>Requirements</h4>
+                                <p>Interview the practice owner. Map customer journeys. Identify top questions and pain points.</p>
+                            </div>
+                        </div>
+                        <div class="build-step">
+                            <div class="step-number">2</div>
+                            <div class="step-content">
+                                <h4>Prompt Engineering</h4>
+                                <p>Build the bot's "personality" and knowledge base. Train it on FAQs, service details, and insurance info.</p>
+                            </div>
+                        </div>
+                        <div class="build-step">
+                            <div class="step-number">3</div>
+                            <div class="step-content">
+                                <h4>Integration</h4>
+                                <p>Connect the bot to their booking API, CRM, and email system for lead capture and follow-up.</p>
+                            </div>
+                        </div>
+                        <div class="build-step">
+                            <div class="step-number">4</div>
+                            <div class="step-content">
+                                <h4>Testing</h4>
+                                <p>Real-world scenarios. Edge cases. Handoff to human agents when needed.</p>
+                            </div>
+                        </div>
+                        <div class="build-step">
+                            <div class="step-number">5</div>
+                            <div class="step-content">
+                                <h4>Deployment</h4>
+                                <p>Live on website. Monitor conversations. Iterate based on real user data.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="case-study-section">
+                    <h3>The Result</h3>
+                    <p>A system like this typically captures 30-40% more leads by engaging visitors who would otherwise leave without even reaching out. The practice reduced after-hours lead loss, improved response time to zero seconds, and built a knowledge system they can continuously improve based on actual conversations.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- What You Get Section -->
+        <section>
+            <h2>What You Get</h2>
+            <div class="deliverables">
+                <div class="deliverable-card">
+                    <div class="card-icon">🧠</div>
+                    <h4>Custom AI Personality</h4>
+                    <p>A chatbot trained on your business, your tone, your expertise, and your unique selling points.</p>
+                </div>
+                <div class="deliverable-card">
+                    <div class="card-icon">💻</div>
+                    <h4>Website Integration</h4>
+                    <p>A widget that sits on your site or a standalone chat page. Responsive. Always available.</p>
+                </div>
+                <div class="deliverable-card">
+                    <div class="card-icon">📋</div>
+                    <h4>Lead Capture</h4>
+                    <p>Automatically collect emails, phone numbers, and details. Sync with your CRM or email list.</p>
+                </div>
+                <div class="deliverable-card">
+                    <div class="card-icon">📊</div>
+                    <h4>Analytics Dashboard</h4>
+                    <p>See every conversation, track which topics get asked, measure conversion from chat to customer.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- CTA Section -->
+        <section>
+            <div class="cta-section">
+                <h2>Ready to Add a Chatbot to Your Business?</h2>
+                <p>Let's talk about how to capture more leads and keep your customers happy 24/7.</p>
+                <a href="../index.html#contact" class="cta-button">Get In Touch</a>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        const responses = {
+            'dental': {
+                reply: "Great! A chatbot for a dental practice is perfect. You can handle appointment inquiries, answer questions about procedures, explain insurance, and capture contact info after hours. This usually increases lead capture by 30-40%. Are you interested in learning more?",
+                followUps: ['Tell me about pricing', 'How does it integrate with my booking system?']
+            },
+            'ecommerce': {
+                reply: "Perfect use case! An e-commerce chatbot can help customers find products, answer sizing/shipping questions, handle returns, and drive upsells. You can integrate it with your inventory and shopping cart. Many stores see a 25%+ boost in conversion rate. What would be most valuable for your store?",
+                followUps: ['Tell me about pricing', 'How does it track sales?']
+            },
+            'realestate': {
+                reply: "Real estate agents love this. A chatbot can qualify leads 24/7, answer questions about listings, schedule showings, and capture contact info from site visitors. You get a lead-gen machine that never sleeps. Agents typically see 40%+ more qualified inquiries. Interested?",
+                followUps: ['Tell me about pricing', 'Can it schedule showings?']
+            },
+            'pricing': {
+                reply: "I charge based on complexity and integration needs. A basic chatbot with email integration runs $2,500-$5,000. Custom integrations with APIs or CRM systems typically range $5,000-$10,000+. You also have monthly hosting and maintenance options. Happy to discuss what makes sense for your business. What's your budget looking like?",
+                followUps: ['Tell me more about features', 'How long does implementation take?']
+            },
+            'features': {
+                reply: "Standard features include: 24/7 availability, lead qualification, FAQs, appointment scheduling integration, CRM sync, analytics dashboard, and human handoff. Advanced options: multi-language support, payment processing, document uploads, and custom API connections. What's most important for your business?",
+                followUps: ['Tell me about pricing', 'How does integration work?']
+            },
+            'integration': {
+                reply: "I can integrate with most tools: Zapier, Make, your booking system, CRM (HubSpot, Salesforce, Pipedrive), email platforms, and payment processors. If your tool has an API, we can probably connect it. I'll handle the technical side. What systems are you currently using?",
+                followUps: ['Tell me about pricing', 'How long does implementation take?']
+            },
+            'default': {
+                reply: "That's a great question! Let me give you a bit more context. I help businesses like yours build AI chatbots that engage visitors 24/7, qualify leads, and integrate with your existing tools. Want to know more about a specific industry or feature?"
+            }
+        };
+
+        function categorizeInput(input) {
+            const lower = input.toLowerCase();
+            if (lower.includes('dental') || lower.includes('dentist') || lower.includes('medical') || lower.includes('doctor')) return 'dental';
+            if (lower.includes('ecommerce') || lower.includes('e-commerce') || lower.includes('store') || lower.includes('shop')) return 'ecommerce';
+            if (lower.includes('real estate') || lower.includes('agent') || lower.includes('property') || lower.includes('listing')) return 'realestate';
+            if (lower.includes('price') || lower.includes('cost') || lower.includes('how much') || lower.includes('budget')) return 'pricing';
+            if (lower.includes('feature') || lower.includes('what can') || lower.includes('what do')) return 'features';
+            if (lower.includes('integrat') || lower.includes('connect') || lower.includes('sync') || lower.includes('api') || lower.includes('zapier') || lower.includes('crm') || lower.includes('booking')) return 'integration';
+            return 'default';
+        }
+
+        function handleQuickReply(text) {
+            document.getElementById('chatInput').value = text;
+            sendMessage();
+        }
+
+        function sendMessage() {
+            const input = document.getElementById('chatInput');
+            const message = input.value.trim();
+
+            if (!message) return;
+
+            const messagesDiv = document.getElementById('chatMessages');
+
+            // Add user message
+            const userMsg = document.createElement('div');
+            userMsg.className = 'message user';
+            userMsg.innerHTML = `<div class="message-bubble">${escapeHtml(message)}</div>`;
+            messagesDiv.appendChild(userMsg);
+
+            input.value = '';
+
+            // Scroll to bottom
+            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+
+            // Simulate typing delay
+            setTimeout(() => {
+                const category = categorizeInput(message);
+                const responseData = responses[category] || responses['default'];
+                const reply = responseData.reply;
+
+                const botMsg = document.createElement('div');
+                botMsg.className = 'message bot';
+                botMsg.innerHTML = `<div class="message-bubble">${reply}</div>`;
+                messagesDiv.appendChild(botMsg);
+
+                messagesDiv.scrollTop = messagesDiv.scrollHeight;
+            }, 500);
+
+            input.focus();
+        }
+
+        function escapeHtml(text) {
+            const map = {
+                '&': '&amp;',
+                '<': '&lt;',
+                '>': '&gt;',
+                '"': '&quot;',
+                "'": '&#039;'
+            };
+            return text.replace(/[&<>"']/g, m => map[m]);
+        }
+
+        // Allow Enter key to send
+        document.getElementById('chatInput').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                sendMessage();
+            }
+        });
+
+        // Focus input on load
+        document.getElementById('chatInput').focus();
+    </script>
+</body>
+</html>
