@@ -281,7 +281,7 @@
   }
   .chat-option-btn:hover { background: var(--accent); color: white; }
 
-  /* WORKFLOW DEMO */
+  /* WORKFLOW DEMO - UPGRADED */
   .workflow-visual {
     display: flex;
     align-items: center;
@@ -306,10 +306,82 @@
     border-color: var(--accent);
     transform: scale(1.05);
   }
+  .workflow-step.animated {
+    background: var(--accent-glow);
+    border-color: var(--accent);
+    transform: scale(1.05);
+  }
   .workflow-step-icon { font-size: 1.5rem; margin-bottom: 8px; }
   .workflow-step-label { font-size: 0.82rem; font-weight: 600; }
   .workflow-step-desc { font-size: 0.75rem; color: var(--text-muted); margin-top: 4px; }
   .workflow-arrow { color: var(--accent-light); font-size: 1.3rem; font-weight: bold; }
+
+  .workflow-controls {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 20px;
+    justify-content: center;
+  }
+  .workflow-button {
+    background: var(--accent);
+    color: white;
+    border: none;
+    padding: 12px 28px;
+    border-radius: 10px;
+    font-weight: 600;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: background 0.2s;
+  }
+  .workflow-button:hover { background: #4338ca; }
+  .workflow-button:disabled {
+    background: var(--text-muted);
+    cursor: not-allowed;
+  }
+
+  .workflow-status {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 16px;
+    text-align: center;
+  }
+
+  .workflow-progress-bar {
+    width: 100%;
+    height: 4px;
+    background: var(--border);
+    border-radius: 999px;
+    overflow: hidden;
+    margin-bottom: 20px;
+  }
+  .workflow-progress-fill {
+    height: 100%;
+    background: var(--accent);
+    width: 0%;
+    transition: width 0.3s ease;
+  }
+
+  .workflow-log {
+    background: #1a1a2e;
+    color: #10b981;
+    border-radius: 10px;
+    padding: 16px;
+    font-family: 'Monaco', 'Courier New', monospace;
+    font-size: 0.85rem;
+    line-height: 1.6;
+    max-height: 200px;
+    overflow-y: auto;
+    margin-top: 20px;
+  }
+  .workflow-log-entry {
+    opacity: 0;
+    animation: slideIn 0.3s ease forwards;
+  }
+  @keyframes slideIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
 
   /* FEEDBACK DEMO */
   .feedback-form {
@@ -365,6 +437,29 @@
     display: none;
   }
 
+  .feedback-analysis {
+    background: var(--surface-2);
+    border-radius: 12px;
+    padding: 16px;
+    margin-top: 16px;
+    display: none;
+    border: 1px solid var(--border);
+  }
+  .feedback-analysis.active { display: block; }
+  .analysis-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 0;
+    font-size: 0.9rem;
+    border-bottom: 1px solid var(--border);
+  }
+  .analysis-row:last-child { border-bottom: none; }
+  .analysis-label { font-weight: 600; color: var(--text); }
+  .analysis-value { color: var(--text-muted); }
+  .sentiment-positive { color: var(--success); font-weight: 600; }
+  .sentiment-neutral { color: #f59e0b; font-weight: 600; }
+  .sentiment-negative { color: #ef4444; font-weight: 600; }
+
   /* FUNNEL DEMO */
   .funnel-container {
     display: flex;
@@ -404,6 +499,237 @@
   .funnel-connector {
     width: 2px; height: 20px;
     background: var(--border);
+  }
+
+  .funnel-controls {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 20px;
+    justify-content: center;
+  }
+  .funnel-button {
+    background: var(--accent);
+    color: white;
+    border: none;
+    padding: 12px 28px;
+    border-radius: 10px;
+    font-weight: 600;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: background 0.2s;
+  }
+  .funnel-button:hover { background: #4338ca; }
+  .funnel-button:disabled {
+    background: var(--text-muted);
+    cursor: not-allowed;
+  }
+
+  .funnel-details {
+    background: var(--surface-2);
+    border-radius: 12px;
+    padding: 20px;
+    margin-top: 20px;
+    display: none;
+    border: 1px solid var(--border);
+  }
+  .funnel-details.active { display: block; }
+
+  .funnel-mockup {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px;
+    margin-top: 12px;
+    font-size: 0.85rem;
+    line-height: 1.6;
+  }
+
+  .conversion-metrics {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 16px;
+    padding-top: 16px;
+    border-top: 1px solid var(--border);
+  }
+  .conversion-metric {
+    text-align: center;
+  }
+  .conversion-number { font-weight: 700; font-size: 1.1rem; color: var(--accent); }
+  .conversion-label { font-size: 0.78rem; color: var(--text-muted); margin-top: 4px; }
+
+  /* CONTENT GENERATION DEMO - UPGRADED */
+  .content-tabs {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 20px;
+    border-bottom: 1px solid var(--border);
+  }
+  .content-tab {
+    background: transparent;
+    border: none;
+    padding: 12px 20px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    border-bottom: 3px solid transparent;
+    transition: all 0.2s;
+  }
+  .content-tab.active {
+    color: var(--accent);
+    border-bottom-color: var(--accent);
+  }
+  .content-tab:hover { color: var(--text); }
+
+  .business-selector {
+    margin-bottom: 20px;
+  }
+  .business-selector label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 8px;
+    font-size: 0.9rem;
+  }
+  .business-selector select {
+    width: 100%;
+    padding: 10px 14px;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    font-size: 0.9rem;
+    font-family: inherit;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  .business-selector select:focus { border-color: var(--accent); }
+
+  .content-output {
+    background: var(--surface-2);
+    border-radius: 12px;
+    padding: 20px;
+    min-height: 120px;
+    position: relative;
+  }
+
+  .content-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 16px;
+  }
+  .content-action-btn {
+    background: white;
+    border: 1px solid var(--accent);
+    color: var(--accent);
+    padding: 8px 16px;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .content-action-btn:hover { background: var(--accent); color: white; }
+
+  .content-note {
+    font-size: 0.82rem;
+    color: var(--text-muted);
+    margin-top: 12px;
+    font-style: italic;
+  }
+
+  /* QUIZ DEMO - UPGRADED */
+  .quiz-container {
+    background: var(--surface-2);
+    border-radius: 12px;
+    padding: 24px;
+  }
+
+  .quiz-progress {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 20px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--border);
+  }
+  .quiz-score-bar {
+    flex: 1;
+    height: 8px;
+    background: var(--border);
+    border-radius: 999px;
+    overflow: hidden;
+  }
+  .quiz-score-fill {
+    height: 100%;
+    background: var(--accent);
+    width: 0%;
+    transition: width 0.3s ease;
+  }
+  .quiz-score-text {
+    font-weight: 600;
+    font-size: 0.9rem;
+    min-width: 60px;
+    text-align: right;
+  }
+
+  .quiz-question {
+    margin-bottom: 24px;
+  }
+  .quiz-question h4 {
+    font-weight: 600;
+    margin-bottom: 16px;
+    font-size: 1rem;
+  }
+
+  .quiz-options {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 16px;
+  }
+  .quiz-option-btn {
+    text-align: left;
+    padding: 14px 18px;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    background: white;
+    cursor: pointer;
+    font-size: 0.92rem;
+    font-family: inherit;
+    transition: all 0.2s;
+  }
+  .quiz-option-btn:hover {
+    border-color: var(--accent);
+    background: rgba(79,70,229,0.05);
+  }
+
+  .quiz-result {
+    display: none;
+    margin-top: 16px;
+    padding: 16px;
+    border-radius: 10px;
+  }
+  .quiz-result.active { display: block; }
+
+  .quiz-complete {
+    display: none;
+    text-align: center;
+  }
+  .quiz-complete.active { display: block; }
+  .quiz-complete h3 {
+    font-size: 1.3rem;
+    margin-bottom: 16px;
+  }
+  .quiz-complete-score {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--accent);
+    margin-bottom: 12px;
+  }
+  .quiz-complete-message {
+    color: var(--text-muted);
+    margin-bottom: 16px;
+    line-height: 1.6;
   }
 
   /* CONTACT */
@@ -538,6 +864,8 @@
     .workflow-visual { flex-direction: column; }
     .workflow-arrow { transform: rotate(90deg); }
     .demo-section { padding: 24px; }
+    .content-tabs { flex-wrap: wrap; }
+    .conversion-metrics { flex-direction: column; gap: 8px; }
   }
 </style>
 </head>
@@ -729,83 +1057,160 @@
     </div>
   </div>
 
-  <!-- WORKFLOW DEMO -->
+  <!-- WORKFLOW DEMO - UPGRADED -->
   <div class="demo-section" id="demo-workflow">
     <h3>Automation Pipeline Demo</h3>
-    <p class="demo-subtitle">Click each step to see how a real automated content pipeline flows. This is a system I built and run in production.</p>
+    <p class="demo-subtitle">Click "Run Pipeline" to see an animated simulation of a real automated content pipeline running in production.</p>
+
+    <div class="workflow-controls">
+      <button class="workflow-button" id="workflowRunBtn" onclick="runWorkflowSimulation()">Run Pipeline</button>
+      <button class="workflow-button" id="workflowResetBtn" onclick="resetWorkflow()" style="display:none; background: var(--text-muted);">Reset</button>
+    </div>
+
+    <div class="workflow-status" id="workflowStatus">Pipeline Status: Ready</div>
+    <div class="workflow-progress-bar"><div class="workflow-progress-fill" id="workflowProgress"></div></div>
+
     <div class="workflow-visual" id="workflowVisual">
-      <div class="workflow-step active" onclick="activateStep(0)">
+      <div class="workflow-step" id="step-0" onclick="activateStep(0)">
         <div class="workflow-step-icon">&#128225;</div>
         <div class="workflow-step-label">Data Collection</div>
         <div class="workflow-step-desc">RSS feeds & web scraping</div>
       </div>
       <div class="workflow-arrow">&#8594;</div>
-      <div class="workflow-step" onclick="activateStep(1)">
+      <div class="workflow-step" id="step-1" onclick="activateStep(1)">
         <div class="workflow-step-icon">&#129302;</div>
         <div class="workflow-step-label">AI Processing</div>
         <div class="workflow-step-desc">Claude API generates content</div>
       </div>
       <div class="workflow-arrow">&#8594;</div>
-      <div class="workflow-step" onclick="activateStep(2)">
+      <div class="workflow-step" id="step-2" onclick="activateStep(2)">
         <div class="workflow-step-icon">&#128240;</div>
         <div class="workflow-step-label">Blog Publishing</div>
         <div class="workflow-step-desc">Auto-publish via Blogger API</div>
       </div>
       <div class="workflow-arrow">&#8594;</div>
-      <div class="workflow-step" onclick="activateStep(3)">
+      <div class="workflow-step" id="step-3" onclick="activateStep(3)">
         <div class="workflow-step-icon">&#128227;</div>
         <div class="workflow-step-label">Social Media</div>
         <div class="workflow-step-desc">Facebook Graph API post</div>
       </div>
       <div class="workflow-arrow">&#8594;</div>
-      <div class="workflow-step" onclick="activateStep(4)">
+      <div class="workflow-step" id="step-4" onclick="activateStep(4)">
         <div class="workflow-step-icon">&#128176;</div>
         <div class="workflow-step-label">Monetization</div>
         <div class="workflow-step-desc">Affiliate links embedded</div>
       </div>
     </div>
+
+    <div class="workflow-log" id="workflowLog"></div>
+
     <div id="workflowDetail" style="background: var(--surface-2); border-radius: 14px; padding: 20px; margin-top: 20px;">
-      <p style="font-weight: 600; margin-bottom: 6px;">Data Collection</p>
-      <p style="color: var(--text-muted); font-size: 0.92rem;">The system scrapes real-time deals from multiple RSS feeds and e-commerce sources, rotates through search keywords, deduplicates results, and selects the best items. All automated, all scheduled.</p>
+      <p style="font-weight: 600; margin-bottom: 6px;">Pipeline Ready</p>
+      <p style="color: var(--text-muted); font-size: 0.92rem;">Click "Run Pipeline" above to start the automated workflow simulation, or click on any step to see its details manually.</p>
     </div>
   </div>
 
-  <!-- WEB APP DEMO -->
+  <!-- WEB APP DEMO - UPGRADED (3-Question Quiz) -->
   <div class="demo-section" id="demo-webapp">
-    <h3>Web App Demo</h3>
-    <p class="demo-subtitle">An interactive career quiz scoring engine. Users answer questions, the system calculates multi-dimensional scores in real time.</p>
-    <div style="background: var(--surface-2); border-radius: 14px; padding: 24px;">
-      <p style="font-weight: 600; margin-bottom: 16px;">Sample Question: What causes an aircraft to stall?</p>
-      <div style="display: flex; flex-direction: column; gap: 10px;" id="quizOptions">
-        <button onclick="selectQuizOption(this, false)" style="text-align:left; padding: 14px 18px; border: 1px solid var(--border); border-radius: 12px; background: white; cursor: pointer; font-size: 0.92rem; font-family: inherit; transition: all 0.2s;">A. Engine failure</button>
-        <button onclick="selectQuizOption(this, false)" style="text-align:left; padding: 14px 18px; border: 1px solid var(--border); border-radius: 12px; background: white; cursor: pointer; font-size: 0.92rem; font-family: inherit; transition: all 0.2s;">B. Flying too slowly</button>
-        <button onclick="selectQuizOption(this, true)" style="text-align:left; padding: 14px 18px; border: 1px solid var(--border); border-radius: 12px; background: white; cursor: pointer; font-size: 0.92rem; font-family: inherit; transition: all 0.2s;">C. Exceeding the critical angle of attack</button>
-        <button onclick="selectQuizOption(this, false)" style="text-align:left; padding: 14px 18px; border: 1px solid var(--border); border-radius: 12px; background: white; cursor: pointer; font-size: 0.92rem; font-family: inherit; transition: all 0.2s;">D. Running out of fuel</button>
+    <h3>Web App Demo - Interactive Quiz</h3>
+    <p class="demo-subtitle">A multi-question quiz with real-time scoring. Answer all questions to see your final results.</p>
+
+    <div class="quiz-container">
+      <div class="quiz-progress" id="quizProgress">
+        <div class="quiz-score-bar"><div class="quiz-score-fill" id="quizScoreFill" style="width: 0%;"></div></div>
+        <div class="quiz-score-text" id="quizScoreText">0/3</div>
       </div>
-      <div id="quizResult" style="display: none; margin-top: 16px; padding: 16px; border-radius: 12px;"></div>
+
+      <div id="quizContent">
+        <div class="quiz-question">
+          <h4>Question 1: What causes an aircraft to stall?</h4>
+          <div class="quiz-options" id="q1Options">
+            <button class="quiz-option-btn" onclick="selectQuizOption(0, 0, false)">A. Engine failure</button>
+            <button class="quiz-option-btn" onclick="selectQuizOption(0, 1, false)">B. Flying too slowly</button>
+            <button class="quiz-option-btn" onclick="selectQuizOption(0, 2, true)">C. Exceeding the critical angle of attack</button>
+            <button class="quiz-option-btn" onclick="selectQuizOption(0, 3, false)">D. Running out of fuel</button>
+          </div>
+          <div class="quiz-result" id="q1Result"></div>
+        </div>
+
+        <div class="quiz-question" id="q2Question" style="display:none;">
+          <h4>Question 2: What does API stand for?</h4>
+          <div class="quiz-options" id="q2Options">
+            <button class="quiz-option-btn" onclick="selectQuizOption(1, 0, false)">A. Advanced Programming Interface</button>
+            <button class="quiz-option-btn" onclick="selectQuizOption(1, 1, true)">B. Application Programming Interface</button>
+            <button class="quiz-option-btn" onclick="selectQuizOption(1, 2, false)">C. Automated Protocol Integration</button>
+            <button class="quiz-option-btn" onclick="selectQuizOption(1, 3, false)">D. Application Process Integrator</button>
+          </div>
+          <div class="quiz-result" id="q2Result"></div>
+        </div>
+
+        <div class="quiz-question" id="q3Question" style="display:none;">
+          <h4>Question 3: What is the main benefit of a CRM system?</h4>
+          <div class="quiz-options" id="q3Options">
+            <button class="quiz-option-btn" onclick="selectQuizOption(2, 0, false)">A. Faster internet</button>
+            <button class="quiz-option-btn" onclick="selectQuizOption(2, 1, false)">B. Better file storage</button>
+            <button class="quiz-option-btn" onclick="selectQuizOption(2, 2, true)">C. Centralized customer relationship management</button>
+            <button class="quiz-option-btn" onclick="selectQuizOption(2, 3, false)">D. Automated accounting</button>
+          </div>
+          <div class="quiz-result" id="q3Result"></div>
+        </div>
+      </div>
+
+      <div class="quiz-complete" id="quizComplete">
+        <h3>Quiz Complete!</h3>
+        <div class="quiz-complete-score" id="finalScore">0/3</div>
+        <div class="quiz-complete-message">
+          <p>Your quiz app would look like this — but with <strong>YOUR questions</strong>, <strong>YOUR scoring logic</strong>, and <strong>YOUR brand</strong>. I build interactive learning systems, certification quizzes, career assessments, and knowledge checks tailored to your exact needs.</p>
+        </div>
+      </div>
     </div>
   </div>
 
-  <!-- CONTENT GENERATION DEMO -->
+  <!-- CONTENT GENERATION DEMO - UPGRADED -->
   <div class="demo-section" id="demo-content">
     <h3>AI Content Generation Demo</h3>
-    <p class="demo-subtitle">Select a content type to see how AI generates tailored, on-brand content automatically.</p>
-    <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 20px;">
-      <button class="chat-option-btn" onclick="showContent('blog')" style="font-size: 0.9rem;">Blog Post</button>
-      <button class="chat-option-btn" onclick="showContent('social')" style="font-size: 0.9rem;">Social Media</button>
-      <button class="chat-option-btn" onclick="showContent('email')" style="font-size: 0.9rem;">Email Sequence</button>
+    <p class="demo-subtitle">Select a business type and content type to see AI-generated output tailored to that industry.</p>
+
+    <div class="business-selector">
+      <label for="businessType">Select Your Business Type:</label>
+      <select id="businessType" onchange="updateContentDisplay()">
+        <option value="tech">Tech Startup</option>
+        <option value="dental">Dental Practice</option>
+        <option value="realestate">Real Estate Agency</option>
+        <option value="restaurant">Restaurant</option>
+        <option value="ecommerce">E-commerce Store</option>
+      </select>
     </div>
-    <div id="contentOutput" style="background: var(--surface-2); border-radius: 14px; padding: 24px; min-height: 120px;">
-      <p style="color: var(--text-muted); font-style: italic;">Click a content type above to see AI-generated output.</p>
+
+    <div class="content-tabs">
+      <button class="content-tab active" onclick="switchContentTab('blog')">Blog</button>
+      <button class="content-tab" onclick="switchContentTab('social')">Social Media</button>
+      <button class="content-tab" onclick="switchContentTab('email')">Email</button>
     </div>
+
+    <div class="content-output" id="contentOutput">
+      <p style="color: var(--text-muted); font-style: italic;">Select a content type above to see AI-generated output.</p>
+    </div>
+
+    <div class="content-actions">
+      <button class="content-action-btn" onclick="cycleContentExample()">Generate Another</button>
+    </div>
+
+    <div class="content-note">In production, this content is generated live by AI tailored to YOUR business — no templates. Every piece is unique and optimized for your specific industry and audience.</div>
   </div>
 
-  <!-- FUNNEL DEMO -->
+  <!-- FUNNEL DEMO - UPGRADED -->
   <div class="demo-section" id="demo-funnel">
     <h3>Sales Funnel Demo</h3>
-    <p class="demo-subtitle">Click through each stage to see how an automated funnel moves leads from first touch to conversion.</p>
+    <p class="demo-subtitle">Click "Start Simulation" to watch a lead named Sarah go through your entire sales funnel automatically.</p>
+
+    <div class="funnel-controls">
+      <button class="funnel-button" id="funnelStartBtn" onclick="startFunnelSimulation()">Start Simulation</button>
+      <button class="funnel-button" id="funnelResetBtn" onclick="resetFunnel()" style="display:none; background: var(--text-muted);">Reset</button>
+    </div>
+
     <div class="funnel-container" id="funnelContainer">
-      <div class="funnel-stage active" onclick="activateFunnel(0)">
+      <div class="funnel-stage" id="funnel-0" onclick="activateFunnel(0)">
         <div class="funnel-stage-num">1</div>
         <div class="funnel-stage-text">
           <h4>Ad Click / Landing Page</h4>
@@ -813,7 +1218,7 @@
         </div>
       </div>
       <div class="funnel-connector"></div>
-      <div class="funnel-stage" onclick="activateFunnel(1)">
+      <div class="funnel-stage" id="funnel-1" onclick="activateFunnel(1)">
         <div class="funnel-stage-num">2</div>
         <div class="funnel-stage-text">
           <h4>Lead Capture Form</h4>
@@ -821,7 +1226,7 @@
         </div>
       </div>
       <div class="funnel-connector"></div>
-      <div class="funnel-stage" onclick="activateFunnel(2)">
+      <div class="funnel-stage" id="funnel-2" onclick="activateFunnel(2)">
         <div class="funnel-stage-num">3</div>
         <div class="funnel-stage-text">
           <h4>AI Follow-Up Sequence</h4>
@@ -829,7 +1234,7 @@
         </div>
       </div>
       <div class="funnel-connector"></div>
-      <div class="funnel-stage" onclick="activateFunnel(3)">
+      <div class="funnel-stage" id="funnel-3" onclick="activateFunnel(3)">
         <div class="funnel-stage-num">4</div>
         <div class="funnel-stage-text">
           <h4>Booking / Conversion</h4>
@@ -837,12 +1242,34 @@
         </div>
       </div>
     </div>
+
+    <div class="funnel-details" id="funnelDetails">
+      <div id="funnelDetailContent"></div>
+      <div class="conversion-metrics">
+        <div class="conversion-metric">
+          <div class="conversion-number">1,000</div>
+          <div class="conversion-label">Visitors</div>
+        </div>
+        <div class="conversion-metric">
+          <div class="conversion-number">320</div>
+          <div class="conversion-label">Leads</div>
+        </div>
+        <div class="conversion-metric">
+          <div class="conversion-number">89</div>
+          <div class="conversion-label">Engaged</div>
+        </div>
+        <div class="conversion-metric">
+          <div class="conversion-number">34</div>
+          <div class="conversion-label">Booked</div>
+        </div>
+      </div>
+    </div>
   </div>
 
-  <!-- FEEDBACK DEMO -->
+  <!-- FEEDBACK DEMO - UPGRADED -->
   <div class="demo-section" id="demo-feedback">
     <h3>Feedback & Support System Demo</h3>
-    <p class="demo-subtitle">An interactive rating and feedback form with smart categorization. Try it out.</p>
+    <p class="demo-subtitle">Rate your experience and leave feedback. Watch in real-time as AI categorizes and routes your input.</p>
     <div class="feedback-form" id="feedbackForm">
       <p style="font-weight: 600; margin-bottom: 12px;">How was your experience?</p>
       <div class="feedback-stars" id="feedbackStars">
@@ -852,10 +1279,34 @@
         <span class="feedback-star" onclick="setRating(4)">&#11088;</span>
         <span class="feedback-star" onclick="setRating(5)">&#11088;</span>
       </div>
-      <textarea class="feedback-textarea" id="feedbackText" placeholder="Tell us more about your experience..."></textarea>
+      <textarea class="feedback-textarea" id="feedbackText" placeholder="Tell us more about your experience..." oninput="analyzeFeedback()"></textarea>
+
+      <div class="feedback-analysis" id="feedbackAnalysis">
+        <div class="analysis-row">
+          <div class="analysis-label">Sentiment:</div>
+          <div class="analysis-value"><span id="sentimentValue" class="sentiment-positive">Positive</span></div>
+        </div>
+        <div class="analysis-row">
+          <div class="analysis-label">Category:</div>
+          <div class="analysis-value" id="categoryValue">Not detected</div>
+        </div>
+        <div class="analysis-row">
+          <div class="analysis-label">Priority:</div>
+          <div class="analysis-value" id="priorityValue">Low</div>
+        </div>
+        <div class="analysis-row">
+          <div class="analysis-label">Route To:</div>
+          <div class="analysis-value" id="routeValue">Feedback Dashboard</div>
+        </div>
+      </div>
+
       <button class="feedback-submit" onclick="submitFeedback()">Submit Feedback</button>
     </div>
-    <div class="feedback-success" id="feedbackSuccess">Thanks for your feedback! Your response has been categorized and routed automatically.</div>
+    <div class="feedback-success" id="feedbackSuccess">
+      <strong>Thanks for your feedback!</strong><br>
+      <span style="font-size:0.85rem;font-weight:400;">Your response has been analyzed and automatically routed.</span>
+      <div id="feedbackSummary" style="margin-top:12px; font-size: 0.9rem; text-align: left; background: rgba(16,185,129,0.2); padding: 12px; border-radius: 8px;"></div>
+    </div>
   </div>
 </section>
 
@@ -872,31 +1323,30 @@
       </div>
 
       <div class="form-group">
-        <label for="email">Email Address</label>
+        <label for="email">Email</label>
         <input type="email" id="email" name="email" required>
       </div>
 
       <div class="form-group">
         <label for="service">What are you looking for?</label>
         <select id="service" name="service" required>
-          <option value="">Select an option...</option>
+          <option value="">-- Select a service --</option>
           <option value="AI Chatbot">AI Chatbot</option>
-          <option value="Automation/Workflow">Automation/Workflow</option>
-          <option value="Web App">Web App</option>
-          <option value="Content Generation">Content Generation</option>
+          <option value="Automation Pipeline">Automation Pipeline</option>
+          <option value="Web App">Web App / Dashboard</option>
+          <option value="Content Generation">Content Generation System</option>
+          <option value="Sales Funnel">Sales Funnel Automation</option>
+          <option value="Feedback System">Feedback & Support System</option>
           <option value="API Integration">API Integration</option>
-          <option value="Funnel/CRM Automation">Funnel/CRM Automation</option>
-          <option value="Feedback System">Feedback System</option>
-          <option value="Custom AI Solution">Custom AI Solution</option>
-          <option value="Not Sure Yet">Not Sure Yet</option>
+          <option value="Custom Project">Custom Project</option>
         </select>
       </div>
 
       <div class="form-group">
-        <label for="budget">Budget Range</label>
+        <label for="budget">What's your budget range?</label>
         <select id="budget" name="budget" required>
-          <option value="">Select a range...</option>
-          <option value="Under $500">Under $500</option>
+          <option value="">-- Select a range --</option>
+          <option value="<$500">Less than $500</option>
           <option value="$500-$1000">$500-$1000</option>
           <option value="$1000-$2500">$1000-$2500</option>
           <option value="$2500-$5000">$2500-$5000</option>
@@ -946,7 +1396,6 @@
     container.scrollTop = container.scrollHeight;
   }
   async function botReply(userText) {
-    // Show typing indicator
     const container = document.getElementById('chatMessages');
     const typingId = 'typing_' + Date.now();
     container.innerHTML += `<div class="chat-message bot" id="${typingId}"><div class="chat-avatar">AI</div><div class="chat-bubble" style="opacity:0.6;">Thinking...</div></div>`;
@@ -960,7 +1409,6 @@
       });
       const data = await response.json();
 
-      // Remove typing indicator
       const typingEl = document.getElementById(typingId);
       if (typingEl) typingEl.remove();
 
@@ -973,14 +1421,14 @@
         addMessage('Sorry, something went wrong. Please try again.', 'bot');
       }
     } catch (err) {
-      // Remove typing indicator
       const typingEl = document.getElementById(typingId);
       if (typingEl) typingEl.remove();
       addMessage('Connection error. The demo server may be offline. Please try again later or reach out through the contact form!', 'bot');
     }
   }
 
-  // === WORKFLOW DEMO ===
+  // === WORKFLOW DEMO - ANIMATED SIMULATION ===
+  let workflowAnimating = false;
   const workflowDetails = [
     { title: 'Data Collection', desc: 'The system scrapes real-time deals from multiple RSS feeds and e-commerce sources, rotates through search keywords, deduplicates results, and selects the best items. All automated, all scheduled.' },
     { title: 'AI Processing', desc: 'Collected data is sent to the Claude API with custom prompt engineering. The AI generates original blog content with a consistent brand voice, plus separate social media teasers. Different prompt architectures for different content types.' },
@@ -988,57 +1436,355 @@
     { title: 'Social Media', desc: 'The system generates a platform-specific teaser post and publishes it to Facebook via the Graph API, driving traffic back to the blog. Timed to post at optimal engagement hours.' },
     { title: 'Monetization', desc: 'Every product link includes embedded affiliate tracking. The system automatically builds monetization into every piece of content it generates. Revenue is earned passively while the system runs.' },
   ];
+
+  const workflowLogs = [
+    '[10:32:01] Scanning 4 RSS feeds... found 23 new items',
+    '[10:32:03] Deduplicating... 18 unique items remaining',
+    '[10:32:05] Sending to Claude API... generating blog content',
+    '[10:32:08] Blog post generated: "Top 7 Tech Deals This Week"',
+    '[10:32:09] Publishing to Blogger via API... Success (Post ID: 8847291)',
+    '[10:32:11] Generating social teaser... Posted to Facebook',
+    '[10:32:12] Pipeline complete. 1 blog post, 1 social post, 7 affiliate links embedded.'
+  ];
+
+  async function runWorkflowSimulation() {
+    if (workflowAnimating) return;
+    workflowAnimating = true;
+    document.getElementById('workflowRunBtn').disabled = true;
+    document.getElementById('workflowResetBtn').style.display = 'inline-block';
+
+    const logEl = document.getElementById('workflowLog');
+    logEl.innerHTML = '';
+
+    for (let i = 0; i < 5; i++) {
+      document.getElementById(`step-${i}`).classList.add('animated');
+
+      const progress = ((i + 1) / 5) * 100;
+      document.getElementById('workflowProgress').style.width = progress + '%';
+      document.getElementById('workflowStatus').textContent = 'Pipeline Status: Running...';
+
+      // Show 1-2 logs per step
+      const logsForStep = i === 0 ? [0, 1] : i === 1 ? [2, 3] : i === 2 ? [4] : i === 3 ? [5] : [6];
+      for (const logIdx of logsForStep) {
+        await new Promise(r => setTimeout(r, 500));
+        const entry = document.createElement('div');
+        entry.className = 'workflow-log-entry';
+        entry.textContent = workflowLogs[logIdx];
+        logEl.appendChild(entry);
+        logEl.scrollTop = logEl.scrollHeight;
+      }
+
+      await new Promise(r => setTimeout(r, 300));
+    }
+
+    document.getElementById('workflowStatus').textContent = 'Pipeline Status: Complete ✓';
+    document.getElementById('workflowProgress').style.width = '100%';
+    workflowAnimating = false;
+  }
+
+  function resetWorkflow() {
+    workflowAnimating = false;
+    document.querySelectorAll('.workflow-step').forEach(s => s.classList.remove('animated'));
+    document.getElementById('workflowProgress').style.width = '0%';
+    document.getElementById('workflowStatus').textContent = 'Pipeline Status: Ready';
+    document.getElementById('workflowLog').innerHTML = '';
+    document.getElementById('workflowRunBtn').disabled = false;
+    document.getElementById('workflowResetBtn').style.display = 'none';
+    document.getElementById('workflowDetail').innerHTML = `<p style="font-weight:600;margin-bottom:6px;">Pipeline Ready</p><p style="color:var(--text-muted);font-size:0.92rem;">Click "Run Pipeline" above to start the automated workflow simulation, or click on any step to see its details manually.</p>`;
+  }
+
   function activateStep(idx) {
     document.querySelectorAll('.workflow-step').forEach((s,i) => s.classList.toggle('active', i===idx));
     const d = workflowDetails[idx];
     document.getElementById('workflowDetail').innerHTML = `<p style="font-weight:600;margin-bottom:6px;">${d.title}</p><p style="color:var(--text-muted);font-size:0.92rem;">${d.desc}</p>`;
   }
 
-  // === QUIZ DEMO ===
-  function selectQuizOption(btn, correct) {
-    document.querySelectorAll('#quizOptions button').forEach(b => { b.style.pointerEvents = 'none'; b.style.opacity = '0.6'; });
-    btn.style.opacity = '1';
-    const result = document.getElementById('quizResult');
+  // === QUIZ DEMO - UPGRADED ===
+  let quizAnswers = [null, null, null];
+  let quizAnswered = [false, false, false];
+
+  function selectQuizOption(questionIdx, optionIdx, correct) {
+    if (quizAnswered[questionIdx]) return;
+
+    quizAnswered[questionIdx] = true;
+    quizAnswers[questionIdx] = correct;
+
+    const optionsId = ['q1Options', 'q2Options', 'q3Options'][questionIdx];
+    const resultId = ['q1Result', 'q2Result', 'q3Result'][questionIdx];
+    const buttons = document.querySelectorAll(`#${optionsId} button`);
+
+    buttons.forEach(b => { b.style.pointerEvents = 'none'; b.style.opacity = '0.5'; });
+    buttons[optionIdx].style.opacity = '1';
+
+    const result = document.getElementById(resultId);
     if (correct) {
-      btn.style.borderColor = 'var(--success)'; btn.style.background = 'rgba(16,185,129,0.1)';
-      result.innerHTML = '<p style="color:var(--success);font-weight:600;">Correct!</p><p style="color:var(--text-muted);font-size:0.92rem;margin-top:6px;">A stall occurs when the wing exceeds its critical angle of attack, disrupting airflow regardless of speed. This is the kind of multi-dimensional scoring my quiz apps calculate across intuition, technical knowledge, safety awareness, and pattern recognition.</p>';
-      result.style.background = 'rgba(16,185,129,0.08)'; result.style.border = '1px solid var(--success)';
+      buttons[optionIdx].style.borderColor = 'var(--success)';
+      buttons[optionIdx].style.background = 'rgba(16,185,129,0.1)';
+      result.innerHTML = '<p style="color:var(--success);font-weight:600;">Correct!</p><p style="color:var(--text-muted);font-size:0.92rem;margin-top:6px;">Great job! This is the kind of instant feedback and detailed explanations my interactive quiz apps provide.</p>';
+      result.style.background = 'rgba(16,185,129,0.08)';
+      result.style.border = '1px solid var(--success)';
+      result.classList.add('active');
     } else {
-      btn.style.borderColor = 'var(--accent)'; btn.style.background = 'rgba(79,70,229,0.1)';
-      document.querySelectorAll('#quizOptions button')[2].style.borderColor = 'var(--success)';
-      document.querySelectorAll('#quizOptions button')[2].style.background = 'rgba(16,185,129,0.1)';
-      document.querySelectorAll('#quizOptions button')[2].style.opacity = '1';
-      result.innerHTML = '<p style="color:var(--accent);font-weight:600;">Not quite!</p><p style="color:var(--text-muted);font-size:0.92rem;margin-top:6px;">The correct answer is C. A stall happens when the wing exceeds its critical angle of attack. Common misconception that it\'s about speed or engine failure. My quiz systems provide instant feedback, explanations, and multi-category scoring.</p>';
-      result.style.background = 'var(--accent-glow)'; result.style.border = '1px solid var(--accent)';
+      buttons[optionIdx].style.borderColor = 'var(--accent)';
+      buttons[optionIdx].style.background = 'rgba(79,70,229,0.1)';
+      const correctBtn = Array.from(buttons).findIndex((b, i) => i !== optionIdx);
+      result.innerHTML = '<p style="color:var(--accent);font-weight:600;">Not quite!</p><p style="color:var(--text-muted);font-size:0.92rem;margin-top:6px;">My quiz systems provide instant feedback, show the correct answer, and help users learn from mistakes.</p>';
+      result.style.background = 'var(--accent-glow)';
+      result.style.border = '1px solid var(--accent)';
+      result.classList.add('active');
     }
-    result.style.display = 'block';
+
+    updateQuizProgress();
+
+    if (questionIdx < 2 && quizAnswered[questionIdx]) {
+      setTimeout(() => {
+        document.getElementById(['q2Question', 'q3Question'][questionIdx]).style.display = 'block';
+      }, 800);
+    }
+
+    if (quizAnswered[0] && quizAnswered[1] && quizAnswered[2]) {
+      setTimeout(() => {
+        showQuizComplete();
+      }, 1000);
+    }
   }
 
-  // === CONTENT DEMO ===
-  const contentExamples = {
-    blog: `<p style="font-weight:700;font-size:1.1rem;margin-bottom:12px;">Today's Top Tech Deals You Don't Want to Miss</p><p style="color:var(--text-muted);font-size:0.92rem;line-height:1.7;">Listen, I don't usually get excited about USB-C hubs. But when a 7-in-1 dock drops from $45 to $18? That's worth talking about. Whether you're working from a laptop at the coffee shop or running a dual-monitor setup at home, this little hub handles HDMI, USB-A, SD cards, and 100W passthrough charging. At this price, grab two.</p><p style="margin-top:12px;font-size:0.82rem;color:var(--accent);font-weight:600;">Generated automatically by AI with consistent brand voice, affiliate links embedded, and published across blog + social media.</p>`,
-    social: `<p style="font-weight:700;font-size:1.1rem;margin-bottom:12px;">Facebook Post (Auto-Generated)</p><p style="color:var(--text-muted);font-size:0.92rem;line-height:1.7;background:white;padding:16px;border-radius:12px;border:1px solid var(--border);">That USB-C hub everyone's been recommending just dropped to $18. Yeah, the 7-in-1 one. Full roundup on the blog with 6 more deals just as good.<br><br>Link in comments.</p><p style="margin-top:12px;font-size:0.82rem;color:var(--accent);font-weight:600;">Short, punchy, curiosity-driven. Generated from the same deal data as the blog post but optimized for social engagement.</p>`,
-    email: `<p style="font-weight:700;font-size:1.1rem;margin-bottom:12px;">Automated Email Sequence (Day 1 of 7)</p><p style="color:var(--text-muted);font-size:0.92rem;line-height:1.7;background:white;padding:16px;border-radius:12px;border:1px solid var(--border);"><strong>Subject:</strong> Quick question about your [business type]<br><br>Hi [Name],<br><br>Thanks for checking us out. I noticed you were looking at our [service]. Most of our clients in [industry] start seeing results within the first two weeks.<br><br>Would it help if I sent over a quick case study from a similar business?<br><br>Talk soon,<br>[Your Name]</p><p style="margin-top:12px;font-size:0.82rem;color:var(--accent);font-weight:600;">AI generates personalized sequences based on lead source, industry, and behavior. Each follow-up adapts based on engagement.</p>`,
-  };
-  function showContent(type) { document.getElementById('contentOutput').innerHTML = contentExamples[type]; }
+  function updateQuizProgress() {
+    const answered = quizAnswered.filter(a => a).length;
+    document.getElementById('quizScoreFill').style.width = (answered / 3) * 100 + '%';
+    document.getElementById('quizScoreText').textContent = answered + '/3';
+  }
 
-  // === FUNNEL DEMO ===
+  function showQuizComplete() {
+    document.getElementById('quizContent').style.display = 'none';
+    document.getElementById('quizProgress').style.display = 'none';
+    document.getElementById('quizComplete').classList.add('active');
+
+    const correct = quizAnswers.filter(a => a).length;
+    document.getElementById('finalScore').textContent = correct + '/3';
+  }
+
+  // === CONTENT GENERATION DEMO - UPGRADED ===
+  let currentBusinessType = 'tech';
+  let currentContentTab = 'blog';
+  let currentContentIndex = 0;
+
+  const contentData = {
+    tech: {
+      blog: [
+        '<p style="font-weight:700;font-size:1.1rem;margin-bottom:12px;">5 DevOps Trends Reshaping Enterprise Infrastructure in 2026</p><p style="color:var(--text-muted);font-size:0.92rem;line-height:1.7;">The DevOps landscape is shifting faster than ever. Infrastructure as Code is no longer optional—it\'s baseline. Kubernetes adoption is reaching critical mass in mid-market companies. AI-powered monitoring is catching problems before humans see them. We break down the trends that matter, the hype you can skip, and how to position your team for what\'s next.</p>',
+        '<p style="font-weight:700;font-size:1.1rem;margin-bottom:12px;">Building APIs That Scale: Lessons from High-Traffic SaaS Platforms</p><p style="color:var(--text-muted);font-size:0.92rem;line-height:1.7;">What separates an API that handles 100 requests/sec from one that handles 100,000? We interviewed engineers from 8 scaling SaaS companies and compiled their collective wisdom. Rate limiting strategies. Caching architectures. Database query optimization. Real code examples. Real metrics. This is what scale actually looks like.</p>'
+      ],
+      social: [
+        '<p style="font-weight:700;font-size:1.1rem;margin-bottom:12px;">LinkedIn Post</p><p style="color:var(--text-muted);font-size:0.92rem;line-height:1.7;background:white;padding:16px;border-radius:12px;border:1px solid var(--border);">Infrastructure as Code isn\'t a trend anymore. It\'s how enterprise DevOps actually works in 2026.<br><br>We mapped the shift. The tools winning. The skills in demand. Full breakdown on the blog.<br><br>#DevOps #Engineering #SaaS</p>',
+        '<p style="font-weight:700;font-size:1.1rem;margin-bottom:12px;">Twitter Post</p><p style="color:var(--text-muted);font-size:0.92rem;line-height:1.7;background:white;padding:16px;border-radius:12px;border:1px solid var(--border);">Kubernetes is standard. AI-powered monitoring is baseline. The DevOps landscape changed dramatically in the last 12 months.<br><br>Here\'s what actually shifted (and what\'s just hype):<br><br>blog link</p>'
+      ],
+      email: [
+        '<p style="font-weight:700;font-size:1.1rem;margin-bottom:12px;">Email Day 1</p><p style="color:var(--text-muted);font-size:0.92rem;line-height:1.7;background:white;padding:16px;border-radius:12px;border:1px solid var(--border);"><strong>Subject:</strong> You\'re building APIs. Are they future-proof?<br><br>Hi [Name],<br><br>I noticed you're working on [tech_stack]. Most teams scaling infrastructure right now are hitting the same bottleneck: their APIs weren\'t built with scale in mind.<br><br>We just published a guide on scaling patterns used by companies handling millions of requests. Might be useful for what you\'re building.<br><br>Check it out: [link]</p>',
+        '<p style="font-weight:700;font-size:1.1rem;margin-bottom:12px;">Email Day 3</p><p style="color:var(--text-muted);font-size:0.92rem;line-height:1.7;background:white;padding:16px;border-radius:12px;border:1px solid var(--border);"><strong>Subject:</strong> The DevOps shift everyone's talking about</p><p>Most infrastructure teams don\'t realize how dramatically the landscape changed. Infrastructure as Code adoption just crossed the 70% threshold in enterprise. AI monitoring is becoming standard. Kubernetes isn\'t niche anymore.</p>'
+      ]
+    },
+    dental: {
+      blog: [
+        '<p style="font-weight:700;font-size:1.1rem;margin-bottom:12px;">The Complete Guide to Patient Retention for Dental Practices</p><p style="color:var(--text-muted);font-size:0.92rem;line-height:1.7;">Acquiring a new patient costs 5x more than retaining one. Yet most practices focus entirely on acquisition. We analyzed patient data from 47 dental practices and found the 7 habits of practices with 85%+ retention rates. Appointment reminders. Follow-up protocols. Review management. Personalization. This is what actually works.</p>',
+        '<p style="font-weight:700;font-size:1.1rem;margin-bottom:12px;">Digital Marketing for Dentists: Your 2026 Strategy</p><p style="color:var(--text-muted);font-size:0.92rem;line-height:1.7;">Google Ads for dentists got more competitive. Local SEO shifted. Review management became critical. We break down the channels actually driving patient appointments right now, the budget allocation that works, and how to measure what matters.</p>'
+      ],
+      social: [
+        '<p style="font-weight:700;font-size:1.1rem;margin-bottom:12px;">Facebook Post</p><p style="color:var(--text-muted);font-size:0.92rem;line-height:1.7;background:white;padding:16px;border-radius:12px;border:1px solid var(--border);">Did you know? Patients who get appointment reminders are 40% less likely to no-show.<br><br>We\'re not talking about a text 30 minutes before. We\'re talking about a sequence: 1 week out, 2 days out, then 24 hours.<br><br>It works. See what other practices are doing on our blog.</p>',
+        '<p style="font-weight:700;font-size:1.1rem;margin-bottom:12px;">Instagram Post</p><p style="color:var(--text-muted);font-size:0.92rem;line-height:1.7;background:white;padding:16px;border-radius:12px;border:1px solid var(--border);">Your before/after transformations are powerful. But they\'re not enough.<br><br>The practices growing fastest are telling patient stories, educating about oral health, and building community.<br><br>Here\'s what\'s actually working in 2026 →</p>'
+      ],
+      email: [
+        '<p style="font-weight:700;font-size:1.1rem;margin-bottom:12px;">Email Day 1</p><p style="color:var(--text-muted);font-size:0.92rem;line-height:1.7;background:white;padding:16px;border-radius:12px;border:1px solid var(--border);"><strong>Subject:</strong> The #1 reason patients don\'t return</p><p>Hi [Name],<br><br>It\'s not the cost. It\'s not finding someone else. It\'s simply forgetting about you.<br><br>Patients with no reminder? 32% no-show rate. Patients who get a sequence of reminders? 8% no-show rate.<br><br>That\'s the difference between a thriving practice and one always scrambling for appointments.</p>',
+        '<p style="font-weight:700;font-size:1.1rem;margin-bottom:12px;">Email Day 7</p><p style="color:var(--text-muted);font-size:0.92rem;line-height:1.7;background:white;padding:16px;border-radius:12px;border:1px solid var(--border);"><strong>Subject:</strong> Quick question about your practice goals</p><p>Hi [Name],<br><br>Most dentists tell us they want to grow. But "grow" means different things.<br><br>For some it\'s more patients. For others it\'s higher case acceptance. For others it\'s filling cancellations.<br><br>What\'s your biggest challenge right now?</p>'
+      ]
+    },
+    realestate: {
+      blog: [
+        '<p style="font-weight:700;font-size:1.1rem;margin-bottom:12px;">The Modern Real Estate Agent: Tech Stack and Lead Generation in 2026</p><p style="color:var(--text-muted);font-size:0.92rem;line-height:1.7;">Agents closing big deals aren\'t doing more showings. They\'re smarter about lead quality. They\'re using systems to automate follow-up. They\'re building authority through content. We interviewed 12 top producers and mapped exactly how they structure their business. Lead sources. CRM workflows. Conversion rates. This is what\'s working right now.</p>',
+        '<p style="font-weight:700;font-size:1.1rem;margin-bottom:12px;">Listing Photos That Actually Sell Homes: A Data-Driven Guide</p><p style="color:var(--text-muted);font-size:0.92rem;line-height:1.7;">Professional photos increase inquiry rates by 72%. But not all professional photos are created equal. We analyzed listing performance data from 500+ properties and found the specific angles, lighting setups, and editing approaches that drive the most qualified leads.</p>'
+      ],
+      social: [
+        '<p style="font-weight:700;font-size:1.1rem;margin-bottom:12px;">Instagram Reel</p><p style="color:var(--text-muted);font-size:0.92rem;line-height:1.7;background:white;padding:16px;border-radius:12px;border:1px solid var(--border);">The 3-shot sequence real estate agents miss:<br><br>1. The kitchen (where buyers imagine themselves cooking)<br>2. The bedroom (where they imagine sleeping)<br>3. The backyard (where they imagine gathering)<br><br>Most focus on the living room. Here\'s why that\'s backwards →</p>',
+        '<p style="font-weight:700;font-size:1.1rem;margin-bottom:12px;">Facebook Video Post</p><p style="color:var(--text-muted);font-size:0.92rem;line-height:1.7;background:white;padding:16px;border-radius:12px;border:1px solid var(--border);">Virtual tours are standard now. But they\'re not enough to convert.<br><br>Top agents pair tours with a sequence: initial tour email, neighborhood highlights, comparable sales, then the CTA.<br><br>It doubles inquiry rates. Here\'s how →</p>'
+      ],
+      email: [
+        '<p style="font-weight:700;font-size:1.1rem;margin-bottom:12px;">Email Day 1</p><p style="color:var(--text-muted);font-size:0.92rem;line-height:1.7;background:white;padding:16px;border-radius:12px;border:1px solid var(--border);"><strong>Subject:</strong> Is your real estate marketing on autopilot?</p><p>Hi [Name],<br><br>Most agents handle everything manually: following up with leads, sending market updates, reminding past clients about refinance opportunities.<br><br>Top producers? They automated all of it. They close more deals working less.</p>',
+        '<p style="font-weight:700;font-size:1.1rem;margin-bottom:12px;">Email Day 5</p><p style="color:var(--text-muted);font-size:0.92rem;line-height:1.7;background:white;padding:16px;border-radius:12px;border:1px solid var(--border);"><strong>Subject:</strong> [Client Name], your market update is ready</p><p>Hi [Name],<br><br>The market in [neighborhood] is HOT right now. 7 new listings this week. Average time on market down 3 days.</p>'
+      ]
+    },
+    restaurant: {
+      blog: [
+        '<p style="font-weight:700;font-size:1.1rem;margin-bottom:12px;">Restaurant Loyalty Programs That Actually Work: Data From 200+ Establishments</p><p style="color:var(--text-muted);font-size:0.92rem;line-height:1.7;">Most loyalty programs fail because they\'re transactional. Buy 10, get 1 free. Boring. Top restaurants are building community. They\'re rewarding frequency and social sharing. They\'re making customers feel like insiders. We analyzed what drives repeat business and what\'s just noise.</p>',
+        '<p style="font-weight:700;font-size:1.1rem;margin-bottom:12px;">The Complete Guide to Online Ordering That Doesn\'t Destroy Margins</p><p style="color:var(--text-muted);font-size:0.92rem;line-height:1.7;">DoorDash and Uber Eats take 30%. That hurts. But completely avoiding third-party platforms costs you volume. We break down the hybrid approach top restaurants use: own website ordering, strategic platform presence, and the systems that tie it all together.</p>'
+      ],
+      social: [
+        '<p style="font-weight:700;font-size:1.1rem;margin-bottom:12px;">TikTok Video</p><p style="color:var(--text-muted);font-size:0.92rem;line-height:1.7;background:white;padding:16px;border-radius:12px;border:1px solid var(--border);">[Behind-the-scenes of prep] [Quick cut to finished dish] [Customer reaction]<br><br>This format gets 3x more engagement than just showing the food.<br><br>Viewers want to feel connected to the process, the chef, the craft.</p>',
+        '<p style="font-weight:700;font-size:1.1rem;margin-bottom:12px;">Instagram Story</p><p style="color:var(--text-muted);font-size:0.92rem;line-height:1.7;background:white;padding:16px;border-radius:12px;border:1px solid var(--border);">Tonight\'s special: pan-seared duck (only 6 portions left)<br><br>Real scarcity drives urgency. Tell your regulars what\'s exclusive today.</p>'
+      ],
+      email: [
+        '<p style="font-weight:700;font-size:1.1rem;margin-bottom:12px;">Email Day 1</p><p style="color:var(--text-muted);font-size:0.92rem;line-height:1.7;background:white;padding:16px;border-radius:12px;border:1px solid var(--border);"><strong>Subject:</strong> You\'re missing out (chef\'s special inside)</p><p>Hi [Name],<br><br>We saved you a seat.<br><br>Friday\'s reservation list filled up fast. But we held back a few spots for our best regulars. Here\'s what\'s on the menu if you want to join us.</p>',
+        '<p style="font-weight:700;font-size:1.1rem;margin-bottom:12px;">Email Day 3</p><p style="color:var(--text-muted);font-size:0.92rem;line-height:1.7;background:white;padding:16px;border-radius:12px;border:1px solid var(--border);"><strong>Subject:</strong> [Name], did you see tonight\'s special?</p><p>We just posted something new. It\'s only on the menu this weekend. Some of our regulars have already put in their reservations for it.</p>'
+      ]
+    },
+    ecommerce: {
+      blog: [
+        '<p style="font-weight:700;font-size:1.1rem;margin-bottom:12px;">E-commerce Personalization: From Browsing to Buying With AI</p><p style="color:var(--text-muted);font-size:0.92rem;line-height:1.7;">Showing everyone the same homepage converts at 1%. Showing personalized recommendations? 8-12% conversion lift. We break down the personalization strategies that don\'t require a data science team. Dynamic product recommendations. Smart email segments. Behavioral triggers. Real numbers from stores in your category.</p>',
+        '<p style="font-weight:700;font-size:1.1rem;margin-bottom:12px;">Winning at Email Abandoned Cart Recovery</p><p style="color:var(--text-muted);font-size:0.92rem;line-height:1.7;">Most stores ignore abandoned carts. You\'re leaving 25% of revenue on the table. The stores crushing it use a 3-email sequence: first email within 1 hour, second with customer reviews, third with a time-limited discount. Average recovery rate: 18-22%.</p>'
+      ],
+      social: [
+        '<p style="font-weight:700;font-size:1.1rem;margin-bottom:12px;">Pinterest Post</p><p style="color:var(--text-muted);font-size:0.92rem;line-height:1.7;background:white;padding:16px;border-radius:12px;border:1px solid var(--border);">Pinterest drives 3x more traffic than Instagram for e-commerce.<br><br>But only if you\'re using Rich Pins.<br><br>Here\'s how to set them up (and why it matters) →</p>',
+        '<p style="font-weight:700;font-size:1.1rem;margin-bottom:12px;">Facebook/Instagram Ad</p><p style="color:var(--text-muted);font-size:0.92rem;line-height:1.7;background:white;padding:16px;border-radius:12px;border:1px solid var(--border);">Just a heads up: customers who get recommended products by AI buy 40% more than those who browse on their own.<br><br>We built that for [brand].<br><br>What if we built it for you?</p>'
+      ],
+      email: [
+        '<p style="font-weight:700;font-size:1.1rem;margin-bottom:12px;">Email Day 1</p><p style="color:var(--text-muted);font-size:0.92rem;line-height:1.7;background:white;padding:16px;border-radius:12px;border:1px solid var(--border);"><strong>Subject:</strong> You left something in your cart</p><p>Hi [Name],<br><br>That [product] you were looking at? It\'s still here. And right now we\'re running [discount code].<br><br>Complete your order: [link]</p>',
+        '<p style="font-weight:700;font-size:1.1rem;margin-bottom:12px;">Email Day 3</p><p style="color:var(--text-muted);font-size:0.92rem;line-height:1.7;background:white;padding:16px;border-radius:12px;border:1px solid var(--border);"><strong>Subject:</strong> Customers like you are buying this</p><p>Hi [Name],<br><br>The product you were looking at? It\'s one of our best sellers. 1,200+ 5-star reviews. Here\'s what customers love about it →</p>'
+      ]
+    }
+  };
+
+  function switchContentTab(tab) {
+    document.querySelectorAll('.content-tab').forEach(t => t.classList.remove('active'));
+    event.target.classList.add('active');
+    currentContentTab = tab;
+    currentContentIndex = 0;
+    updateContentDisplay();
+  }
+
+  function updateContentDisplay() {
+    currentBusinessType = document.getElementById('businessType').value;
+    currentContentIndex = 0;
+    const data = contentData[currentBusinessType][currentContentTab];
+    const content = data[currentContentIndex];
+    document.getElementById('contentOutput').innerHTML = content;
+  }
+
+  function cycleContentExample() {
+    const data = contentData[currentBusinessType][currentContentTab];
+    currentContentIndex = (currentContentIndex + 1) % data.length;
+    document.getElementById('contentOutput').innerHTML = data[currentContentIndex];
+  }
+
+  // === FUNNEL DEMO - UPGRADED ===
+  let funnelAnimating = false;
+
+  async function startFunnelSimulation() {
+    if (funnelAnimating) return;
+    funnelAnimating = true;
+    document.getElementById('funnelStartBtn').disabled = true;
+    document.getElementById('funnelResetBtn').style.display = 'inline-block';
+
+    const stages = [
+      { title: 'Ad Click / Landing Page', content: '<p style="font-weight:600;">Sarah clicks your ad in Facebook...</p><p style="margin-top:8px; font-size:0.9rem;">She lands on a beautiful page describing your service. Loads in 1.2 seconds. Mobile optimized. Clear value prop. She scrolls.</p>' },
+      { title: 'Lead Capture Form', content: '<p style="font-weight:600;">Sarah enters her name and email...</p><p style="margin-top:8px; font-size:0.9rem;">Smart form. No unnecessary fields. Auto-detection of city/state. She hits submit. Immediately gets a confirmation: "Check your email for next steps."</p>' },
+      { title: 'AI Follow-Up Sequence', content: '<p style="font-weight:600;">Day 1: Welcome email + resource</p><p style="margin-top:6px; font-size:0.9rem;"><strong>Day 3:</strong> Case study from someone like her</p><p style="font-size:0.9rem;"><strong>Day 7:</strong> "Still interested?" check-in with social proof</p><p style="margin-top:8px; font-size:0.85rem; color: var(--text-muted);">Each email gets higher open rates. The sequence builds trust automatically.</p>' },
+      { title: 'Booking / Conversion', content: '<p style="font-weight:600;">Sarah books a call ✓</p><p style="margin-top:8px; font-size:0.9rem;">She got value from the emails. She trusts you. She\'s ready. Calendly opens. She picks a time. Calendar invite sent to her. You get notified. Follow-up reminders automated.</p>' },
+    ];
+
+    for (let i = 0; i < 4; i++) {
+      document.getElementById(`funnel-${i}`).classList.add('active');
+      const details = document.getElementById('funnelDetails');
+      details.classList.add('active');
+      document.getElementById('funnelDetailContent').innerHTML = stages[i].content;
+      await new Promise(r => setTimeout(r, 2000));
+    }
+
+    funnelAnimating = false;
+  }
+
+  function resetFunnel() {
+    document.querySelectorAll('.funnel-stage').forEach(s => s.classList.remove('active'));
+    document.getElementById('funnelDetails').classList.remove('active');
+    document.getElementById('funnelStartBtn').disabled = false;
+    document.getElementById('funnelResetBtn').style.display = 'none';
+    funnelAnimating = false;
+  }
+
   function activateFunnel(idx) {
     document.querySelectorAll('.funnel-stage').forEach((s,i) => s.classList.toggle('active', i <= idx));
   }
 
-  // === FEEDBACK DEMO ===
+  // === FEEDBACK DEMO - UPGRADED WITH AI ANALYSIS ===
   let currentRating = 0;
+
   function setRating(n) {
     currentRating = n;
     document.querySelectorAll('.feedback-star').forEach((s,i) => s.classList.toggle('active', i < n));
+    analyzeFeedback();
   }
+
+  function analyzeFeedback() {
+    const text = document.getElementById('feedbackText').value.toLowerCase();
+    const analysis = document.getElementById('feedbackAnalysis');
+
+    if (!text && !currentRating) {
+      analysis.classList.remove('active');
+      return;
+    }
+
+    // Sentiment analysis
+    const positiveWords = ['great', 'amazing', 'excellent', 'love', 'awesome', 'perfect', 'fantastic', 'wonderful', 'good', 'best'];
+    const negativeWords = ['bad', 'terrible', 'awful', 'hate', 'worst', 'poor', 'disappointing', 'frustrating', 'broken', 'issue'];
+
+    let sentiment = 'Neutral';
+    let sentimentClass = 'sentiment-neutral';
+
+    if (positiveWords.some(w => text.includes(w))) { sentiment = 'Positive'; sentimentClass = 'sentiment-positive'; }
+    else if (negativeWords.some(w => text.includes(w))) { sentiment = 'Negative'; sentimentClass = 'sentiment-negative'; }
+    else if (currentRating >= 4) { sentiment = 'Positive'; sentimentClass = 'sentiment-positive'; }
+    else if (currentRating <= 2) { sentiment = 'Negative'; sentimentClass = 'sentiment-negative'; }
+
+    // Category detection
+    let category = 'Feedback';
+    if (text.includes('product') || text.includes('quality') || text.includes('feature')) category = 'Product Quality';
+    if (text.includes('support') || text.includes('service') || text.includes('help') || text.includes('staff')) category = 'Customer Service';
+    if (text.includes('price') || text.includes('cost') || text.includes('expensive') || text.includes('cheap')) category = 'Pricing';
+    if (text.includes('add') || text.includes('feature') || text.includes('wish')) category = 'Feature Request';
+    if (text.includes('bug') || text.includes('broken') || text.includes('error') || text.includes('crash')) category = 'Bug Report';
+
+    // Priority
+    let priority = 'Low';
+    if (category === 'Bug Report') priority = 'High';
+    if (sentiment === 'Negative') priority = 'Medium';
+    if (currentRating === 1) priority = 'High';
+
+    // Route
+    let route = 'Feedback Dashboard';
+    if (category === 'Bug Report') route = 'Development Team (Priority)';
+    if (category === 'Feature Request') route = 'Product Team';
+    if (sentiment === 'Negative' && currentRating <= 2) route = 'Support Team (Priority)';
+
+    document.getElementById('sentimentValue').innerHTML = `<span class="${sentimentClass}">${sentiment}</span>`;
+    document.getElementById('categoryValue').textContent = category;
+    document.getElementById('priorityValue').textContent = priority;
+    document.getElementById('routeValue').textContent = route;
+
+    analysis.classList.add('active');
+  }
+
   function submitFeedback() {
     if (!currentRating) return;
+
+    const text = document.getElementById('feedbackText').value;
+    const analysis = document.getElementById('feedbackAnalysis');
+
+    const sentiment = analysis.querySelector('#sentimentValue span').textContent;
+    const category = document.getElementById('categoryValue').textContent;
+    const priority = document.getElementById('priorityValue').textContent;
+    const route = document.getElementById('routeValue').textContent;
+
     document.getElementById('feedbackForm').style.display = 'none';
     const success = document.getElementById('feedbackSuccess');
     success.style.display = 'block';
-    success.innerHTML = `<strong>Thanks for your feedback!</strong><br><span style="font-size:0.85rem;font-weight:400;">Rating: ${currentRating}/5 | Category: ${currentRating >= 4 ? 'Positive' : currentRating >= 3 ? 'Neutral' : 'Needs Attention'} | Auto-routed to: ${currentRating < 3 ? 'Support Team (Priority)' : 'Feedback Dashboard'}</span>`;
+
+    document.getElementById('feedbackSummary').innerHTML = `
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+        <div><strong>Rating:</strong> ${currentRating}/5</div>
+        <div><strong>Sentiment:</strong> ${sentiment}</div>
+        <div><strong>Category:</strong> ${category}</div>
+        <div><strong>Priority:</strong> ${priority}</div>
+        <div colspan="2" style="grid-column: 1/-1;"><strong>Routed To:</strong> ${route}</div>
+      </div>
+    `;
   }
 
   // === CONTACT FORM ===
