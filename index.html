@@ -927,21 +927,17 @@
 </footer>
 
 <script>
-  // === CHATBOT DEMO ===
-  const chatResponses = {
-    'chatbot': "Great choice! I build custom AI chatbots that integrate with your website, handle lead qualification, answer FAQs, and book appointments automatically. They run 24/7 and speak in your brand's voice. What industry are you in?",
-    'automate': "Smart move. I've built production automation pipelines that run 3x daily, pull data from multiple sources, generate AI content, and publish across platforms with zero human involvement. What processes are eating up your time?",
-    'app': "I build full-stack web apps with AI baked in. Think interactive dashboards, quiz platforms, data tools, or customer-facing apps. I handle everything from UI design to database to deployment. What's the idea?",
-    'default': "That's an interesting use case! I work with Claude, ChatGPT, and custom AI integrations to build exactly what businesses need. Whether it's automation, chatbots, content generation, or a full web app, I can make it happen. Want to tell me more about what you're looking for?"
-  };
+  // === CHATBOT DEMO (Live Claude API) ===
+  const chatSessionId = 'session_' + Math.random().toString(36).substr(2, 9) + '_' + Date.now();
 
-  function chatReply(text) { addMessage(text, 'user'); setTimeout(() => botReply(text), 800); }
+  function chatReply(text) { addMessage(text, 'user'); botReply(text); }
   function sendChat() {
     const input = document.getElementById('chatInput');
     if (!input.value.trim()) return;
-    addMessage(input.value, 'user');
-    const val = input.value; input.value = '';
-    setTimeout(() => botReply(val), 800);
+    const val = input.value.trim();
+    addMessage(val, 'user');
+    input.value = '';
+    botReply(val);
   }
   function addMessage(text, sender) {
     const container = document.getElementById('chatMessages');
@@ -949,13 +945,39 @@
     container.innerHTML += `<div class="chat-message ${sender}"><div class="chat-avatar">${avatar}</div><div class="chat-bubble">${text}</div></div>`;
     container.scrollTop = container.scrollHeight;
   }
-  function botReply(userText) {
-    const lower = userText.toLowerCase();
-    let response = chatResponses.default;
-    if (lower.includes('chatbot') || lower.includes('chat bot')) response = chatResponses.chatbot;
-    else if (lower.includes('automat') || lower.includes('workflow') || lower.includes('pipeline')) response = chatResponses.automate;
-    else if (lower.includes('app') || lower.includes('website') || lower.includes('web')) response = chatResponses.app;
-    addMessage(response, 'bot');
+  async function botReply(userText) {
+    // Show typing indicator
+    const container = document.getElementById('chatMessages');
+    const typingId = 'typing_' + Date.now();
+    container.innerHTML += `<div class="chat-message bot" id="${typingId}"><div class="chat-avatar">AI</div><div class="chat-bubble" style="opacity:0.6;">Thinking...</div></div>`;
+    container.scrollTop = container.scrollHeight;
+
+    try {
+      const response = await fetch('/api/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message: userText, sessionId: chatSessionId })
+      });
+      const data = await response.json();
+
+      // Remove typing indicator
+      const typingEl = document.getElementById(typingId);
+      if (typingEl) typingEl.remove();
+
+      if (data.reply) {
+        addMessage(data.reply, 'bot');
+        if (data.messagesRemaining !== undefined && data.messagesRemaining <= 5 && data.messagesRemaining > 0) {
+          addMessage(`(${data.messagesRemaining} messages remaining in this demo)`, 'bot');
+        }
+      } else if (data.error) {
+        addMessage('Sorry, something went wrong. Please try again.', 'bot');
+      }
+    } catch (err) {
+      // Remove typing indicator
+      const typingEl = document.getElementById(typingId);
+      if (typingEl) typingEl.remove();
+      addMessage('Connection error. The demo server may be offline. Please try again later or reach out through the contact form!', 'bot');
+    }
   }
 
   // === WORKFLOW DEMO ===
