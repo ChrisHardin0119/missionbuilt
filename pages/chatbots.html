@@ -64,6 +64,84 @@
             font-weight: 700;
             font-size: 1.1rem;
             color: var(--accent);
+            text-decoration: none;
+        }
+
+        .logo span { color: var(--text); }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .nav-dropdown {
+            position: relative;
+        }
+
+        .nav-dropdown-btn {
+            background: none;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 0.5rem 1rem;
+            font-family: inherit;
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: var(--text);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.2s;
+        }
+
+        .nav-dropdown-btn:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        .nav-dropdown-menu {
+            display: none;
+            position: absolute;
+            right: 0;
+            top: calc(100% + 8px);
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+            min-width: 280px;
+            z-index: 1001;
+            overflow: hidden;
+        }
+
+        .nav-dropdown.open .nav-dropdown-menu {
+            display: block;
+        }
+
+        .nav-dropdown-menu a {
+            display: block;
+            padding: 0.75rem 1.25rem;
+            color: var(--text);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 400;
+            transition: background 0.15s;
+            border-bottom: 1px solid var(--surface-2);
+        }
+
+        .nav-dropdown-menu a:last-child {
+            border-bottom: none;
+        }
+
+        .nav-dropdown-menu a:hover {
+            background: var(--surface-2);
+            color: var(--accent);
+        }
+
+        .nav-dropdown-menu a.active {
+            background: rgba(79, 70, 229, 0.06);
+            color: var(--accent);
+            font-weight: 600;
         }
 
         main {
@@ -493,8 +571,26 @@
 <body>
     <!-- Navigation -->
     <nav>
-        <a href="../index.html">← Back to Portfolio</a>
-        <span class="logo">MissionBuilt.dev</span>
+        <a href="../index.html" class="logo">Mission<span>Built</span>.dev</a>
+        <div class="nav-right">
+            <a href="../index.html" style="font-size:0.9rem;">Home</a>
+            <div class="nav-dropdown" id="navDropdown">
+                <button class="nav-dropdown-btn" onclick="document.getElementById('navDropdown').classList.toggle('open')">
+                    Services ▾
+                </button>
+                <div class="nav-dropdown-menu">
+                    <a href="chatbots.html" class="active">AI Chatbots</a>
+                    <a href="automation.html">Automation Workflows</a>
+                    <a href="webapps.html">Web Apps & Dashboards</a>
+                    <a href="content.html">AI Content Generation</a>
+                    <a href="api-integrations.html">API Integrations</a>
+                    <a href="funnel-crm.html">Funnel & CRM Automation</a>
+                    <a href="feedback.html">Feedback & Support</a>
+                    <a href="custom-ai.html">Custom AI Solutions</a>
+                </div>
+            </div>
+            <a href="../index.html#contact" style="font-size:0.9rem;">Contact</a>
+        </div>
     </nav>
 
     <main>
@@ -536,7 +632,6 @@
         <!-- Case Study Section -->
         <section>
             <h2>How I'd Build This For You</h2>
-            <div class="demo-banner">This is an example scenario — not a past project. It shows my process and what a real engagement would look like.</div>
             <div class="case-study">
                 <div class="case-study-section">
                     <h3>Example Scenario: A Dental Practice</h3>
@@ -733,6 +828,12 @@
 
         // Focus input on load
         document.getElementById('chatInput').focus();
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', (e) => {
+            const dd = document.getElementById('navDropdown');
+            if (dd && !dd.contains(e.target)) dd.classList.remove('open');
+        });
     </script>
 </body>
 </html>
