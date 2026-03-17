@@ -61,13 +61,14 @@
         }
 
         .logo {
-            font-weight: 700;
-            font-size: 1.1rem;
-            color: var(--accent);
+            font-weight: 800;
+            font-size: 1.15rem;
+            letter-spacing: -0.02em;
             text-decoration: none;
+            color: var(--text);
         }
 
-        .logo span { color: var(--text); }
+        .logo span { color: var(--accent); }
 
         .nav-right {
             display: flex;
@@ -610,16 +611,16 @@
 
         <!-- Case Study -->
         <section class="container">
-            <h2>Case Study: Multi-API Pipeline</h2>
+            <h2>Example Scenario: Multi-API Pipeline</h2>
             <div class="case-study">
                 <div class="case-study-section">
-                    <h4>The Problem</h4>
-                    <p>Needed to connect 5+ APIs into a single automated workflow: Slickdeals RSS, Amazon Product API, Anthropic Claude, Google Blogger, and Facebook Graph API. Each has different authentication methods (API keys, OAuth2, access tokens), rate limits, and data formats—requiring careful orchestration to function seamlessly.</p>
+                    <h4>The Challenge</h4>
+                    <p>Imagine you need to connect 5+ APIs into a single automated workflow: RSS feeds, a product API, AI processing, and publishing platforms. Each has different authentication methods (API keys, OAuth2, access tokens), rate limits, and data formats—requiring careful orchestration to function seamlessly.</p>
                 </div>
 
                 <div class="case-study-section">
-                    <h4>The Solution</h4>
-                    <p>Built a unified Python pipeline that handles OAuth2 token refresh for Google, manages Facebook access tokens, processes RSS/XML feeds, makes authenticated Amazon requests, and orchestrates Claude API calls—all with robust error handling and retry logic.</p>
+                    <h4>What I'd Build</h4>
+                    <p>A unified Python pipeline that handles OAuth2 token refresh, manages access tokens, processes multiple data formats, makes authenticated requests, and orchestrates API calls—all with robust error handling and retry logic.</p>
 
                     <h4 style="margin-top: 1.5rem;">Authentication Flows</h4>
                     <div class="auth-flow">
@@ -669,8 +670,8 @@
                 </div>
 
                 <div class="case-study-section">
-                    <h4>The Result</h4>
-                    <p><strong>Five different APIs working together seamlessly, running autonomously 3 times daily.</strong> The pipeline automatically discovers deal content, enriches it with AI analysis, publishes to blog and social media, and generates affiliate links—all without manual intervention. Handles edge cases, recovers from API outages, and maintains data integrity across all platforms.</p>
+                    <h4>Expected Impact</h4>
+                    <p><strong>Five different APIs working together seamlessly, running autonomously on your schedule.</strong> The pipeline would automatically discover content, enrich it with AI analysis, publish to your platforms, and generate integrations—all without manual intervention. It handles edge cases, recovers from API outages, and maintains data integrity across all systems.</p>
                 </div>
             </div>
         </section>
