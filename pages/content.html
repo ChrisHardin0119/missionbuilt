@@ -806,7 +806,7 @@
             // Get random sample from appropriate content type
             const samples = sampleContent[contentType]?.[tone] || sampleContent.blog.professional;
             const randomIndex = Math.floor(Math.random() * samples.length);
-            const content = samples[randomIndex];
+            let content = samples[randomIndex];
 
             // Display output
             const output = document.getElementById('demo-output');
@@ -822,13 +822,49 @@
             };
 
             title.textContent = `Generated ${contentTypeLabel[contentType]} (${tone} tone)`;
-            contentArea.textContent = content.replace(/\[Name\]/g, 'John').replace(/\[Signature\]/g, 'Christopher Hardin');
-            output.style.display = 'block';
 
-            // Scroll to output
-            setTimeout(() => {
-                output.scrollIntoView({ behavior: 'smooth' });
-            }, 100);
+            // Format content with proper subject/body separation for emails
+            content = content.replace(/\[Name\]/g, 'John').replace(/\[Signature\]/g, 'Christopher Hardin');
+
+            if (contentType === 'email') {
+                // Split subject from body and format them distinctly
+                const lines = content.split('\n');
+                let subjectLine = '';
+                let bodyLines = [];
+                let foundSubject = false;
+
+                for (const line of lines) {
+                    if (line.startsWith('Subject:') && !foundSubject) {
+                        subjectLine = line.replace('Subject:', '').trim();
+                        foundSubject = true;
+                    } else {
+                        bodyLines.push(line);
+                    }
+                }
+
+                const bodyText = bodyLines.join('\n').trim().replace(/\n\n/g, '</p><p style="margin-top:12px;">').replace(/\n/g, '<br>');
+
+                contentArea.innerHTML = `
+                    <div style="background: white; border: 1px solid var(--border); border-radius: 12px; overflow: hidden;">
+                        <div style="background: var(--accent); color: white; padding: 12px 16px; font-weight: 600; font-size: 0.85rem; letter-spacing: 0.02em;">
+                            SUBJECT LINE
+                        </div>
+                        <div style="padding: 16px; font-size: 1.05rem; font-weight: 600; border-bottom: 1px solid var(--border);">
+                            ${subjectLine}
+                        </div>
+                        <div style="background: white; padding: 12px 16px; font-weight: 600; font-size: 0.85rem; color: var(--text-muted); letter-spacing: 0.02em;">
+                            EMAIL BODY
+                        </div>
+                        <div style="padding: 16px; line-height: 1.8; color: var(--text);">
+                            <p>${bodyText}</p>
+                        </div>
+                    </div>`;
+            } else {
+                // For non-email content, just render with line breaks
+                contentArea.innerHTML = content.replace(/\n/g, '<br>');
+            }
+
+            output.style.display = 'block';
         }
 
         function copyToClipboard() {
@@ -845,8 +881,7 @@
             });
         }
 
-        // Generate on page load
-        window.addEventListener('load', generateContent);
+        // No auto-generate — user clicks Generate button
 
         // Click outside to close dropdown
         document.addEventListener('click', (e) => {
